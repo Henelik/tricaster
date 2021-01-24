@@ -1,6 +1,7 @@
 package tuple
 
 import (
+	"fmt"
 	"math"
 
 	"github.com/Henelik/tricaster/util"
@@ -83,4 +84,8 @@ func (t *Tuple) CrossProd(o *Tuple) *Tuple {
 	return NewVector(t.Y*o.Z-t.Z*o.Y,
 		t.Z*o.X-t.X*o.Z,
 		t.X*o.Y-t.Y*o.X)
+}
+
+func (t *Tuple) Fmt() string {
+	return fmt.Sprintf("X: %f, Y: %f, Z:%f, W:%f", t.X, t.Y, t.Z, t.W)
 }

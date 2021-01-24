@@ -30,6 +30,6 @@ func physics_test() {
 
 	for p.Pos.Z > 0 {
 		p = p.Tick(e)
-		log.Printf("projectile position: X: %f, Y: %f, Z:%f, W:%f\n", p.Pos.X, p.Pos.Y, p.Pos.Z, p.Pos.W)
+		log.Printf("projectile position: %s\n", p.Pos.Fmt())
 	}
 }
