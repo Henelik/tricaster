@@ -8,20 +8,20 @@ import (
 
 func TestPoint(t *testing.T) {
 	a := NewPoint(4.3, -4.2, 3.1)
-	assert.Equal(t, 4.3, a.x)
-	assert.Equal(t, -4.2, a.y)
-	assert.Equal(t, 3.1, a.z)
-	assert.Equal(t, 1.0, a.w)
+	assert.Equal(t, 4.3, a.X)
+	assert.Equal(t, -4.2, a.Y)
+	assert.Equal(t, 3.1, a.Z)
+	assert.Equal(t, 1.0, a.W)
 	assert.Equal(t, a.IsPoint(), true)
 	assert.Equal(t, a.IsVector(), false)
 }
 
 func TestVector(t *testing.T) {
 	a := NewVector(4.3, -4.2, 3.1)
-	assert.Equal(t, 4.3, a.x)
-	assert.Equal(t, -4.2, a.y)
-	assert.Equal(t, 3.1, a.z)
-	assert.Equal(t, 0.0, a.w)
+	assert.Equal(t, 4.3, a.X)
+	assert.Equal(t, -4.2, a.Y)
+	assert.Equal(t, 3.1, a.Z)
+	assert.Equal(t, 0.0, a.W)
 	assert.Equal(t, a.IsPoint(), false)
 	assert.Equal(t, a.IsVector(), true)
 }
@@ -119,17 +119,17 @@ func TestMag(t *testing.T) {
 		want float64
 	}{
 		{
-			name: "x unit vector",
+			name: "X unit vector",
 			v:    NewVector(1, 0, 0),
 			want: 1,
 		},
 		{
-			name: "y unit vector",
+			name: "Y unit vector",
 			v:    NewVector(0, 1, 0),
 			want: 1,
 		},
 		{
-			name: "z unit vector",
+			name: "Z unit vector",
 			v:    NewVector(0, 0, 1),
 			want: 1,
 		},

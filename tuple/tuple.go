@@ -7,80 +7,80 @@ import (
 )
 
 type Tuple struct {
-	x float64
-	y float64
-	z float64
-	w float64
+	X float64
+	Y float64
+	Z float64
+	W float64
 }
 
-func New(x, y, z, w float64) *Tuple {
-	return &Tuple{x, y, z, w}
+func New(X, Y, Z, W float64) *Tuple {
+	return &Tuple{X, Y, Z, W}
 }
 
-func NewPoint(x, y, z float64) *Tuple {
-	return &Tuple{x, y, z, 1.0}
+func NewPoint(X, Y, Z float64) *Tuple {
+	return &Tuple{X, Y, Z, 1.0}
 }
 
-func NewVector(x, y, z float64) *Tuple {
-	return &Tuple{x, y, z, 0.0}
+func NewVector(X, Y, Z float64) *Tuple {
+	return &Tuple{X, Y, Z, 0.0}
 }
 
 func (t *Tuple) IsPoint() bool {
-	return t.w == 1.0
+	return t.W == 1.0
 }
 
 func (t *Tuple) IsVector() bool {
-	return t.w == 0.0
+	return t.W == 0.0
 }
 
 func (t *Tuple) Equal(o *Tuple) bool {
-	if util.Equal(t.x, o.x) &&
-		util.Equal(t.y, o.y) &&
-		util.Equal(t.z, o.z) &&
-		util.Equal(t.w, o.w) {
+	if util.Equal(t.X, o.X) &&
+		util.Equal(t.Y, o.Y) &&
+		util.Equal(t.Z, o.Z) &&
+		util.Equal(t.W, o.W) {
 		return true
 	}
 	return false
 }
 
 func (t *Tuple) Add(o *Tuple) *Tuple {
-	return New(t.x+o.x, t.y+o.y, t.z+o.z, t.w+o.w)
+	return New(t.X+o.X, t.Y+o.Y, t.Z+o.Z, t.W+o.W)
 }
 
 func (t *Tuple) Sub(o *Tuple) *Tuple {
-	return New(t.x-o.x, t.y-o.y, t.z-o.z, t.w-o.w)
+	return New(t.X-o.X, t.Y-o.Y, t.Z-o.Z, t.W-o.W)
 }
 
 func (t *Tuple) Neg() *Tuple {
-	return New(-t.x, -t.y, -t.z, -t.w)
+	return New(-t.X, -t.Y, -t.Z, -t.W)
 }
 
 func (t *Tuple) Mult(n float64) *Tuple {
-	return New(t.x*n, t.y*n, t.z*n, t.w*n)
+	return New(t.X*n, t.Y*n, t.Z*n, t.W*n)
 }
 
 func (t *Tuple) Div(n float64) *Tuple {
-	return New(t.x/n, t.y/n, t.z/n, t.w/n)
+	return New(t.X/n, t.Y/n, t.Z/n, t.W/n)
 }
 
 func (t *Tuple) Mag() float64 {
-	return math.Sqrt(t.x*t.x + t.y*t.y + t.z*t.z + t.w*t.w)
+	return math.Sqrt(t.X*t.X + t.Y*t.Y + t.Z*t.Z + t.W*t.W)
 }
 
 func (t *Tuple) Norm() *Tuple {
 	m := t.Mag()
-	return New(t.x/m, t.y/m, t.z/m, t.w/m)
+	return New(t.X/m, t.Y/m, t.Z/m, t.W/m)
 }
 
 func (t *Tuple) DotProd(o *Tuple) float64 {
-	return t.x*o.x +
-		t.y*o.y +
-		t.z*o.z +
-		t.w*o.w
+	return t.X*o.X +
+		t.Y*o.Y +
+		t.Z*o.Z +
+		t.W*o.W
 }
 
 func (t *Tuple) CrossProd(o *Tuple) *Tuple {
-	return NewVector(t.y*o.z-t.z*o.y,
-		t.z*o.x-t.x*o.z,
-		t.x*o.y-t.y*o.x)
+	return NewVector(t.Y*o.Z-t.Z*o.Y,
+		t.Z*o.X-t.X*o.Z,
+		t.X*o.Y-t.Y*o.X)
 }
