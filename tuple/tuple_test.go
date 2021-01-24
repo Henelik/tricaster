@@ -111,3 +111,42 @@ func TestDiv(t *testing.T) {
 
 	assert.Equal(t, e, b)
 }
+
+func TestMag(t *testing.T) {
+	testCases := []struct {
+		name string
+		v    *Tuple
+		want float64
+	}{
+		{
+			name: "x unit vector",
+			v:    NewVector(1, 0, 0),
+			want: 1,
+		},
+		{
+			name: "y unit vector",
+			v:    NewVector(0, 1, 0),
+			want: 1,
+		},
+		{
+			name: "z unit vector",
+			v:    NewVector(0, 0, 1),
+			want: 1,
+		},
+		{
+			name: "all positive vector",
+			v:    NewVector(1, 2, 3),
+			want: 3.7416573867739413,
+		},
+		{
+			name: "all negative vector",
+			v:    NewVector(-1, -2, -3),
+			want: 3.7416573867739413,
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			assert.Equal(t, tc.want, tc.v.Mag())
+		})
+	}
+}

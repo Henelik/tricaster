@@ -1,6 +1,10 @@
 package tuple
 
-import "github.com/Henelik/tricaster/util"
+import (
+	"math"
+
+	"github.com/Henelik/tricaster/util"
+)
 
 type Tuple struct {
 	x float64
@@ -57,4 +61,8 @@ func (t *Tuple) Mult(n float64) *Tuple {
 
 func (t *Tuple) Div(n float64) *Tuple {
 	return New(t.x/n, t.y/n, t.z/n, t.w/n)
+}
+
+func (t *Tuple) Mag() float64 {
+	return math.Sqrt(t.x*t.x + t.y*t.y + t.z*t.z + t.w*t.w)
 }
