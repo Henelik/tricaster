@@ -91,3 +91,13 @@ func TestNeg(t *testing.T) {
 
 	assert.Equal(t, e, b)
 }
+
+func TestMult(t *testing.T) {
+	a := New(1, -2, 3, -4)
+
+	b := a.Mult(0.5)
+
+	e := New(0.5, -1, 1.5, -2)
+
+	assert.Equal(t, e, b)
+}

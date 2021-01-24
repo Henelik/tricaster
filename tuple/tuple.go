@@ -50,3 +50,7 @@ func (t *Tuple) Sub(o *Tuple) *Tuple {
 func (t *Tuple) Neg() *Tuple {
 	return New(-t.x, -t.y, -t.z, -t.w)
 }
+
+func (t *Tuple) Mult(n float64) *Tuple {
+	return New(t.x*n, t.y*n, t.z*n, t.w*n)
+}
