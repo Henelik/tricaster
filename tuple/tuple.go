@@ -13,11 +13,11 @@ func New(x, y, z, w float64) *Tuple {
 	return &Tuple{x, y, z, w}
 }
 
-func Point(x, y, z float64) *Tuple {
+func NewPoint(x, y, z float64) *Tuple {
 	return &Tuple{x, y, z, 1.0}
 }
 
-func Vector(x, y, z float64) *Tuple {
+func NewVector(x, y, z float64) *Tuple {
 	return &Tuple{x, y, z, 0.0}
 }
 
@@ -37,4 +37,12 @@ func (t *Tuple) Equal(o *Tuple) bool {
 		return true
 	}
 	return false
+}
+
+func (t *Tuple) Add(o *Tuple) *Tuple {
+	return New(t.x+o.x, t.y+o.y, t.z+o.z, t.w+o.w)
+}
+
+func (t *Tuple) Sub(o *Tuple) *Tuple {
+	return New(t.x-o.x, t.y-o.y, t.z-o.z, t.w-o.w)
 }
