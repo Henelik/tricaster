@@ -72,12 +72,22 @@ func TestSubPointAndVector(t *testing.T) {
 }
 
 func TestSubVectors(t *testing.T) {
-	p1 := NewVector(3, 2, 1)
-	p2 := NewVector(5, 6, 7)
+	v1 := NewVector(3, 2, 1)
+	v2 := NewVector(5, 6, 7)
 
-	a := p1.Sub(p2)
+	a := v1.Sub(v2)
 
 	e := NewVector(-2, -4, -6)
 
 	assert.Equal(t, e, a)
+}
+
+func TestNeg(t *testing.T) {
+	a := New(1, -2, 3, -4)
+
+	b := a.Neg()
+
+	e := New(-1, 2, -3, 4)
+
+	assert.Equal(t, e, b)
 }

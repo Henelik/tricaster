@@ -46,3 +46,7 @@ func (t *Tuple) Add(o *Tuple) *Tuple {
 func (t *Tuple) Sub(o *Tuple) *Tuple {
 	return New(t.x-o.x, t.y-o.y, t.z-o.z, t.w-o.w)
 }
+
+func (t *Tuple) Neg() *Tuple {
+	return New(-t.x, -t.y, -t.z, -t.w)
+}
