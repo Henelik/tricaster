@@ -66,3 +66,8 @@ func (t *Tuple) Div(n float64) *Tuple {
 func (t *Tuple) Mag() float64 {
 	return math.Sqrt(t.x*t.x + t.y*t.y + t.z*t.z + t.w*t.w)
 }
+
+func (t *Tuple) Norm() *Tuple {
+	m := t.Mag()
+	return New(t.x/m, t.y/m, t.z/m, t.w/m)
+}

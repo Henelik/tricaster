@@ -150,3 +150,32 @@ func TestMag(t *testing.T) {
 		})
 	}
 }
+
+func TestNorm(t *testing.T) {
+	testCases := []struct {
+		name string
+		v    *Tuple
+		want *Tuple
+	}{
+		{
+			name: "unit vector multiple",
+			v:    NewVector(4, 0, 0),
+			want: NewVector(1, 0, 0),
+		},
+		{
+			name: "all positive vector",
+			v:    NewVector(1, 2, 3),
+			want: NewVector(0.2672612419124244, 0.5345224838248488, 0.8017837257372732),
+		},
+		{
+			name: "all negative vector",
+			v:    NewVector(-1, -2, -3),
+			want: NewVector(-0.2672612419124244, -0.5345224838248488, -0.8017837257372732),
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			assert.Equal(t, tc.want, tc.v.Norm())
+		})
+	}
+}
