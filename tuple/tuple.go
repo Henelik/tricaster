@@ -78,3 +78,9 @@ func (t *Tuple) DotProd(o *Tuple) float64 {
 		t.z*o.z +
 		t.w*o.w
 }
+
+func (t *Tuple) CrossProd(o *Tuple) *Tuple {
+	return NewVector(t.y*o.z-t.z*o.y,
+		t.z*o.x-t.x*o.z,
+		t.x*o.y-t.y*o.x)
+}

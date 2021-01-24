@@ -186,3 +186,14 @@ func TestDotProd(t *testing.T) {
 
 	assert.Equal(t, 20.0, v.DotProd(o))
 }
+
+func TestCrossProd(t *testing.T) {
+	a := NewVector(1, 2, 3)
+	b := NewVector(2, 3, 4)
+
+	axb := NewVector(-1, 2, -1)
+	bxa := NewVector(1, -2, 1)
+
+	assert.Equal(t, axb, a.CrossProd(b))
+	assert.Equal(t, bxa, b.CrossProd(a))
+}
