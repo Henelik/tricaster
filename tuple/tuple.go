@@ -54,3 +54,7 @@ func (t *Tuple) Neg() *Tuple {
 func (t *Tuple) Mult(n float64) *Tuple {
 	return New(t.x*n, t.y*n, t.z*n, t.w*n)
 }
+
+func (t *Tuple) Div(n float64) *Tuple {
+	return New(t.x/n, t.y/n, t.z/n, t.w/n)
+}

@@ -101,3 +101,13 @@ func TestMult(t *testing.T) {
 
 	assert.Equal(t, e, b)
 }
+
+func TestDiv(t *testing.T) {
+	a := New(1, -2, 3, -4)
+
+	b := a.Div(2)
+
+	e := New(0.5, -1, 1.5, -2)
+
+	assert.Equal(t, e, b)
+}
