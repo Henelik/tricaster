@@ -8,13 +8,13 @@ import (
 )
 
 func main() {
-	physics_test()
+	physicsTest()
 }
 
-func physics_test() {
+func physicsTest() {
 	// projectile starts one unit above the origin
 	// velocity is normalized to 1  unit/tick
-	p, err := physics.CreateProjectile(
+	p, err := physics.NewProjectile(
 		tuple.NewPoint(0, 0, 1),
 		tuple.NewVector(1, 0, 1),
 	)
@@ -23,7 +23,7 @@ func physics_test() {
 	}
 
 	// gravity -0.1 unit/tick, and wind is -0.01 unit/tick
-	e, err := physics.CreateEnvironment(
+	e, err := physics.NewEnvironment(
 		tuple.NewVector(0, 0, -0.1),
 		tuple.NewVector(-0.01, 0, 0),
 	)

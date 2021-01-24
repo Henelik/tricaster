@@ -11,7 +11,7 @@ type Environment struct {
 	Wind    *tuple.Tuple
 }
 
-func CreateEnvironment(grav, wind *tuple.Tuple) (*Environment, error) {
+func NewEnvironment(grav, wind *tuple.Tuple) (*Environment, error) {
 	if !grav.IsVector() {
 		return nil, errors.New("grav must be a vector")
 	}

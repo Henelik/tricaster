@@ -11,7 +11,7 @@ type Projectile struct {
 	Vel *tuple.Tuple
 }
 
-func CreateProjectile(pos, vel *tuple.Tuple) (*Projectile, error) {
+func NewProjectile(pos, vel *tuple.Tuple) (*Projectile, error) {
 	if !pos.IsPoint() {
 		return nil, errors.New("pos must be a point")
 	}
