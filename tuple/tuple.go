@@ -71,3 +71,10 @@ func (t *Tuple) Norm() *Tuple {
 	m := t.Mag()
 	return New(t.x/m, t.y/m, t.z/m, t.w/m)
 }
+
+func (t *Tuple) DotProd(o *Tuple) float64 {
+	return t.x*o.x +
+		t.y*o.y +
+		t.z*o.z +
+		t.w*o.w
+}

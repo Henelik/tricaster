@@ -179,3 +179,10 @@ func TestNorm(t *testing.T) {
 		})
 	}
 }
+
+func TestDotProd(t *testing.T) {
+	v := NewVector(1, 2, 3)
+	o := NewVector(2, 3, 4)
+
+	assert.Equal(t, 20.0, v.DotProd(o))
+}
