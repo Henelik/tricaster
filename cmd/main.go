@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	imageTest()
+	projectilePlot()
 }
 
 func physicsTest() {
@@ -31,6 +31,9 @@ func physicsTest() {
 		tuple.NewVector(0, 0, -0.1),
 		tuple.NewVector(-0.01, 0, 0),
 	)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	for p.Pos.Z > 0 {
 		p = p.Tick(e)
@@ -40,7 +43,7 @@ func physicsTest() {
 
 // generate a test UV space
 func imageTest() {
-	canv, err := canvas.NewCanvas(32, 32)
+	canv, err := canvas.NewCanvas(256, 256)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -58,6 +61,48 @@ func imageTest() {
 	img := canv.ToImage()
 
 	outputFile, err := os.Create("test.png")
+	if err != nil {
+		panic(err)
+	}
+
+	png.Encode(outputFile, img)
+
+	outputFile.Close()
+}
+
+func projectilePlot() {
+	p, err := physics.NewProjectile(
+		tuple.NewPoint(0, 0, 1),
+		tuple.NewVector(1, 0, 1.8).Norm().Mult(11.25),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	e, err := physics.NewEnvironment(
+		tuple.NewVector(0, 0, -0.1),
+		tuple.NewVector(-0.01, 0, 0),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	canv, err := canvas.NewCanvas(900, 550)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for p.Pos.Z > 0 {
+		p = p.Tick(e)
+		canv.SetSafe(int(p.Pos.X), canv.H-int(p.Pos.Z), color.Red)
+		canv.SetSafe(int(p.Pos.X)+1, canv.H-int(p.Pos.Z), color.Red)
+		canv.SetSafe(int(p.Pos.X), canv.H-int(p.Pos.Z)+1, color.Red)
+		canv.SetSafe(int(p.Pos.X)+1, canv.H-int(p.Pos.Z)+1, color.Red)
+	}
+
+	img := canv.ToImage()
+
+	outputFile, err := os.Create("projectile.png")
 	if err != nil {
 		panic(err)
 	}
