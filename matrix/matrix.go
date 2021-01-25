@@ -148,3 +148,15 @@ func (m *Matrix) Cofactor(x, y int) float64 {
 func (m *Matrix) IsInvertible() bool {
 	return m.Determinant() != 0.0
 }
+
+func (m *Matrix) Inverse() *Matrix {
+	det := m.Determinant()
+	data := make([][]float64, m.Order)
+	for i := 0; i < m.Order; i++ {
+		data[i] = make([]float64, m.Order)
+		for j := 0; j < m.Order; j++ {
+			data[i][j] = m.Cofactor(j, i) / det
+		}
+	}
+	return &Matrix{m.Order, data}
+}

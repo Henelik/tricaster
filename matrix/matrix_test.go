@@ -281,3 +281,19 @@ func TestIsInvertible(t *testing.T) {
 
 	assert.Equal(t, false, b.IsInvertible())
 }
+
+func TestInverse(t *testing.T) {
+	m, err := NewMatrix(
+		-5, 2, 6, -8,
+		1, -5, 1, 8,
+		7, 7, -6, -7,
+		1, -3, 7, 4,
+	)
+	assert.Nil(t, err)
+
+	e := &Matrix{Order: 4, Data: [][]float64{[]float64{0.21804511278195488, 0.45112781954887216, -0.24060150375939848, -0.045112781954887216}, []float64{-0.8082706766917294, 1.4567669172932332, -0.44360902255639095, -0.5206766917293233}, []float64{-0.07894736842105263, -0.2236842105263158, 0.05263157894736842, 0.19736842105263158}, []float64{-0.5225563909774437, 0.8139097744360902, -0.3007518796992481, -0.30639097744360905}}}
+
+	assert.True(t, m.IsInvertible())
+	assert.Equal(t, 532.0, m.Determinant())
+	assert.Equal(t, e, m.Inverse())
+}
