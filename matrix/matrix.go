@@ -95,12 +95,53 @@ func (m *Matrix) MultTuple(t *tuple.Tuple) *tuple.Tuple {
 func (m *Matrix) Transpose() *Matrix {
 	data := make([][]float64, m.Order)
 	for i := 0; i < m.Order; i++ {
-		data[i] = []float64{
-			m.Data[0][i],
-			m.Data[1][i],
-			m.Data[2][i],
-			m.Data[3][i],
+		data[i] = make([]float64, m.Order)
+		for j := 0; j < m.Order; j++ {
+			data[i][j] = m.Data[j][i]
 		}
 	}
 	return &Matrix{m.Order, data}
+}
+
+func (m *Matrix) Determinant() float64 {
+	switch m.Order {
+	case 2:
+		return m.Data[0][0]*m.Data[1][1] - m.Data[0][1]*m.Data[1][0]
+	case 3:
+		return 0
+	case 4:
+		return 0
+	}
+	return 0
+}
+
+func (m *Matrix) Submatrix(x, y int) *Matrix {
+	order := m.Order - 1
+	data := make([][]float64, order)
+	for i := 0; i < order; i++ {
+		data[i] = make([]float64, order)
+		for j := 0; j < order; j++ {
+			iIndex := i
+			jIndex := j
+			if i >= x {
+				iIndex += 1
+			}
+			if j >= y {
+				jIndex += 1
+			}
+			data[i][j] = m.Data[iIndex][jIndex]
+		}
+	}
+	return &Matrix{order, data}
+}
+
+func (m *Matrix) Minor(x, y int) float64 {
+	return m.Submatrix(x, y).Determinant()
+}
+
+func (m *Matrix) Cofactor(x, y int) float64 {
+	if x+y%2 != 0 {
+		return m.Minor(x, y) * -1
+	}
+	return m.Minor(x, y)
 }

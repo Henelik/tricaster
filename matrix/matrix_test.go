@@ -164,3 +164,75 @@ func TestTranspose(t *testing.T) {
 
 	assert.Equal(t, e, m.Transpose())
 }
+
+func TestSubmatrix3(t *testing.T) {
+	a, err := NewMatrix(
+		1, 5, 0,
+		-3, 2, 7,
+		0, 6, -3,
+	)
+	assert.Nil(t, err)
+
+	e, err := NewMatrix(
+		-3, 2,
+		0, 6,
+	)
+	assert.Nil(t, err)
+
+	assert.Equal(t, e, a.Submatrix(0, 2))
+}
+
+func TestSubmatrix4(t *testing.T) {
+	a, err := NewMatrix(
+		-6, 1, 1, 6,
+		-8, 5, 8, 6,
+		-1, 0, 8, 2,
+		-7, 1, -1, 1,
+	)
+	assert.Nil(t, err)
+
+	e, err := NewMatrix(
+		-6, 1, 6,
+		-8, 8, 6,
+		-7, -1, 1,
+	)
+	assert.Nil(t, err)
+
+	assert.Equal(t, e, a.Submatrix(2, 1))
+}
+
+func TestMinor(t *testing.T) {
+	a, err := NewMatrix(
+		3, 5, 0,
+		2, -1, -7,
+		6, -1, -5,
+	)
+	assert.Nil(t, err)
+
+	assert.Equal(t, -25.0, a.Minor(1, 0))
+}
+
+func TestCofactor(t *testing.T) {
+	m, err := NewMatrix(
+		3, 5, 0,
+		2, -1, -7,
+		6, -1, 5,
+	)
+	assert.Nil(t, err)
+
+	assert.Equal(t, -12.0, m.Minor(0, 0))
+	assert.Equal(t, -12.0, m.Cofactor(0, 0))
+
+	assert.Equal(t, 25.0, m.Minor(1, 0))
+	assert.Equal(t, -25.0, m.Cofactor(1, 0))
+}
+
+func TestDeterminant2(t *testing.T) {
+	m, err := NewMatrix(
+		1, 5,
+		-3, 2,
+	)
+	assert.Nil(t, err)
+
+	assert.Equal(t, 17.0, m.Determinant())
+}
