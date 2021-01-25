@@ -11,10 +11,12 @@ func TestEqual(t *testing.T) {
 	f2 := 1.0
 
 	assert.True(t, Equal(f1, f2))
+	assert.NotEqual(t, f1, f2)
 
 	f1 = 1.0 + 2*epsilon
 
 	assert.False(t, Equal(f1, f2))
+	assert.NotEqual(t, f1, f2)
 }
 
 func TestClamp(t *testing.T) {
