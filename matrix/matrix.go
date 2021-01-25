@@ -104,15 +104,14 @@ func (m *Matrix) Transpose() *Matrix {
 }
 
 func (m *Matrix) Determinant() float64 {
-	switch m.Order {
-	case 2:
+	if m.Order == 2 {
 		return m.Data[0][0]*m.Data[1][1] - m.Data[0][1]*m.Data[1][0]
-	case 3:
-		return 0
-	case 4:
-		return 0
 	}
-	return 0
+	det := 0.0
+	for i := 0; i < m.Order; i++ {
+		det += m.Cofactor(0, i) * m.Data[0][i]
+	}
+	return det
 }
 
 func (m *Matrix) Submatrix(x, y int) *Matrix {
