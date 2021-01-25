@@ -3,6 +3,7 @@ package matrix
 import (
 	"errors"
 
+	"github.com/Henelik/tricaster/tuple"
 	"github.com/Henelik/tricaster/util"
 )
 
@@ -51,4 +52,32 @@ func (m *Matrix) Equal(o *Matrix) bool {
 		}
 	}
 	return true
+}
+
+func (m *Matrix) Mult(o *Matrix) *Matrix {
+	if m.Order != o.Order {
+		return nil
+	}
+	data := make([][]float64, m.Order)
+	for i := 0; i < m.Order; i++ {
+		row := make([]float64, m.Order)
+		for j := 0; j < m.Order; j++ {
+			val := 0.0
+			for k := 0; k < m.Order; k++ {
+				val += m.Data[i][k] * o.Data[k][j]
+			}
+			row[j] = val
+		}
+		data[i] = row
+	}
+	return &Matrix{m.Order, data}
+}
+
+func (m *Matrix) MultTuple(t *tuple.Tuple) *tuple.Tuple {
+	return tuple.New(
+		m.Data[0][0]*t.X+m.Data[0][1]*t.Y+m.Data[0][2]*t.Z+m.Data[0][3]*t.W,
+		m.Data[1][0]*t.X+m.Data[1][1]*t.Y+m.Data[1][2]*t.Z+m.Data[1][3]*t.W,
+		m.Data[2][0]*t.X+m.Data[2][1]*t.Y+m.Data[2][2]*t.Z+m.Data[2][3]*t.W,
+		m.Data[3][0]*t.X+m.Data[3][1]*t.Y+m.Data[3][2]*t.Z+m.Data[3][3]*t.W,
+	)
 }
