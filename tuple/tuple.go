@@ -35,13 +35,10 @@ func (t *Tuple) IsVector() bool {
 }
 
 func (t *Tuple) Equal(o *Tuple) bool {
-	if util.Equal(t.X, o.X) &&
+	return util.Equal(t.X, o.X) &&
 		util.Equal(t.Y, o.Y) &&
 		util.Equal(t.Z, o.Z) &&
-		util.Equal(t.W, o.W) {
-		return true
-	}
-	return false
+		util.Equal(t.W, o.W)
 }
 
 func (t *Tuple) Add(o *Tuple) *Tuple {
