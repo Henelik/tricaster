@@ -7,6 +7,18 @@ import (
 	"github.com/Henelik/tricaster/util"
 )
 
+var (
+	Identity = &Matrix{
+		Order: 4,
+		Data: [][]float64{
+			[]float64{1, 0, 0, 0},
+			[]float64{0, 1, 0, 0},
+			[]float64{0, 0, 1, 0},
+			[]float64{0, 0, 0, 1},
+		},
+	}
+)
+
 type Matrix struct {
 	Order int
 	Data  [][]float64
@@ -55,22 +67,20 @@ func (m *Matrix) Equal(o *Matrix) bool {
 }
 
 func (m *Matrix) Mult(o *Matrix) *Matrix {
-	if m.Order != o.Order {
-		return nil
-	}
-	data := make([][]float64, m.Order)
-	for i := 0; i < m.Order; i++ {
-		row := make([]float64, m.Order)
-		for j := 0; j < m.Order; j++ {
+	order := util.MinInt(m.Order, o.Order)
+	data := make([][]float64, order)
+	for i := 0; i < order; i++ {
+		row := make([]float64, order)
+		for j := 0; j < order; j++ {
 			val := 0.0
-			for k := 0; k < m.Order; k++ {
+			for k := 0; k < order; k++ {
 				val += m.Data[i][k] * o.Data[k][j]
 			}
 			row[j] = val
 		}
 		data[i] = row
 	}
-	return &Matrix{m.Order, data}
+	return &Matrix{order, data}
 }
 
 func (m *Matrix) MultTuple(t *tuple.Tuple) *tuple.Tuple {

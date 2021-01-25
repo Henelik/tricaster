@@ -128,3 +128,15 @@ func TestMultTuple(t *testing.T) {
 
 	assert.Equal(t, e, a.MultTuple(tup))
 }
+
+func TestIdentity(t *testing.T) {
+	m, err := NewMatrix(
+		0, 1, 2, 4,
+		1, 2, 4, 8,
+		2, 4, 8, 16,
+		4, 8, 16, 32,
+	)
+	assert.Nil(t, err)
+
+	assert.Equal(t, m, m.Mult(Identity))
+}
