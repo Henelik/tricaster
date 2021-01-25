@@ -259,3 +259,25 @@ func TestDeterminant4(t *testing.T) {
 
 	assert.Equal(t, -4071.0, m.Determinant())
 }
+
+func TestIsInvertible(t *testing.T) {
+	a, err := NewMatrix(
+		-2, -8, 3, 5,
+		-3, 1, 7, 3,
+		1, 2, -9, 6,
+		-6, 7, 7, -9,
+	)
+	assert.Nil(t, err)
+
+	assert.Equal(t, true, a.IsInvertible())
+
+	b, err := NewMatrix(
+		-4, 2, -2, -3,
+		9, 6, 2, 6,
+		0, -5, 1, -5,
+		0, 0, 0, 0,
+	)
+	assert.Nil(t, err)
+
+	assert.Equal(t, false, b.IsInvertible())
+}

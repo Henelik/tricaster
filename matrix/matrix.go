@@ -144,3 +144,7 @@ func (m *Matrix) Cofactor(x, y int) float64 {
 	}
 	return m.Minor(x, y)
 }
+
+func (m *Matrix) IsInvertible() bool {
+	return m.Determinant() != 0.0
+}
