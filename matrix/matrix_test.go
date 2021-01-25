@@ -139,4 +139,28 @@ func TestIdentity(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.Equal(t, m, m.Mult(Identity))
+
+	a := tuple.New(1, 2, 3, 4)
+
+	assert.Equal(t, a, Identity.MultTuple(a))
+}
+
+func TestTranspose(t *testing.T) {
+	m, err := NewMatrix(
+		0, 9, 3, 0,
+		9, 8, 0, 8,
+		1, 8, 5, 3,
+		0, 0, 5, 8,
+	)
+	assert.Nil(t, err)
+
+	e, err := NewMatrix(
+		0, 9, 1, 0,
+		9, 8, 8, 0,
+		3, 0, 5, 5,
+		0, 8, 3, 8,
+	)
+	assert.Nil(t, err)
+
+	assert.Equal(t, e, m.Transpose())
 }

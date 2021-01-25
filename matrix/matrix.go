@@ -91,3 +91,16 @@ func (m *Matrix) MultTuple(t *tuple.Tuple) *tuple.Tuple {
 		m.Data[3][0]*t.X+m.Data[3][1]*t.Y+m.Data[3][2]*t.Z+m.Data[3][3]*t.W,
 	)
 }
+
+func (m *Matrix) Transpose() *Matrix {
+	data := make([][]float64, m.Order)
+	for i := 0; i < m.Order; i++ {
+		data[i] = []float64{
+			m.Data[0][i],
+			m.Data[1][i],
+			m.Data[2][i],
+			m.Data[3][i],
+		}
+	}
+	return &Matrix{m.Order, data}
+}
