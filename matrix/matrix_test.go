@@ -49,6 +49,30 @@ func TestMatrix3x3(t *testing.T) {
 	assert.Equal(t, 1.0, m.Data[2][2])
 }
 
+func TestEqual(t *testing.T) {
+	m, err := NewMatrix(
+		-3, 5,
+		1, -2,
+	)
+	assert.Nil(t, err)
+
+	o, err := NewMatrix(
+		-3, 5,
+		1, -2,
+	)
+	assert.Nil(t, err)
+
+	assert.True(t, m.Equal(o))
+
+	o, err = NewMatrix(
+		-3, 5,
+		1, -1,
+	)
+	assert.Nil(t, err)
+
+	assert.False(t, m.Equal(o))
+}
+
 func TestMatrixImproperSize(t *testing.T) {
 	m, err := NewMatrix(
 		1, 2, 3, 4,

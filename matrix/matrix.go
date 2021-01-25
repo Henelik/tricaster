@@ -1,6 +1,10 @@
 package matrix
 
-import "errors"
+import (
+	"errors"
+
+	"github.com/Henelik/tricaster/util"
+)
 
 type Matrix struct {
 	Order int
@@ -33,4 +37,18 @@ func NewMatrix(ns ...float64) (*Matrix, error) {
 		m.Data[i] = row
 	}
 	return &m, nil
+}
+
+func (m *Matrix) Equal(o *Matrix) bool {
+	if m.Order != o.Order {
+		return false
+	}
+	for i := 0; i < m.Order; i++ {
+		for j := 0; j < m.Order; j++ {
+			if !util.Equal(m.Data[i][j], o.Data[i][j]) {
+				return false
+			}
+		}
+	}
+	return true
 }
