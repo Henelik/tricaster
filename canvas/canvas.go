@@ -35,6 +35,15 @@ func (c *Canvas) Set(x, y int, col *color.Color) {
 	c.Pix[x+y*c.W].B = col.B
 }
 
+func (c *Canvas) SetSafe(x, y int, col *color.Color) {
+	if x > c.W || y > c.H {
+		return
+	}
+	c.Pix[x+y*c.W].R = col.R
+	c.Pix[x+y*c.W].G = col.G
+	c.Pix[x+y*c.W].B = col.B
+}
+
 func (c *Canvas) ToImage() *image.RGBA {
 	img := image.NewRGBA(image.Rect(0, 0, c.W, c.H))
 
