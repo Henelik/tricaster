@@ -2,8 +2,10 @@ package canvas
 
 import (
 	"errors"
+	"image"
 
 	"github.com/Henelik/tricaster/color"
+	"github.com/Henelik/tricaster/util"
 )
 
 type Canvas struct {
@@ -33,8 +35,20 @@ func (c *Canvas) Set(x, y int, col *color.Color) {
 	c.Pix[x+y*c.W].B = col.B
 }
 
-func (c *Canvas) ToPPM() string {
-	s := "PPM\n"
+func (c *Canvas) ToImage() *image.RGBA {
+	img := image.NewRGBA(image.Rect(0, 0, c.W, c.H))
 
-	return s
+	for x := 0; x < c.W; x++ {
+		for y := 0; y < c.H; y++ {
+			r := uint8(util.Clamp(c.Pix[x+y*c.W].R, 0, 1) * 255)
+			g := uint8(util.Clamp(c.Pix[x+y*c.W].G, 0, 1) * 255)
+			b := uint8(util.Clamp(c.Pix[x+y*c.W].B, 0, 1) * 255)
+			img.Pix[(x+y*c.W)*4] = r
+			img.Pix[(x+y*c.W)*4+1] = g
+			img.Pix[(x+y*c.W)*4+2] = b
+			img.Pix[(x+y*c.W)*4+3] = 255
+		}
+	}
+
+	return img
 }
