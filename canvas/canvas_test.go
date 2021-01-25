@@ -14,7 +14,7 @@ func TestNewCanvas(t *testing.T) {
 	h := 20
 
 	c, err := NewCanvas(w, h)
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 
 	assert.Equal(t, w, c.W)
 	assert.Equal(t, h, c.H)
@@ -29,7 +29,7 @@ func TestGet(t *testing.T) {
 	black := color.NewColor(0, 0, 0)
 
 	c, err := NewCanvas(w, h)
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 
 	for x := 0; x < w; x++ {
 		for y := 0; y < h; y++ {
@@ -44,7 +44,7 @@ func TestSet(t *testing.T) {
 	red := color.NewColor(1, 0, 0)
 
 	c, err := NewCanvas(w, h)
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 
 	for x := 0; x < w; x++ {
 		for y := 0; y < h; y++ {

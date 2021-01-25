@@ -13,7 +13,7 @@ func TestMatrix4x4(t *testing.T) {
 		9, 10, 11, 12,
 		13.5, 14.5, 15.5, 16.5,
 	)
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 	assert.Equal(t, 1.0, m.Data[0][0])
 	assert.Equal(t, 4.0, m.Data[0][3])
 	assert.Equal(t, 5.5, m.Data[1][0])
@@ -28,7 +28,7 @@ func TestMatrix2x2(t *testing.T) {
 		-3, 5,
 		1, -2,
 	)
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 	assert.Equal(t, -3.0, m.Data[0][0])
 	assert.Equal(t, 5.0, m.Data[0][1])
 	assert.Equal(t, 1.0, m.Data[1][0])
@@ -41,7 +41,7 @@ func TestMatrix3x3(t *testing.T) {
 		1, -2, -7,
 		0, 1, 1,
 	)
-	assert.Equal(t, nil, err)
+	assert.Nil(t, err)
 	assert.Equal(t, -3.0, m.Data[0][0])
 	assert.Equal(t, 5.0, m.Data[0][1])
 	assert.Equal(t, 1.0, m.Data[1][0])
