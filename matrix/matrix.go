@@ -70,15 +70,12 @@ func (m *Matrix) Mult(o *Matrix) *Matrix {
 	order := util.MinInt(m.Order, o.Order)
 	data := make([][]float64, order)
 	for i := 0; i < order; i++ {
-		row := make([]float64, order)
+		data[i] = make([]float64, order)
 		for j := 0; j < order; j++ {
-			val := 0.0
 			for k := 0; k < order; k++ {
-				val += m.Data[i][k] * o.Data[k][j]
+				data[i][j] += m.Data[i][k] * o.Data[k][j]
 			}
-			row[j] = val
 		}
-		data[i] = row
 	}
 	return &Matrix{order, data}
 }
@@ -139,7 +136,7 @@ func (m *Matrix) Minor(x, y int) float64 {
 }
 
 func (m *Matrix) Cofactor(x, y int) float64 {
-	if x+y%2 != 0 {
+	if (x+y)%2 != 0 {
 		return m.Minor(x, y) * -1
 	}
 	return m.Minor(x, y)
