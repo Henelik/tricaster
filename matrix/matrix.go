@@ -169,3 +169,15 @@ func Translation(x, y, z float64) *Matrix {
 		},
 	}
 }
+
+func Scaling(x, y, z float64) *Matrix {
+	return &Matrix{
+		Order: 4,
+		Data: [][]float64{
+			[]float64{x, 0, 0, 0},
+			[]float64{0, y, 0, 0},
+			[]float64{0, 0, z, 0},
+			[]float64{0, 0, 0, 1},
+		},
+	}
+}

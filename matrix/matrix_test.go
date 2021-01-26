@@ -385,3 +385,43 @@ func TestTranslationVector(t *testing.T) {
 
 	assert.Equal(t, v, trans.MultTuple(v))
 }
+
+func TestScalingPoint(t *testing.T) {
+	s := Scaling(2, 3, 4)
+
+	p := tuple.NewPoint(-4, 6, 8)
+
+	e := tuple.NewPoint(-8, 18, 32)
+
+	assert.Equal(t, e, s.MultTuple(p))
+}
+
+func TestScalingVector(t *testing.T) {
+	s := Scaling(2, 3, 4)
+
+	v := tuple.NewVector(-4, 6, 8)
+
+	e := tuple.NewVector(-8, 18, 32)
+
+	assert.Equal(t, e, s.MultTuple(v))
+}
+
+func TestScalingInverse(t *testing.T) {
+	s := Scaling(2, 3, 4)
+
+	v := tuple.NewVector(-4, 6, 8)
+
+	e := tuple.NewVector(-2, 2, 2)
+
+	assert.Equal(t, e, s.Inverse().MultTuple(v))
+}
+
+func TestScalingReflection(t *testing.T) {
+	s := Scaling(-1, 1, 1)
+
+	p := tuple.NewPoint(2, 3, 4)
+
+	e := tuple.NewPoint(-2, 3, 4)
+
+	assert.Equal(t, e, s.MultTuple(p))
+}
