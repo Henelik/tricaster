@@ -157,3 +157,15 @@ func (m *Matrix) Inverse() *Matrix {
 	}
 	return &Matrix{m.Order, data}
 }
+
+func Translation(x, y, z float64) *Matrix {
+	return &Matrix{
+		Order: 4,
+		Data: [][]float64{
+			[]float64{1, 0, 0, x},
+			[]float64{0, 1, 0, y},
+			[]float64{0, 0, 1, z},
+			[]float64{0, 0, 0, 1},
+		},
+	}
+}

@@ -357,3 +357,31 @@ func TestMultInverse(t *testing.T) {
 
 	assert.True(t, a.Equal(c.Mult(b.Inverse())))
 }
+
+func TestTranslation(t *testing.T) {
+	trans := Translation(5, -3, 2)
+
+	p := tuple.NewPoint(-3, 4, 5)
+
+	e := tuple.NewPoint(2, 1, 7)
+
+	assert.Equal(t, e, trans.MultTuple(p))
+}
+
+func TestTranslationInverse(t *testing.T) {
+	trans := Translation(5, -3, 2)
+
+	p := tuple.NewPoint(-3, 4, 5)
+
+	e := tuple.NewPoint(-8, 7, 3)
+
+	assert.Equal(t, e, trans.Inverse().MultTuple(p))
+}
+
+func TestTranslationVector(t *testing.T) {
+	trans := Translation(5, -3, 2)
+
+	v := tuple.NewVector(-3, 4, 5)
+
+	assert.Equal(t, v, trans.MultTuple(v))
+}
