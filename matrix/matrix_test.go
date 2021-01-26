@@ -1,6 +1,7 @@
 package matrix
 
 import (
+	"math"
 	"testing"
 
 	"github.com/Henelik/tricaster/tuple"
@@ -424,4 +425,48 @@ func TestScalingReflection(t *testing.T) {
 	e := tuple.NewPoint(-2, 3, 4)
 
 	assert.Equal(t, e, s.MultTuple(p))
+}
+
+func TestRotationX(t *testing.T) {
+	p := tuple.NewPoint(0, 1, 0)
+
+	eighth := RotationX(math.Pi / 4)
+	eighthPoint := tuple.NewPoint(0, math.Sqrt(2)/2, math.Sqrt(2)/2)
+	assert.True(t, eighthPoint.Equal(eighth.MultTuple(p)))
+
+	quarter := RotationX(math.Pi / 2)
+	quarterPoint := tuple.NewPoint(0, 0, 1)
+	assert.True(t, quarterPoint.Equal(quarter.MultTuple(p)))
+}
+
+func TestRotationXInverse(t *testing.T) {
+	p := tuple.NewPoint(0, 1, 0)
+
+	eighth := RotationX(math.Pi / 4)
+	e := tuple.NewPoint(0, math.Sqrt(2)/2, -math.Sqrt(2)/2)
+	assert.True(t, e.Equal(eighth.Inverse().MultTuple(p)))
+}
+
+func TestRotationY(t *testing.T) {
+	p := tuple.NewPoint(0, 0, 1)
+
+	eighth := RotationY(math.Pi / 4)
+	eighthPoint := tuple.NewPoint(math.Sqrt(2)/2, 0, math.Sqrt(2)/2)
+	assert.True(t, eighthPoint.Equal(eighth.MultTuple(p)))
+
+	quarter := RotationY(math.Pi / 2)
+	quarterPoint := tuple.NewPoint(1, 0, 0)
+	assert.True(t, quarterPoint.Equal(quarter.MultTuple(p)))
+}
+
+func TestRotationZ(t *testing.T) {
+	p := tuple.NewPoint(0, 1, 0)
+
+	eighth := RotationZ(math.Pi / 4)
+	eighthPoint := tuple.NewPoint(-math.Sqrt(2)/2, math.Sqrt(2)/2, 0)
+	assert.True(t, eighthPoint.Equal(eighth.MultTuple(p)))
+
+	quarter := RotationZ(math.Pi / 2)
+	quarterPoint := tuple.NewPoint(-1, 0, 0)
+	assert.True(t, quarterPoint.Equal(quarter.MultTuple(p)))
 }
