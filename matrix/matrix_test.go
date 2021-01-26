@@ -521,3 +521,36 @@ func TestShearing(t *testing.T) {
 		})
 	}
 }
+
+func TestTransformationsSequence(t *testing.T) {
+	p := tuple.NewPoint(1, 0, 1)
+
+	a := RotationX(math.Pi / 2)
+	b := Scaling(5, 5, 5)
+	c := Translation(10, 5, 7)
+
+	p2 := a.MultTuple(p)
+	p2e := tuple.NewPoint(1, -1, 0)
+	assert.True(t, p2e.Equal(p2))
+
+	p3 := b.MultTuple(p2)
+	p3e := tuple.NewPoint(5, -5, 0)
+	assert.True(t, p3e.Equal(p3))
+
+	p4 := c.MultTuple(p3)
+	p4e := tuple.NewPoint(15, 0, 7)
+	assert.True(t, p4e.Equal(p4))
+}
+
+func TestTransformationsReverse(t *testing.T) {
+	p := tuple.NewPoint(1, 0, 1)
+
+	a := RotationX(math.Pi / 2)
+	b := Scaling(5, 5, 5)
+	c := Translation(10, 5, 7)
+
+	transform := c.Mult(b.Mult(a))
+	pe := tuple.NewPoint(15, 0, 7)
+
+	assert.Equal(t, pe, transform.MultTuple(p))
+}
