@@ -211,10 +211,10 @@ func RotationZ(r float64) *Matrix {
 	return &Matrix{
 		Order: 4,
 		Data: [][]float64{
-			[]float64{math.Cos(r), -math.Sin(r), 0, 0},
-			[]float64{math.Sin(r), math.Cos(r), 0, 0},
-			[]float64{0, 0, 1, 0},
-			[]float64{0, 0, 0, 1},
+			{math.Cos(r), -math.Sin(r), 0, 0},
+			{math.Sin(r), math.Cos(r), 0, 0},
+			{0, 0, 1, 0},
+			{0, 0, 0, 1},
 		},
 	}
 }
