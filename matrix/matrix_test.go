@@ -470,3 +470,54 @@ func TestRotationZ(t *testing.T) {
 	quarterPoint := tuple.NewPoint(-1, 0, 0)
 	assert.True(t, quarterPoint.Equal(quarter.MultTuple(p)))
 }
+
+func TestShearing(t *testing.T) {
+	testCases := []struct {
+		name string
+		t    *Matrix
+		p    *tuple.Tuple
+		want *tuple.Tuple
+	}{
+		{
+			name: "A shearing transformation moves x in proportion to y",
+			t:    Shearing(1, 0, 0, 0, 0, 0),
+			p:    tuple.NewPoint(2, 3, 4),
+			want: tuple.NewPoint(5, 3, 4),
+		},
+		{
+			name: "A shearing transformation moves x in proportion to z",
+			t:    Shearing(0, 1, 0, 0, 0, 0),
+			p:    tuple.NewPoint(2, 3, 4),
+			want: tuple.NewPoint(6, 3, 4),
+		},
+		{
+			name: "A shearing transformation moves y in proportion to x",
+			t:    Shearing(0, 0, 1, 0, 0, 0),
+			p:    tuple.NewPoint(2, 3, 4),
+			want: tuple.NewPoint(2, 5, 4),
+		},
+		{
+			name: "A shearing transformation moves y in proportion to z",
+			t:    Shearing(0, 0, 0, 1, 0, 0),
+			p:    tuple.NewPoint(2, 3, 4),
+			want: tuple.NewPoint(2, 7, 4),
+		},
+		{
+			name: "A shearing transformation moves z in proportion to x",
+			t:    Shearing(0, 0, 0, 0, 1, 0),
+			p:    tuple.NewPoint(2, 3, 4),
+			want: tuple.NewPoint(2, 3, 6),
+		},
+		{
+			name: "A shearing transformation moves z in proportion to y",
+			t:    Shearing(0, 0, 0, 0, 0, 1),
+			p:    tuple.NewPoint(2, 3, 4),
+			want: tuple.NewPoint(2, 3, 7),
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			assert.Equal(t, tc.want, tc.t.MultTuple(tc.p))
+		})
+	}
+}
