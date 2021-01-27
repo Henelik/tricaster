@@ -566,3 +566,20 @@ func TestTransformationsReverse(t *testing.T) {
 
 	assert.Equal(t, pe, transform.MultTuple(p))
 }
+
+func BenchmarkInversion(b *testing.B) {
+	var result *Matrix
+	for n := 0; n < b.N; n++ {
+		s := Scaling(2, 3, 4)
+		result = s.Inverse()
+
+		r := RotationX(2)
+		result = r.Inverse()
+
+		t := Translation(2, 3, 4)
+		result = t.Inverse()
+	}
+	if result != Identity {
+		return
+	}
+}

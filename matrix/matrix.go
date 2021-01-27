@@ -118,15 +118,16 @@ func (m *Matrix) Submatrix(x, y int) *Matrix {
 	for i := 0; i < order; i++ {
 		data[i] = make([]float64, order)
 		for j := 0; j < order; j++ {
-			iIndex := i
-			jIndex := j
-			if i >= x {
-				iIndex += 1
+			switch {
+			case i >= x && j >= y:
+				data[i][j] = m.Data[i+1][j+1]
+			case i >= x:
+				data[i][j] = m.Data[i+1][j]
+			case j >= y:
+				data[i][j] = m.Data[i][j+1]
+			default:
+				data[i][j] = m.Data[i][j]
 			}
-			if j >= y {
-				jIndex += 1
-			}
-			data[i][j] = m.Data[iIndex][jIndex]
 		}
 	}
 	return &Matrix{order, data}
