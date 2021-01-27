@@ -18,13 +18,13 @@ type Intersection struct {
 	P Primitive
 }
 
-var NilIntersection = Intersection{math.Inf(1), nil}
+var NilHit = Intersection{math.Inf(1), nil}
 
 func Hit(inters []Intersection) Intersection {
 	if len(inters) == 0 {
-		return NilIntersection
+		return NilHit
 	}
-	var closest Intersection = NilIntersection
+	var closest Intersection = NilHit
 	for _, i := range inters {
 		if i.T > 0 && i.T < closest.T {
 			closest = i

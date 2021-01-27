@@ -2,7 +2,6 @@ package canvas
 
 import (
 	"image"
-	"log"
 	"testing"
 
 	"github.com/Henelik/tricaster/color"
@@ -13,8 +12,7 @@ func TestNewCanvas(t *testing.T) {
 	w := 10
 	h := 20
 
-	c, err := NewCanvas(w, h)
-	assert.Nil(t, err)
+	c := NewCanvas(w, h)
 
 	assert.Equal(t, w, c.W)
 	assert.Equal(t, h, c.H)
@@ -28,8 +26,7 @@ func TestGet(t *testing.T) {
 	h := 20
 	black := color.NewColor(0, 0, 0)
 
-	c, err := NewCanvas(w, h)
-	assert.Nil(t, err)
+	c := NewCanvas(w, h)
 
 	for x := 0; x < w; x++ {
 		for y := 0; y < h; y++ {
@@ -43,8 +40,7 @@ func TestSet(t *testing.T) {
 	h := 20
 	red := color.NewColor(1, 0, 0)
 
-	c, err := NewCanvas(w, h)
-	assert.Nil(t, err)
+	c := NewCanvas(w, h)
 
 	for x := 0; x < w; x++ {
 		for y := 0; y < h; y++ {
@@ -60,10 +56,7 @@ func TestSet(t *testing.T) {
 }
 
 func TestToImage(t *testing.T) {
-	canv, err := NewCanvas(32, 32)
-	if err != nil {
-		log.Fatal(err)
-	}
+	canv := NewCanvas(32, 32)
 
 	for x := 0; x < canv.W; x++ {
 		for y := 0; y < canv.H; y++ {

@@ -1,7 +1,6 @@
 package canvas
 
 import (
-	"errors"
 	"image"
 
 	"github.com/Henelik/tricaster/color"
@@ -14,15 +13,17 @@ type Canvas struct {
 	Pix []color.Color
 }
 
-func NewCanvas(w, h int) (*Canvas, error) {
+// NewCanvas creates a new Canvas object with initialized Pix.
+// Returns nil if w or h are < 1
+func NewCanvas(w, h int) *Canvas {
 	if w <= 0 || h <= 0 {
-		return nil, errors.New("canvas width and heigh must be 1 or more")
+		return nil
 	}
 	return &Canvas{
 		W:   w,
 		H:   h,
 		Pix: make([]color.Color, w*h),
-	}, nil
+	}
 }
 
 func (c *Canvas) Get(x, y int) *color.Color {

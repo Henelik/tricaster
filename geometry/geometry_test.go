@@ -36,7 +36,7 @@ func TestHit(t *testing.T) {
 				{-2, s},
 				{-1, s},
 			},
-			want: NilIntersection,
+			want: NilHit,
 		},
 		{
 			name: "The hit is always the lowest nonnegative intersection",

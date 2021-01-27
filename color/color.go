@@ -9,7 +9,7 @@ var (
 	Cyan    = &Color{0, 1, 1}
 	Magenta = &Color{1, 0, 1}
 	Yellow  = &Color{1, 1, 0}
-	White   = &Color{1, 0, 1}
+	White   = &Color{1, 1, 1}
 	Black   = &Color{0, 0, 0}
 )
 

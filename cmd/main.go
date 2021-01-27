@@ -7,12 +7,15 @@ import (
 
 	"github.com/Henelik/tricaster/canvas"
 	"github.com/Henelik/tricaster/color"
+	"github.com/Henelik/tricaster/geometry"
+	"github.com/Henelik/tricaster/matrix"
 	"github.com/Henelik/tricaster/physics"
+	"github.com/Henelik/tricaster/ray"
 	"github.com/Henelik/tricaster/tuple"
 )
 
 func main() {
-	projectilePlot()
+	drawSphereTest()
 }
 
 func physicsTest() {
@@ -43,10 +46,7 @@ func physicsTest() {
 
 // generate a test UV space
 func imageTest() {
-	canv, err := canvas.NewCanvas(256, 256)
-	if err != nil {
-		log.Fatal(err)
-	}
+	canv := canvas.NewCanvas(256, 256)
 
 	for x := 0; x < canv.W; x++ {
 		for y := 0; y < canv.H; y++ {
@@ -87,10 +87,7 @@ func projectilePlot() {
 		log.Fatal(err)
 	}
 
-	canv, err := canvas.NewCanvas(900, 550)
-	if err != nil {
-		log.Fatal(err)
-	}
+	canv := canvas.NewCanvas(900, 550)
 
 	for p.Pos.Z > 0 {
 		p = p.Tick(e)
@@ -103,6 +100,42 @@ func projectilePlot() {
 	img := canv.ToImage()
 
 	outputFile, err := os.Create("projectile.png")
+	if err != nil {
+		panic(err)
+	}
+
+	png.Encode(outputFile, img)
+
+	outputFile.Close()
+}
+
+func drawSphereTest() {
+	s := geometry.NewSphere(matrix.Translation(0, 5, 0))
+
+	w := 512
+	h := 512
+
+	canv := canvas.NewCanvas(w, h)
+
+	for x := 0; x < w; x++ {
+		for y := 0; y < h; y++ {
+			// shoot a ray at the sphere
+			xPos := (float64(x) - float64(w)/2.0) / (float64(w) * 0.4)
+			yPos := -(float64(y) - float64(h)/2.0) / (float64(h) * 0.4)
+			r := ray.NewRay(
+				tuple.NewPoint(xPos, 0, yPos),
+				tuple.NewVector(0, 1, 0),
+			)
+			h := geometry.Hit(s.Intersects(r))
+			if h != geometry.NilHit {
+				canv.Set(x, y, color.Red)
+			}
+		}
+	}
+
+	img := canv.ToImage()
+
+	outputFile, err := os.Create("circle.png")
 	if err != nil {
 		panic(err)
 	}
