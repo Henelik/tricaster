@@ -3,13 +3,14 @@ package geometry
 import (
 	"testing"
 
+	"github.com/Henelik/tricaster/matrix"
 	"github.com/Henelik/tricaster/ray"
 	"github.com/Henelik/tricaster/tuple"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestIntersects(t *testing.T) {
-	s := NewSphere()
+	s := NewSphere(matrix.Identity)
 	testCases := []struct {
 		name string
 		r    *ray.Ray
@@ -62,4 +63,26 @@ func TestIntersects(t *testing.T) {
 			assert.Equal(t, tc.want, xs)
 		})
 	}
+}
+
+func TestIntersectsTransformed(t *testing.T) {
+	r := ray.NewRay(
+		tuple.NewPoint(0, 0, -5),
+		tuple.NewVector(0, 0, 1),
+	)
+
+	// Intersecting a scaled sphere with a ray
+	s := NewSphere(matrix.Scaling(2, 2, 2))
+	want := []Intersection{
+		{3, s},
+		{7, s},
+	}
+
+	assert.Equal(t, want, s.Intersects(r))
+
+	// Intersecting a translated sphere with a ray
+	s2 := NewSphere(matrix.Translation(5, 0, 0))
+	want2 := []Intersection{}
+
+	assert.Equal(t, want2, s2.Intersects(r))
 }

@@ -3,11 +3,12 @@ package geometry
 import (
 	"testing"
 
+	"github.com/Henelik/tricaster/matrix"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestHit(t *testing.T) {
-	s := NewSphere()
+	s := NewSphere(matrix.Identity)
 	testCases := []struct {
 		name   string
 		inters []Intersection

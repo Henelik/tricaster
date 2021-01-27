@@ -1,6 +1,9 @@
 package ray
 
-import "github.com/Henelik/tricaster/tuple"
+import (
+	"github.com/Henelik/tricaster/matrix"
+	"github.com/Henelik/tricaster/tuple"
+)
 
 type Ray struct {
 	Origin    *tuple.Tuple
@@ -23,4 +26,11 @@ func NewRay(origin, direction *tuple.Tuple) *Ray {
 // Position gets a point along the ray
 func (r *Ray) Position(t float64) *tuple.Tuple {
 	return r.Origin.Add(r.Direction.Mult(t))
+}
+
+func (r *Ray) Transform(m *matrix.Matrix) *Ray {
+	return NewRay(
+		m.MultTuple(r.Origin),
+		m.MultTuple(r.Direction),
+	)
 }
