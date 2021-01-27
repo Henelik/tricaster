@@ -27,14 +27,13 @@ func (s *Sphere) Intersects(r *ray.Ray) []Intersection {
 	rt := r.Transform(s.im)
 	sphereToRay := rt.Origin.Sub(tuple.NewPoint(0, 0, 0))
 	a := rt.Direction.DotProd(rt.Direction)
-	b := 2 * rt.Direction.DotProd(sphereToRay)
-	c := sphereToRay.DotProd(sphereToRay) - 1
-	discriminant := b*b - 4*a*c
+	b := -2 * rt.Direction.DotProd(sphereToRay)
+	discriminant := b*b - 4*a*(sphereToRay.DotProd(sphereToRay)-1)
 	if discriminant < 0 {
 		return []Intersection{}
 	}
 	return []Intersection{
-		{(-b - math.Sqrt(discriminant)) / (2 * a), s},
-		{(-b + math.Sqrt(discriminant)) / (2 * a), s},
+		{(b - math.Sqrt(discriminant)) / (2 * a), s},
+		{(b + math.Sqrt(discriminant)) / (2 * a), s},
 	}
 }

@@ -16,3 +16,6 @@
 
 # Rendered images
 *.png
+
+# benchmarks
+bench/*
