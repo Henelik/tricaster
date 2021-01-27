@@ -139,9 +139,9 @@ func (m *Matrix) Minor(x, y int) float64 {
 
 func (m *Matrix) Cofactor(x, y int) float64 {
 	if (x+y)%2 != 0 {
-		return m.Minor(x, y) * -1
+		return m.Submatrix(x, y).Determinant() * -1
 	}
-	return m.Minor(x, y)
+	return m.Submatrix(x, y).Determinant()
 }
 
 func (m *Matrix) IsInvertible() bool {
