@@ -25,7 +25,7 @@ func (s *Sphere) UpdateIM() {
 
 func (s *Sphere) Intersects(r *ray.Ray) []Intersection {
 	rt := r.Transform(s.im)
-	sphereToRay := rt.Origin.Sub(tuple.NewPoint(0, 0, 0))
+	sphereToRay := rt.Origin.Sub(tuple.Origin)
 	a := rt.Direction.DotProd(rt.Direction)
 	b := -2 * rt.Direction.DotProd(sphereToRay)
 	discriminant := b*b - 4*a*(sphereToRay.DotProd(sphereToRay)-1)
@@ -36,4 +36,12 @@ func (s *Sphere) Intersects(r *ray.Ray) []Intersection {
 		{(b - math.Sqrt(discriminant)) / (2 * a), s},
 		{(b + math.Sqrt(discriminant)) / (2 * a), s},
 	}
+}
+
+func (s *Sphere) NormalAt(p *tuple.Tuple) *tuple.Tuple {
+	objectPoint := s.im.MultTuple(p)
+	objectNormal := objectPoint.Sub(tuple.Origin)
+	worldNormal := s.im.Transpose().MultTuple(objectNormal)
+	worldNormal.W = 0
+	return worldNormal.Norm()
 }

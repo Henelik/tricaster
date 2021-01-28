@@ -14,6 +14,8 @@ type Tuple struct {
 	W float64
 }
 
+var Origin = NewPoint(0, 0, 0)
+
 func New(X, Y, Z, W float64) *Tuple {
 	return &Tuple{X, Y, Z, W}
 }

@@ -1,6 +1,7 @@
 package geometry
 
 import (
+	"math"
 	"testing"
 
 	"github.com/Henelik/tricaster/matrix"
@@ -85,4 +86,55 @@ func TestIntersectsTransformed(t *testing.T) {
 	want2 := []Intersection{}
 
 	assert.Equal(t, want2, s2.Intersects(r))
+}
+
+func TestNormalAt(t *testing.T) {
+	testCases := []struct {
+		name string
+		s    *Sphere
+		p    *tuple.Tuple
+		want *tuple.Tuple
+	}{
+		{
+			name: "The normal on a sphere at a point on the x axis",
+			s:    NewSphere(matrix.Identity),
+			p:    tuple.NewPoint(1, 0, 0),
+			want: tuple.NewVector(1, 0, 0),
+		},
+		{
+			name: "The normal on a sphere at a point on the y axis",
+			s:    NewSphere(matrix.Identity),
+			p:    tuple.NewPoint(0, 1, 0),
+			want: tuple.NewVector(0, 1, 0),
+		},
+		{
+			name: "The normal on a sphere at a point on the z axis",
+			s:    NewSphere(matrix.Identity),
+			p:    tuple.NewPoint(0, 0, 1),
+			want: tuple.NewVector(0, 0, 1),
+		},
+		{
+			name: "The normal on a sphere at a nonaxial point",
+			s:    NewSphere(matrix.Identity),
+			p:    tuple.NewPoint(math.Sqrt(3)/3, math.Sqrt(3)/3, math.Sqrt(3)/3),
+			want: tuple.NewVector(1, 1, 1).Norm(),
+		},
+		{
+			name: "Computing the normal on a translated sphere",
+			s:    NewSphere(matrix.Translation(0, 1, 0)),
+			p:    tuple.NewPoint(0, 1.70711, -0.70711),
+			want: tuple.NewVector(0, 1, -1).Norm(),
+		},
+		{
+			name: "Computing the normal on a transformed sphere",
+			s:    NewSphere(matrix.Scaling(1, 0.5, 1).Mult(matrix.RotationZ(math.Pi / 5))),
+			p:    tuple.NewPoint(0, math.Sqrt(2)/2, -math.Sqrt(2)/2).Norm(),
+			want: tuple.NewVector(0, 0.970160000001, -0.24254).Norm(),
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			assert.True(t, tc.want.Equal(tc.s.NormalAt(tc.p)))
+		})
+	}
 }
