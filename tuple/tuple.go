@@ -88,3 +88,7 @@ func (t *Tuple) CrossProd(o *Tuple) *Tuple {
 func (t *Tuple) Fmt() string {
 	return fmt.Sprintf("X: %f, Y: %f, Z:%f, W:%f", t.X, t.Y, t.Z, t.W)
 }
+
+func (t *Tuple) Reflect(n *Tuple) *Tuple {
+	return t.Sub(n.Mult(2 * t.DotProd(n)))
+}

@@ -1,6 +1,7 @@
 package tuple
 
 import (
+	"math"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -196,4 +197,20 @@ func TestCrossProd(t *testing.T) {
 
 	assert.Equal(t, axb, a.CrossProd(b))
 	assert.Equal(t, bxa, b.CrossProd(a))
+}
+
+func TestReflect(t *testing.T) {
+	// Reflecting a vector off a slanted surface
+	v1 := NewVector(1, -1, 0)
+	n1 := NewVector(0, 1, 0)
+	r1 := v1.Reflect(n1)
+	e1 := NewVector(1, 1, 0)
+	assert.True(t, e1.Equal(r1))
+
+	// Reflecting a vector off a slanted surface
+	v2 := NewVector(0, -1, 0)
+	n2 := NewVector(math.Sqrt2/2, math.Sqrt2/2, 0)
+	r2 := v2.Reflect(n2)
+	e2 := NewVector(1, 0, 0)
+	assert.True(t, e2.Equal(r2))
 }
