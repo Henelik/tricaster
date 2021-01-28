@@ -8,7 +8,7 @@ import (
 
 // Primitive geometry type which defines an intersection function
 type Primitive interface {
-	// Intersects returns an array of t values along the ray that intersect with the primitive
+	// Intersects returns an array of intersections where the ray meets the primitive
 	Intersects(r *ray.Ray) []Intersection
 }
 

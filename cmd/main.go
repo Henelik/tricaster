@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/Henelik/tricaster/shading"
 	"image/png"
 	"log"
 	"os"
@@ -110,7 +111,20 @@ func projectilePlot() {
 }
 
 func drawSphereTest() {
-	s := geometry.NewSphere(matrix.Translation(0, 5, 0))
+	s := geometry.NewSphere(
+		matrix.Translation(0, 5, 0),
+		&shading.PhongMat{
+			Ambient: 0.1,
+			Diffuse: 0.9,
+			Specular: 0.9,
+			Shininess: 200,
+			Color: color.Magenta,
+		})
+
+	light := &shading.PointLight{
+		tuple.NewPoint(-10, -5, 10),
+		color.White,
+	}
 
 	w := 512
 	h := 512
@@ -128,14 +142,22 @@ func drawSphereTest() {
 			)
 			h := geometry.Hit(s.Intersects(r))
 			if h != geometry.NilHit {
-				canv.Set(x, y, color.Red)
+				// canv.Set(x, y, color.Red)
+				hitPoint := r.Position(h.T)
+				c := s.Mat.Lighting(
+					light,
+					hitPoint,
+					r.Direction.Neg(),
+					s.NormalAt(hitPoint))
+				// fmt.Printf("col: (%v, %v, %v)\n", c.R, c.G, c.B)
+				canv.Set(x, y, c)
 			}
 		}
 	}
 
 	img := canv.ToImage()
 
-	outputFile, err := os.Create("circle.png")
+	outputFile, err := os.Create("sphere.png")
 	if err != nil {
 		panic(err)
 	}

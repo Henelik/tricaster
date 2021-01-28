@@ -1,6 +1,7 @@
 package geometry
 
 import (
+	"github.com/Henelik/tricaster/shading"
 	"math"
 
 	"github.com/Henelik/tricaster/matrix"
@@ -13,10 +14,12 @@ type Sphere struct {
 	M *matrix.Matrix
 	// the inverse transformation matrix
 	im *matrix.Matrix
+	// the material
+	Mat *shading.PhongMat
 }
 
-func NewSphere(m *matrix.Matrix) *Sphere {
-	return &Sphere{m, m.Inverse()}
+func NewSphere(m *matrix.Matrix, mat *shading.PhongMat) *Sphere {
+	return &Sphere{m, m.Inverse(), mat}
 }
 
 func (s *Sphere) UpdateIM() {
