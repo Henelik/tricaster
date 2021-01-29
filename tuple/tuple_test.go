@@ -121,17 +121,17 @@ func TestMag(t *testing.T) {
 	}{
 		{
 			name: "X unit vector",
-			v:    NewVector(1, 0, 0),
+			v:    Right,
 			want: 1,
 		},
 		{
 			name: "Y unit vector",
-			v:    NewVector(0, 1, 0),
+			v:    Backward,
 			want: 1,
 		},
 		{
 			name: "Z unit vector",
-			v:    NewVector(0, 0, 1),
+			v:    Up,
 			want: 1,
 		},
 		{
@@ -161,7 +161,7 @@ func TestNorm(t *testing.T) {
 		{
 			name: "unit vector multiple",
 			v:    NewVector(4, 0, 0),
-			want: NewVector(1, 0, 0),
+			want: Right,
 		},
 		{
 			name: "all positive vector",
@@ -202,15 +202,15 @@ func TestCrossProd(t *testing.T) {
 func TestReflect(t *testing.T) {
 	// Reflecting a vector off a slanted surface
 	v1 := NewVector(1, -1, 0)
-	n1 := NewVector(0, 1, 0)
+	n1 := Backward
 	r1 := v1.Reflect(n1)
 	e1 := NewVector(1, 1, 0)
 	assert.True(t, e1.Equal(r1))
 
 	// Reflecting a vector off a slanted surface
-	v2 := NewVector(0, -1, 0)
+	v2 := Forward
 	n2 := NewVector(math.Sqrt2/2, math.Sqrt2/2, 0)
 	r2 := v2.Reflect(n2)
-	e2 := NewVector(1, 0, 0)
+	e2 := Right
 	assert.True(t, e2.Equal(r2))
 }

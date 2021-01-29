@@ -22,7 +22,7 @@ func TestIntersects(t *testing.T) {
 			name: "A ray intersects a sphere at two points",
 			r: ray.NewRay(
 				tuple.NewPoint(0, 0, -5),
-				tuple.NewVector(0, 0, 1),
+				tuple.Up,
 			),
 			want: []Intersection{{4, s}, {6, s}},
 		},
@@ -30,7 +30,7 @@ func TestIntersects(t *testing.T) {
 			name: "A ray intersects a sphere at a tangent",
 			r: ray.NewRay(
 				tuple.NewPoint(0, 1, -5),
-				tuple.NewVector(0, 0, 1),
+				tuple.Up,
 			),
 			want: []Intersection{{5, s}, {5, s}},
 		},
@@ -38,7 +38,7 @@ func TestIntersects(t *testing.T) {
 			name: "A ray misses a sphere",
 			r: ray.NewRay(
 				tuple.NewPoint(0, 2, -5),
-				tuple.NewVector(0, 0, 1),
+				tuple.Up,
 			),
 			want: []Intersection{},
 		},
@@ -46,7 +46,7 @@ func TestIntersects(t *testing.T) {
 			name: "A ray originates inside a sphere",
 			r: ray.NewRay(
 				tuple.NewPoint(0, 0, 0),
-				tuple.NewVector(0, 0, 1),
+				tuple.Up,
 			),
 			want: []Intersection{{-1, s}, {1, s}},
 		},
@@ -54,7 +54,7 @@ func TestIntersects(t *testing.T) {
 			name: "A sphere is behind a ray",
 			r: ray.NewRay(
 				tuple.NewPoint(0, 0, 5),
-				tuple.NewVector(0, 0, 1),
+				tuple.Up,
 			),
 			want: []Intersection{{-6, s}, {-4, s}},
 		},
@@ -70,7 +70,7 @@ func TestIntersects(t *testing.T) {
 func TestIntersectsTransformed(t *testing.T) {
 	r := ray.NewRay(
 		tuple.NewPoint(0, 0, -5),
-		tuple.NewVector(0, 0, 1),
+		tuple.Up,
 	)
 
 	// Intersecting a scaled sphere with a ray
@@ -106,13 +106,13 @@ func TestNormalAt(t *testing.T) {
 			name: "The normal on a sphere at a point on the y axis",
 			s:    NewSphere(matrix.Identity, shading.DefaultPhong),
 			p:    tuple.NewPoint(0, 1, 0),
-			want: tuple.NewVector(0, 1, 0),
+			want: tuple.Backward,
 		},
 		{
 			name: "The normal on a sphere at a point on the z axis",
 			s:    NewSphere(matrix.Identity, shading.DefaultPhong),
 			p:    tuple.NewPoint(0, 0, 1),
-			want: tuple.NewVector(0, 0, 1),
+			want: tuple.Up,
 		},
 		{
 			name: "The normal on a sphere at a nonaxial point",

@@ -138,7 +138,7 @@ func drawSphereTest() {
 			yPos := -(float64(y) - float64(h)/2.0) / (float64(h) * 0.4)
 			r := ray.NewRay(
 				tuple.NewPoint(xPos, 0, yPos),
-				tuple.NewVector(0, 1, 0),
+				tuple.Backward,
 			)
 			h := geometry.Hit(s.Intersects(r))
 			if h != geometry.NilHit {

@@ -7,7 +7,15 @@ import (
 	"github.com/Henelik/tricaster/util"
 )
 
-//TODO: add cardinal tuple constants
+var (
+	Origin = NewPoint(0, 0, 0)
+	Up = NewVector(0, 0, 1)
+	Down = NewVector(0, 0, -1)
+	Left = NewVector(-1, 0, 0)
+	Right = NewVector(1, 0, 0)
+	Forward = NewVector(0, -1, 0)
+	Backward = NewVector(0, 1, 0)
+)
 
 type Tuple struct {
 	X float64
@@ -15,8 +23,6 @@ type Tuple struct {
 	Z float64
 	W float64
 }
-
-var Origin = NewPoint(0, 0, 0)
 
 func New(X, Y, Z, W float64) *Tuple {
 	return &Tuple{X, Y, Z, W}
