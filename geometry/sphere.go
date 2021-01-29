@@ -19,7 +19,19 @@ type Sphere struct {
 }
 
 func NewSphere(m *matrix.Matrix, mat *shading.PhongMat) *Sphere {
-	return &Sphere{m, m.Inverse(), mat}
+	s := &Sphere{
+		matrix.Identity,
+		matrix.Identity,
+		shading.DefaultPhong,
+	}
+	if m != nil{
+		s.m = m
+		s.im = m.Inverse()
+	}
+	if mat != nil{
+		s.Mat = mat
+	}
+	return s
 }
 
 func (s *Sphere) SetMatrix(m *matrix.Matrix) {
