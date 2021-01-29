@@ -89,3 +89,37 @@ func BenchmarkIntersection128(b *testing.B) {
 		return
 	}
 }
+
+func TestPrecompute(t *testing.T) {
+	r := ray.NewRay(
+		tuple.NewPoint(0, 0, -5),
+		tuple.NewVector(0, 0, 1))
+	s := NewSphere(nil, nil)
+	i := &Intersection{4, s}
+
+	c := i.Precompute(r)
+
+	assert.Equal(t, i.T, c.T)
+	assert.Equal(t, i.P, c.P)
+	assert.Equal(t, tuple.NewPoint(0, 0, -1), c.Point)
+	assert.Equal(t, tuple.NewVector(0, 0, -1), c.EyeV)
+	assert.Equal(t, tuple.NewVector(0, 0, -1), c.NormalV)
+	assert.Equal(t, false, c.Inside)
+}
+
+func TestPrecomputeInside(t *testing.T) {
+	r := ray.NewRay(
+		tuple.Origin,
+		tuple.NewVector(0, 0, 1))
+	s := NewSphere(nil, nil)
+	i := &Intersection{1, s}
+
+	c := i.Precompute(r)
+
+	assert.Equal(t, i.T, c.T)
+	assert.Equal(t, i.P, c.P)
+	assert.Equal(t, tuple.NewPoint(0, 0, 1), c.Point)
+	assert.Equal(t, tuple.NewVector(0, 0, -1), c.EyeV)
+	assert.Equal(t, tuple.NewVector(0, 0, -1), c.NormalV)
+	assert.Equal(t, true, c.Inside)
+}

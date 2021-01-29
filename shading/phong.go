@@ -7,22 +7,22 @@ import (
 )
 
 var DefaultPhong = &PhongMat{
-	Ambient: 0.1,
-	Diffuse: 0.9,
-	Specular: 0.9,
+	Ambient:   0.1,
+	Diffuse:   0.9,
+	Specular:  0.9,
 	Shininess: 200,
-	Color: color.White,
+	Color:     color.White,
 }
 
 type PhongMat struct {
-	Ambient float64
-	Diffuse float64
-	Specular float64
+	Ambient   float64
+	Diffuse   float64
+	Specular  float64
 	Shininess float64
-	Color *color.Color
+	Color     *color.Color
 }
 
-func (m *PhongMat)Lighting(light *PointLight, pos, eyeV, normalV *tuple.Tuple) *color.Color{
+func (m *PhongMat) Lighting(light *PointLight, pos, eyeV, normalV *tuple.Tuple) *color.Color {
 	effectiveColor := m.Color.MultCol(light.Color)
 	lightV := light.Pos.Sub(pos).Norm()
 	ambient := effectiveColor.MultF(m.Ambient)
@@ -34,7 +34,7 @@ func (m *PhongMat)Lighting(light *PointLight, pos, eyeV, normalV *tuple.Tuple) *
 	specular := color.Black
 	if lightDotNormal >= 0 {
 		// compute the diffuse contribution
-		diffuse = effectiveColor.MultF(m.Diffuse*lightDotNormal)
+		diffuse = effectiveColor.MultF(m.Diffuse * lightDotNormal)
 
 		// reflect_dot_eye represents the cosine of the angle between the
 		// reflection vector and the eye vector. A negative number means the
@@ -45,7 +45,7 @@ func (m *PhongMat)Lighting(light *PointLight, pos, eyeV, normalV *tuple.Tuple) *
 		if reflectDotEye > 0 {
 			// compute the specular reflection
 			factor := math.Pow(reflectDotEye, m.Shininess)
-			specular = light.Color.MultF(m.Specular*factor)
+			specular = light.Color.MultF(m.Specular * factor)
 		}
 	}
 	return ambient.Add(diffuse.Add(specular))

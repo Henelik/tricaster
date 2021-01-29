@@ -24,11 +24,11 @@ func NewSphere(m *matrix.Matrix, mat *shading.PhongMat) *Sphere {
 		matrix.Identity,
 		shading.DefaultPhong,
 	}
-	if m != nil{
+	if m != nil {
 		s.m = m
 		s.im = m.Inverse()
 	}
-	if mat != nil{
+	if mat != nil {
 		s.Mat = mat
 	}
 	return s

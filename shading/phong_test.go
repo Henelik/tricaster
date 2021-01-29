@@ -1,15 +1,15 @@
 package shading
 
 import (
-	"github.com/Henelik/tricaster/tuple"
 	"github.com/Henelik/tricaster/color"
+	"github.com/Henelik/tricaster/tuple"
 	"github.com/stretchr/testify/assert"
 	"math"
 	"testing"
 )
 
-func TestPhong(t *testing.T){
-	testCases := []struct{
+func TestPhong(t *testing.T) {
+	testCases := []struct {
 		name    string
 		eyeV    *tuple.Tuple
 		normalV *tuple.Tuple
@@ -44,7 +44,7 @@ func TestPhong(t *testing.T){
 				tuple.NewPoint(0, 10, -10),
 				color.White,
 			},
-			want: color.NewColor(0.7363961030678927,0.7363961030678927,0.7363961030678927),
+			want: color.NewColor(0.7363961030678927, 0.7363961030678927, 0.7363961030678927),
 		},
 		{
 			name:    "Lighting with eye in the path of the reflection vector",
@@ -54,7 +54,7 @@ func TestPhong(t *testing.T){
 				tuple.NewPoint(0, 10, -10),
 				color.White,
 			},
-			want: color.NewColor(1.6363961030678928,1.6363961030678928,1.6363961030678928),
+			want: color.NewColor(1.6363961030678928, 1.6363961030678928, 1.6363961030678928),
 		},
 		{
 			name:    "Lighting with the light behind the surface",

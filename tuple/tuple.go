@@ -7,6 +7,8 @@ import (
 	"github.com/Henelik/tricaster/util"
 )
 
+//TODO: add cardinal tuple constants
+
 type Tuple struct {
 	X float64
 	Y float64

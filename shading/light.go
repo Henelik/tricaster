@@ -6,6 +6,6 @@ import (
 )
 
 type PointLight struct {
-	Pos *tuple.Tuple
+	Pos   *tuple.Tuple
 	Color *color.Color
 }

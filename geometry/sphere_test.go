@@ -128,8 +128,8 @@ func TestNormalAt(t *testing.T) {
 		},
 		{
 			name: "Computing the normal on a transformed sphere",
-			s:    NewSphere(
-				matrix.Scaling(1, 0.5, 1).Mult(matrix.RotationZ(math.Pi / 5)),
+			s: NewSphere(
+				matrix.Scaling(1, 0.5, 1).Mult(matrix.RotationZ(math.Pi/5)),
 				shading.DefaultPhong),
 			p:    tuple.NewPoint(0, math.Sqrt(2)/2, -math.Sqrt(2)/2).Norm(),
 			want: tuple.NewVector(0, 0.970160000001, -0.24254).Norm(),

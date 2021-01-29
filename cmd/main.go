@@ -114,11 +114,11 @@ func drawSphereTest() {
 	s := geometry.NewSphere(
 		matrix.Translation(0, 5, 0),
 		&shading.PhongMat{
-			Ambient: 0.1,
-			Diffuse: 0.9,
-			Specular: 0.9,
+			Ambient:   0.1,
+			Diffuse:   0.9,
+			Specular:  0.9,
 			Shininess: 200,
-			Color: color.Red,
+			Color:     color.Red,
 		})
 
 	light := &shading.PointLight{
