@@ -10,7 +10,7 @@ import (
 	"github.com/Henelik/tricaster/ray"
 )
 
-var NilHit = Intersection{math.Inf(1), nil}
+var NilHit = &Intersection{math.Inf(1), nil}
 
 // Primitive geometry type which defines an intersection function
 type Primitive interface {
@@ -54,17 +54,17 @@ func (i *Intersection) Precompute(r *ray.Ray) *Comp {
 }
 
 // Hit returns the closest positive intersection
-func Hit(inters []Intersection) Intersection {
+func Hit(inters []Intersection) *Intersection {
 	if len(inters) == 0 {
 		return NilHit
 	}
-	var closest Intersection = NilHit
+	var closest = *NilHit
 	for _, i := range inters {
 		if i.T > 0 && i.T < closest.T {
 			closest = i
 		}
 	}
-	return closest
+	return &closest
 }
 
 // SortI merge sorts a list of intersections in ascending order

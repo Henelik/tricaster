@@ -39,7 +39,7 @@ func TestHit(t *testing.T) {
 				{-2, s},
 				{-1, s},
 			},
-			want: NilHit,
+			want: *NilHit,
 		},
 		{
 			name: "The hit is always the lowest nonnegative intersection",
@@ -54,7 +54,7 @@ func TestHit(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			assert.Equal(t, tc.want, Hit(tc.inters))
+			assert.Equal(t, tc.want, *Hit(tc.inters))
 		})
 	}
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/Henelik/tricaster/ray"
 	"github.com/Henelik/tricaster/shading"
 	"github.com/Henelik/tricaster/tuple"
+	"log"
 )
 
 var DefaultWorld = &World{
@@ -39,6 +40,23 @@ func (w *World) Intersect(r *ray.Ray) []geometry.Intersection {
 	return geometry.SortI(inters)
 }
 
+func (w *World) IntersectNoSort(r *ray.Ray) []geometry.Intersection {
+	var inters []geometry.Intersection
+	for _, p := range w.Geometry {
+		inters = append(inters, p.Intersects(r)...)
+	}
+	return inters
+}
+
 func (w *World) Shade(c *geometry.Comp) *color.Color {
 	return c.P.Shade(w.Light, c)
+}
+
+func (w *World) ColorAt(r *ray.Ray) *color.Color{
+	h := geometry.Hit(w.IntersectNoSort(r))
+	log.Printf("hit: %v", h)
+	if h == geometry.NilHit{
+		return color.Black
+	}
+	return w.Shade(h.Precompute(r))
 }

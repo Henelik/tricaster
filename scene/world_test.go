@@ -4,8 +4,10 @@ import (
 	"github.com/Henelik/tricaster/color"
 	"github.com/Henelik/tricaster/geometry"
 	"github.com/Henelik/tricaster/ray"
+	"github.com/Henelik/tricaster/shading"
 	"github.com/Henelik/tricaster/tuple"
 	"github.com/stretchr/testify/assert"
+	"log"
 	"testing"
 )
 
@@ -32,11 +34,26 @@ func TestShading(t *testing.T) {
 	assert.Equal(t, color.NewColor(0.38066119308103435, 0.47582649135129296, 0.28549589481077575), col)
 
 	// Shading an intersection from the inside
-	w := DefaultWorld
-	w.Light.Pos = tuple.NewPoint(0, 0.25, 0)
+	w := *DefaultWorld
+	w.Light = &shading.PointLight{tuple.NewPoint(0, 0.25, 0), color.White}
+	log.Printf("DefaultWorld light pos:  %v", DefaultWorld.Light.Pos)
 	r2 := ray.NewRay(tuple.Origin, tuple.Right)
 	s2 := DefaultWorld.Geometry[1]
 	i2 := &geometry.Intersection{0.5, s2}
 	col2 := w.Shade(i2.Precompute(r2))
 	assert.Equal(t, color.Grey(0.9049844720832575), col2)
+}
+
+func TestColorAtMiss(t *testing.T){
+	// The color when a ray misses
+	r := ray.NewRay(tuple.NewPoint(0, 0, -5), tuple.Forward)
+	c := DefaultWorld.ColorAt(r)
+	assert.Equal(t, color.Black, c)
+}
+
+func TestColorAtHit(t *testing.T){
+	// The color when a ray hits
+	r := ray.NewRay(tuple.NewPoint(-5, 0, 0), tuple.Right)
+	col := DefaultWorld.ColorAt(r)
+	assert.Equal(t, color.NewColor(0.38066119308103435, 0.47582649135129296, 0.28549589481077575), col)
 }
