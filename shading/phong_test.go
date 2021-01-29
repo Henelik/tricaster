@@ -69,7 +69,7 @@ func TestPhong(t *testing.T){
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			result := DefaultMat.Lighting(
+			result := DefaultPhong.Lighting(
 				tc.light,
 				tuple.Origin,
 				tc.eyeV,

@@ -6,7 +6,7 @@ import (
 	"math"
 )
 
-var DefaultMat = PhongMat{
+var DefaultPhong = &PhongMat{
 	Ambient: 0.1,
 	Diffuse: 0.9,
 	Specular: 0.9,

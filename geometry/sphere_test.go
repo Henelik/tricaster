@@ -1,6 +1,7 @@
 package geometry
 
 import (
+	"github.com/Henelik/tricaster/shading"
 	"math"
 	"testing"
 
@@ -11,7 +12,7 @@ import (
 )
 
 func TestIntersects(t *testing.T) {
-	s := NewSphere(matrix.Identity)
+	s := NewSphere(matrix.Identity, shading.DefaultPhong)
 	testCases := []struct {
 		name string
 		r    *ray.Ray
@@ -73,7 +74,7 @@ func TestIntersectsTransformed(t *testing.T) {
 	)
 
 	// Intersecting a scaled sphere with a ray
-	s := NewSphere(matrix.Scaling(2, 2, 2))
+	s := NewSphere(matrix.Scaling(2, 2, 2), shading.DefaultPhong)
 	want := []Intersection{
 		{3, s},
 		{7, s},
@@ -82,7 +83,7 @@ func TestIntersectsTransformed(t *testing.T) {
 	assert.Equal(t, want, s.Intersects(r))
 
 	// Intersecting a translated sphere with a ray
-	s2 := NewSphere(matrix.Translation(5, 0, 0))
+	s2 := NewSphere(matrix.Translation(5, 0, 0), shading.DefaultPhong)
 	want2 := []Intersection{}
 
 	assert.Equal(t, want2, s2.Intersects(r))
@@ -97,37 +98,39 @@ func TestNormalAt(t *testing.T) {
 	}{
 		{
 			name: "The normal on a sphere at a point on the x axis",
-			s:    NewSphere(matrix.Identity),
+			s:    NewSphere(matrix.Identity, shading.DefaultPhong),
 			p:    tuple.NewPoint(1, 0, 0),
 			want: tuple.NewVector(1, 0, 0),
 		},
 		{
 			name: "The normal on a sphere at a point on the y axis",
-			s:    NewSphere(matrix.Identity),
+			s:    NewSphere(matrix.Identity, shading.DefaultPhong),
 			p:    tuple.NewPoint(0, 1, 0),
 			want: tuple.NewVector(0, 1, 0),
 		},
 		{
 			name: "The normal on a sphere at a point on the z axis",
-			s:    NewSphere(matrix.Identity),
+			s:    NewSphere(matrix.Identity, shading.DefaultPhong),
 			p:    tuple.NewPoint(0, 0, 1),
 			want: tuple.NewVector(0, 0, 1),
 		},
 		{
 			name: "The normal on a sphere at a nonaxial point",
-			s:    NewSphere(matrix.Identity),
+			s:    NewSphere(matrix.Identity, shading.DefaultPhong),
 			p:    tuple.NewPoint(math.Sqrt(3)/3, math.Sqrt(3)/3, math.Sqrt(3)/3),
 			want: tuple.NewVector(1, 1, 1).Norm(),
 		},
 		{
 			name: "Computing the normal on a translated sphere",
-			s:    NewSphere(matrix.Translation(0, 1, 0)),
+			s:    NewSphere(matrix.Translation(0, 1, 0), shading.DefaultPhong),
 			p:    tuple.NewPoint(0, 1.70711, -0.70711),
 			want: tuple.NewVector(0, 1, -1).Norm(),
 		},
 		{
 			name: "Computing the normal on a transformed sphere",
-			s:    NewSphere(matrix.Scaling(1, 0.5, 1).Mult(matrix.RotationZ(math.Pi / 5))),
+			s:    NewSphere(
+				matrix.Scaling(1, 0.5, 1).Mult(matrix.RotationZ(math.Pi / 5)),
+				shading.DefaultPhong),
 			p:    tuple.NewPoint(0, math.Sqrt(2)/2, -math.Sqrt(2)/2).Norm(),
 			want: tuple.NewVector(0, 0.970160000001, -0.24254).Norm(),
 		},

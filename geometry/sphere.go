@@ -11,7 +11,7 @@ import (
 
 type Sphere struct {
 	// the transformation matrix
-	M *matrix.Matrix
+	m *matrix.Matrix
 	// the inverse transformation matrix
 	im *matrix.Matrix
 	// the material
@@ -22,8 +22,13 @@ func NewSphere(m *matrix.Matrix, mat *shading.PhongMat) *Sphere {
 	return &Sphere{m, m.Inverse(), mat}
 }
 
-func (s *Sphere) UpdateIM() {
-	s.im = s.M.Inverse()
+func (s *Sphere) SetMatrix(m *matrix.Matrix) {
+	s.m = m
+	s.im = m.Inverse()
+}
+
+func (s *Sphere) GetMatrix() *matrix.Matrix {
+	return s.m
 }
 
 func (s *Sphere) Intersects(r *ray.Ray) []Intersection {

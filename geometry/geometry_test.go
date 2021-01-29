@@ -1,6 +1,7 @@
 package geometry
 
 import (
+	"github.com/Henelik/tricaster/shading"
 	"testing"
 
 	"github.com/Henelik/tricaster/matrix"
@@ -10,7 +11,7 @@ import (
 )
 
 func TestHit(t *testing.T) {
-	s := NewSphere(matrix.Identity)
+	s := NewSphere(matrix.Identity, shading.DefaultPhong)
 	testCases := []struct {
 		name   string
 		inters []Intersection
@@ -61,7 +62,7 @@ func TestHit(t *testing.T) {
 func BenchmarkIntersection128(b *testing.B) {
 	var hit bool
 	for n := 0; n < b.N; n++ {
-		s := NewSphere(matrix.Translation(0, 5, 0))
+		s := NewSphere(matrix.Translation(0, 5, 0), shading.DefaultPhong)
 
 		w := 128
 		h := 128

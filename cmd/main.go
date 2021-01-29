@@ -118,7 +118,7 @@ func drawSphereTest() {
 			Diffuse: 0.9,
 			Specular: 0.9,
 			Shininess: 200,
-			Color: color.Magenta,
+			Color: color.Red,
 		})
 
 	light := &shading.PointLight{

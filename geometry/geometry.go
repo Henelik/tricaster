@@ -1,6 +1,8 @@
 package geometry
 
 import (
+	"github.com/Henelik/tricaster/matrix"
+	"github.com/Henelik/tricaster/tuple"
 	"math"
 
 	"github.com/Henelik/tricaster/ray"
@@ -8,8 +10,12 @@ import (
 
 // Primitive geometry type which defines an intersection function
 type Primitive interface {
+	SetMatrix(m *matrix.Matrix)
+	GetMatrix() *matrix.Matrix
 	// Intersects returns an array of intersections where the ray meets the primitive
 	Intersects(r *ray.Ray) []Intersection
+	// NormalAt returns the normal vector at a given scene point
+	NormalAt(p *tuple.Tuple) *tuple.Tuple
 }
 
 // Intersection stores the t value of a ray intersection and a pointer to the intersected primitive
