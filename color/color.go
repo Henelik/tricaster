@@ -23,6 +23,10 @@ func NewColor(r, g, b float64) *Color {
 	return &Color{r, g, b}
 }
 
+func Grey(v float64) *Color {
+	return &Color{v, v, v}
+}
+
 func (c *Color) Add(o *Color) *Color {
 	return &Color{c.R + o.R, c.G + o.G, c.B + o.B}
 }
