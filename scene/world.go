@@ -11,7 +11,13 @@ import (
 
 var DefaultWorld = &World{
 	Geometry: []geometry.Primitive{
-		geometry.NewSphere(nil, nil),
+		geometry.NewSphere(nil, &shading.PhongMat{
+			Ambient:   0.1,
+			Diffuse:   0.7,
+			Specular:  0.2,
+			Shininess: 200,
+			Color:     color.NewColor(0.8, 1, 0.6),
+		}),
 		geometry.NewSphere(matrix.Scaling(0.5, 0.5, 0.5), nil),
 	},
 	Light: &shading.PointLight{
@@ -31,4 +37,8 @@ func (w *World) Intersect(r *ray.Ray) []geometry.Intersection {
 		inters = append(inters, p.Intersects(r)...)
 	}
 	return geometry.SortI(inters)
+}
+
+func (w *World) Shade(c *geometry.Comp) *color.Color {
+	return c.P.Shade(w.Light, c)
 }

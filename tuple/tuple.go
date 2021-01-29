@@ -8,12 +8,12 @@ import (
 )
 
 var (
-	Origin = NewPoint(0, 0, 0)
-	Up = NewVector(0, 0, 1)
-	Down = NewVector(0, 0, -1)
-	Left = NewVector(-1, 0, 0)
-	Right = NewVector(1, 0, 0)
-	Forward = NewVector(0, -1, 0)
+	Origin   = NewPoint(0, 0, 0)
+	Up       = NewVector(0, 0, 1)
+	Down     = NewVector(0, 0, -1)
+	Left     = NewVector(-1, 0, 0)
+	Right    = NewVector(1, 0, 0)
+	Forward  = NewVector(0, -1, 0)
 	Backward = NewVector(0, 1, 0)
 )
 

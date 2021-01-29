@@ -1,7 +1,9 @@
 package geometry
 
 import (
+	"github.com/Henelik/tricaster/color"
 	"github.com/Henelik/tricaster/matrix"
+	"github.com/Henelik/tricaster/shading"
 	"github.com/Henelik/tricaster/tuple"
 	"math"
 
@@ -18,6 +20,7 @@ type Primitive interface {
 	Intersects(r *ray.Ray) []Intersection
 	// NormalAt returns the normal vector at a given scene point
 	NormalAt(p *tuple.Tuple) *tuple.Tuple
+	Shade(light *shading.PointLight, c *Comp) *color.Color
 }
 
 // Intersection stores the t value of a ray intersection and a pointer to the intersected primitive
@@ -27,7 +30,7 @@ type Intersection struct {
 }
 
 // intersection precomputation
-type comp struct {
+type Comp struct {
 	T       float64
 	P       Primitive
 	Point   *tuple.Tuple
@@ -36,8 +39,8 @@ type comp struct {
 	Inside  bool
 }
 
-func (i *Intersection) Precompute(r *ray.Ray) *comp {
-	c := &comp{}
+func (i *Intersection) Precompute(r *ray.Ray) *Comp {
+	c := &Comp{}
 	c.T = i.T
 	c.P = i.P
 	c.Point = r.Position(i.T)
