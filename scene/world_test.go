@@ -3,6 +3,7 @@ package scene
 import (
 	"github.com/Henelik/tricaster/color"
 	"github.com/Henelik/tricaster/geometry"
+	"github.com/Henelik/tricaster/matrix"
 	"github.com/Henelik/tricaster/ray"
 	"github.com/Henelik/tricaster/shading"
 	"github.com/Henelik/tricaster/tuple"
@@ -44,16 +45,41 @@ func TestShading(t *testing.T) {
 	assert.Equal(t, color.Grey(0.9049844720832575), col2)
 }
 
-func TestColorAtMiss(t *testing.T){
+func TestColorAtMiss(t *testing.T) {
 	// The color when a ray misses
 	r := ray.NewRay(tuple.NewPoint(0, 0, -5), tuple.Forward)
 	c := DefaultWorld.ColorAt(r)
 	assert.Equal(t, color.Black, c)
 }
 
-func TestColorAtHit(t *testing.T){
+func TestColorAtHit(t *testing.T) {
 	// The color when a ray hits
 	r := ray.NewRay(tuple.NewPoint(-5, 0, 0), tuple.Right)
 	col := DefaultWorld.ColorAt(r)
 	assert.Equal(t, color.NewColor(0.38066119308103435, 0.47582649135129296, 0.28549589481077575), col)
+}
+
+func TestColorAtHitBehind(t *testing.T) {
+	// The color when a ray hits
+	w := &World{
+		Geometry: []geometry.Primitive{
+			geometry.NewSphere(nil, &shading.PhongMat{
+				Ambient: 1,
+				Color:   color.Red,
+			}),
+			geometry.NewSphere(
+				matrix.Scaling(0.5, 0.5, 0.5),
+				&shading.PhongMat{
+					Ambient: 1,
+					Color:   color.Blue,
+				}),
+		},
+		Light: &shading.PointLight{
+			tuple.NewPoint(-10, -10, 10),
+			color.White,
+		},
+	}
+	r := ray.NewRay(tuple.NewPoint(0.75, 0, 0), tuple.Left)
+	col := w.ColorAt(r)
+	assert.Equal(t, color.Blue, col)
 }
