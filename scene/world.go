@@ -7,7 +7,6 @@ import (
 	"github.com/Henelik/tricaster/ray"
 	"github.com/Henelik/tricaster/shading"
 	"github.com/Henelik/tricaster/tuple"
-	"log"
 )
 
 var DefaultWorld = &World{
@@ -52,10 +51,9 @@ func (w *World) Shade(c *geometry.Comp) *color.Color {
 	return c.P.Shade(w.Light, c)
 }
 
-func (w *World) ColorAt(r *ray.Ray) *color.Color{
+func (w *World) ColorAt(r *ray.Ray) *color.Color {
 	h := geometry.Hit(w.IntersectNoSort(r))
-	log.Printf("hit: %v", h)
-	if h == geometry.NilHit{
+	if h == geometry.NilHit {
 		return color.Black
 	}
 	return w.Shade(h.Precompute(r))

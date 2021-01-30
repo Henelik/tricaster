@@ -8,7 +8,6 @@ import (
 	"github.com/Henelik/tricaster/shading"
 	"github.com/Henelik/tricaster/tuple"
 	"github.com/stretchr/testify/assert"
-	"log"
 	"testing"
 )
 
@@ -37,7 +36,6 @@ func TestShading(t *testing.T) {
 	// Shading an intersection from the inside
 	w := *DefaultWorld
 	w.Light = &shading.PointLight{tuple.NewPoint(0, 0.25, 0), color.White}
-	log.Printf("DefaultWorld light pos:  %v", DefaultWorld.Light.Pos)
 	r2 := ray.NewRay(tuple.Origin, tuple.Right)
 	s2 := DefaultWorld.Geometry[1]
 	i2 := &geometry.Intersection{0.5, s2}
