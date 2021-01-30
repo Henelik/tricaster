@@ -1,6 +1,7 @@
 package scene
 
 import (
+	"github.com/Henelik/tricaster/canvas"
 	"github.com/Henelik/tricaster/matrix"
 	"github.com/Henelik/tricaster/ray"
 	"github.com/Henelik/tricaster/tuple"
@@ -10,8 +11,8 @@ import (
 var DefaultFOV = math.Pi / 2
 
 type Camera struct {
-	hSize      uint16
-	vSize      uint16
+	hSize      int
+	vSize      int
 	FOV        float64
 	m          *matrix.Matrix
 	im         *matrix.Matrix
@@ -22,7 +23,7 @@ type Camera struct {
 
 // NewCamera creates a new camera.
 // Set fov to 0 and transform to nil to use defaults.
-func NewCamera(hSize, vSize uint16, fov float64, transform *matrix.Matrix) *Camera {
+func NewCamera(hSize, vSize int, fov float64, transform *matrix.Matrix) *Camera {
 	c := &Camera{
 		hSize: hSize,
 		vSize: vSize,
@@ -72,7 +73,7 @@ func (c *Camera) SetTransform(im *matrix.Matrix) {
 	c.m = im.Inverse()
 }
 
-func (c *Camera) RayForPixel(x, y uint16) *ray.Ray {
+func (c *Camera) RayForPixel(x, y int) *ray.Ray {
 	// the offset from the edge of the canvas to the pixel's center
 	xOffset := (float64(x) + 0.5) * c.pixelSize
 	zOffset := (float64(y) + 0.5) * c.pixelSize
@@ -90,4 +91,16 @@ func (c *Camera) RayForPixel(x, y uint16) *ray.Ray {
 	direction := pixel.Sub(origin).Norm()
 
 	return ray.NewRay(origin, direction)
+}
+
+func (c *Camera) Render(w *World) *canvas.Canvas {
+	canv := canvas.NewCanvas(c.hSize, c.vSize)
+	for x := 0; x < c.hSize; x++ {
+		for y := 0; y < c.vSize; y++ {
+			r := c.RayForPixel(x, y)
+			col := w.ColorAt(r)
+			canv.Set(x, y, col)
+		}
+	}
+	return canv
 }
