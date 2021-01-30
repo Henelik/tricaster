@@ -1,8 +1,10 @@
 package scene
 
 import (
+	"github.com/Henelik/tricaster/matrix"
 	"github.com/Henelik/tricaster/tuple"
 	"github.com/stretchr/testify/assert"
+	"math"
 	"testing"
 )
 
@@ -27,4 +29,10 @@ func TestRayForPixel(t *testing.T) {
 	r1 := c.RayForPixel(0, 0)
 	assert.Equal(t, tuple.Origin, r1.Origin)
 	assert.Equal(t, tuple.NewVector(0.6651864261194509, -0.6685123582500481, 0.33259321305972545), r1.Direction)
+
+	// Constructing a ray when the camera is transformed
+	c.SetMatrix(matrix.RotationZ(math.Pi / 4).Mult(matrix.Translation(0, -2, 5)))
+	r2 := c.RayForPixel(100, 50)
+	assert.Equal(t, tuple.NewPoint(0, 2, -5), r2.Origin)
+	assert.Equal(t, tuple.NewVector(-math.Sqrt2/2, -math.Sqrt2/2, 0), r2.Direction)
 }

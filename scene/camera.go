@@ -63,6 +63,15 @@ func (c *Camera) SetMatrix(m *matrix.Matrix) {
 	c.im = m.Inverse()
 }
 
+func (c *Camera) GetTransform() *matrix.Matrix {
+	return c.im
+}
+
+func (c *Camera) SetTransform(im *matrix.Matrix) {
+	c.im = im
+	c.m = im.Inverse()
+}
+
 func (c *Camera) RayForPixel(x, y uint16) *ray.Ray {
 	// the offset from the edge of the canvas to the pixel's center
 	xOffset := (float64(x) + 0.5) * c.pixelSize
