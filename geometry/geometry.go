@@ -1,11 +1,12 @@
 package geometry
 
 import (
+	"math"
+
 	"github.com/Henelik/tricaster/color"
 	"github.com/Henelik/tricaster/matrix"
 	"github.com/Henelik/tricaster/shading"
 	"github.com/Henelik/tricaster/tuple"
-	"math"
 
 	"github.com/Henelik/tricaster/ray"
 )
@@ -58,7 +59,7 @@ func Hit(inters []Intersection) *Intersection {
 	if len(inters) == 0 {
 		return NilHit
 	}
-	var closest = *NilHit
+	closest := *NilHit
 	for _, i := range inters {
 		if i.T > 0 && i.T < closest.T {
 			closest = i
@@ -69,7 +70,7 @@ func Hit(inters []Intersection) *Intersection {
 
 // SortI merge sorts a list of intersections in ascending order
 func SortI(inters []Intersection) []Intersection {
-	var result = make([]Intersection, 0, len(inters))
+	result := make([]Intersection, 0, len(inters))
 	if len(inters) <= 1 {
 		return inters
 	}

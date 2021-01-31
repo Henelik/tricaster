@@ -50,3 +50,10 @@ func (m *PhongMat) Lighting(light *PointLight, pos, eyeV, normalV *tuple.Tuple) 
 	}
 	return ambient.Add(diffuse.Add(specular))
 }
+
+// CopyWithColor returns a new material with modified color
+func (p *PhongMat) CopyWithColor(c *color.Color) *PhongMat {
+	mat := *p
+	mat.Color = c
+	return &mat
+}

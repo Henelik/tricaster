@@ -53,7 +53,7 @@ func (w *World) Shade(c *geometry.Comp) *color.Color {
 
 func (w *World) ColorAt(r *ray.Ray) *color.Color {
 	h := geometry.Hit(w.IntersectNoSort(r))
-	if h == geometry.NilHit {
+	if *h == *geometry.NilHit {
 		return color.Black
 	}
 	return w.Shade(h.Precompute(r))

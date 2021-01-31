@@ -1,11 +1,12 @@
 package scene
 
 import (
+	"math"
+
 	"github.com/Henelik/tricaster/canvas"
 	"github.com/Henelik/tricaster/matrix"
 	"github.com/Henelik/tricaster/ray"
 	"github.com/Henelik/tricaster/tuple"
-	"math"
 )
 
 var DefaultFOV = math.Pi / 2
@@ -76,17 +77,17 @@ func (c *Camera) SetTransform(im *matrix.Matrix) {
 func (c *Camera) RayForPixel(x, y int) *ray.Ray {
 	// the offset from the edge of the canvas to the pixel's center
 	xOffset := (float64(x) + 0.5) * c.pixelSize
-	zOffset := (float64(y) + 0.5) * c.pixelSize
+	yOffset := (float64(y) + 0.5) * c.pixelSize
 
 	// the untransformed coordinates of the pixel in world space.
 	// (remember that the camera looks toward -y, so +x is to the *right*.)
 	worldX := c.halfWidth - xOffset
-	worldZ := c.halfHeight - zOffset
+	worldY := c.halfHeight - yOffset
 
 	// using the camera matrix, transform the canvas point and the origin,
 	// and then compute the ray's direction vector.
 	// (remember that the canvas is at y=-1)
-	pixel := c.im.MultTuple(tuple.NewPoint(worldX, -1, worldZ))
+	pixel := c.im.MultTuple(tuple.NewPoint(worldX, worldY, -1))
 	origin := c.im.MultTuple(tuple.Origin)
 	direction := pixel.Sub(origin).Norm()
 

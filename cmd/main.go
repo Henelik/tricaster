@@ -1,22 +1,24 @@
 package main
 
 import (
-	"github.com/Henelik/tricaster/shading"
 	"image/png"
 	"log"
+	"math"
 	"os"
+
+	"github.com/Henelik/tricaster/scene"
+	"github.com/Henelik/tricaster/shading"
 
 	"github.com/Henelik/tricaster/canvas"
 	"github.com/Henelik/tricaster/color"
 	"github.com/Henelik/tricaster/geometry"
 	"github.com/Henelik/tricaster/matrix"
 	"github.com/Henelik/tricaster/physics"
-	"github.com/Henelik/tricaster/ray"
 	"github.com/Henelik/tricaster/tuple"
 )
 
 func main() {
-	drawSphereTest()
+	drawTestScene()
 }
 
 func physicsTest() {
@@ -122,16 +124,24 @@ func drawSphereTest() {
 		})
 
 	light := &shading.PointLight{
-		tuple.NewPoint(-10, -5, 10),
+		tuple.NewPoint(10, -5, 10),
 		color.White,
 	}
 
-	w := 512
-	h := 512
+	world := &scene.World{
+		Geometry: []geometry.Primitive{s},
+		Light:    light,
+	}
 
-	canv := canvas.NewCanvas(w, h)
+	cam := scene.NewCamera(512, 512, 0,
+		matrix.ViewTransform(
+			tuple.Origin,
+			tuple.NewPoint(0, 5, 0),
+			tuple.Up))
 
-	for x := 0; x < w; x++ {
+	cam.Render(world).SaveImage("new_sphere.png")
+
+	/*for x := 0; x < w; x++ {
 		for y := 0; y < h; y++ {
 			// shoot a ray at the sphere
 			xPos := (float64(x) - float64(w)/2.0) / (float64(w) * 0.4)
@@ -164,5 +174,57 @@ func drawSphereTest() {
 
 	png.Encode(outputFile, img)
 
-	outputFile.Close()
+	outputFile.Close()*/
+}
+
+func drawTestScene() {
+	floor := geometry.NewSphere(
+		matrix.Scaling(10, 10, 0.01),
+		shading.DefaultPhong.CopyWithColor(color.NewColor(1, 0.9, 0.9)))
+	floor.Mat.Specular = 0
+
+	leftWall := geometry.NewSphere(
+		matrix.Translation(0, 5, 0).Mult(
+			matrix.RotationY(-math.Pi/4).Mult(
+				matrix.RotationX(math.Pi/2).Mult(
+					matrix.Scaling(10, 10, 0.01)))),
+		floor.Mat)
+
+	rightWall := geometry.NewSphere(
+		matrix.Translation(5, 0, 0).Mult(
+			matrix.RotationZ(math.Pi/2).Mult(
+				matrix.RotationX(math.Pi/2).Mult(
+					matrix.Scaling(10, 10, 0.01)))),
+		floor.Mat)
+
+	middle := geometry.NewSphere(
+		matrix.Translation(0, 0, 1),
+		&shading.PhongMat{
+			Ambient:   0.1,
+			Diffuse:   0.9,
+			Specular:  0.9,
+			Shininess: 200,
+			Color:     color.NewColor(0.1, 1, 0.5),
+		})
+
+	w := &scene.World{
+		Geometry: []geometry.Primitive{
+			floor,
+			leftWall,
+			rightWall,
+			middle,
+		},
+		Light: &shading.PointLight{
+			Pos:   tuple.NewPoint(-7, -10, 10),
+			Color: color.White,
+		},
+	}
+
+	c := scene.NewCamera(1000, 500, math.Pi/3,
+		matrix.ViewTransform(
+			tuple.NewPoint(-10, -7, 3),
+			tuple.NewPoint(0, 0, 1),
+			tuple.Up))
+
+	c.Render(w).SaveImage("scene.png")
 }

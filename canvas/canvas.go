@@ -2,6 +2,8 @@ package canvas
 
 import (
 	"image"
+	"image/png"
+	"os"
 
 	"github.com/Henelik/tricaster/color"
 	"github.com/Henelik/tricaster/util"
@@ -61,4 +63,24 @@ func (c *Canvas) ToImage() *image.RGBA {
 	}
 
 	return img
+}
+
+func (c *Canvas) SaveImage(name string) error {
+	img := c.ToImage()
+
+	outputFile, err := os.Create(name)
+	if err != nil {
+		return err
+	}
+
+	err = png.Encode(outputFile, img)
+	if err != nil {
+		return err
+	}
+
+	err = outputFile.Close()
+	if err != nil {
+		return err
+	}
+	return nil
 }
