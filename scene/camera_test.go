@@ -1,11 +1,12 @@
 package scene
 
 import (
+	"math"
+	"testing"
+
 	"github.com/Henelik/tricaster/matrix"
 	"github.com/Henelik/tricaster/tuple"
 	"github.com/stretchr/testify/assert"
-	"math"
-	"testing"
 )
 
 func TestPixelSize(t *testing.T) {
@@ -23,16 +24,16 @@ func TestRayForPixel(t *testing.T) {
 	c := NewCamera(201, 101, 0, nil)
 	r := c.RayForPixel(100, 50)
 	assert.Equal(t, tuple.Origin, r.Origin)
-	assert.Equal(t, tuple.Forward, r.Direction)
+	assert.Equal(t, tuple.Down, r.Direction)
 
 	// Constructing a ray through a corner of the canvas
 	r1 := c.RayForPixel(0, 0)
 	assert.Equal(t, tuple.Origin, r1.Origin)
-	assert.Equal(t, tuple.NewVector(0.6651864261194509, -0.6685123582500481, 0.33259321305972545), r1.Direction)
+	assert.Equal(t, tuple.NewVector(0.6651864261194509, 0.33259321305972545, -0.6685123582500481), r1.Direction)
 
 	// Constructing a ray when the camera is transformed
-	c.SetMatrix(matrix.RotationZ(math.Pi / 4).Mult(matrix.Translation(0, -2, 5)))
+	c.SetMatrix(matrix.RotationX(math.Pi / 4).Mult(matrix.Translation(0, -2, 5)))
 	r2 := c.RayForPixel(100, 50)
-	assert.Equal(t, tuple.NewPoint(0, 2, -5), r2.Origin)
-	assert.Equal(t, tuple.NewVector(-math.Sqrt2/2, -math.Sqrt2/2, 0), r2.Direction)
+	assert.True(t, tuple.NewPoint(0, 2, -5).Equal(r2.Origin))
+	assert.True(t, tuple.NewVector(0, -math.Sqrt2/2, -math.Sqrt2/2).Equal(r2.Direction))
 }
