@@ -8,17 +8,15 @@ import (
 	"github.com/Henelik/tricaster/util"
 )
 
-var (
-	Identity = &Matrix{
-		Order: 4,
-		Data: [][]float64{
-			{1, 0, 0, 0},
-			{0, 1, 0, 0},
-			{0, 0, 1, 0},
-			{0, 0, 0, 1},
-		},
-	}
-)
+var Identity = &Matrix{
+	Order: 4,
+	Data: [][]float64{
+		{1, 0, 0, 0},
+		{0, 1, 0, 0},
+		{0, 0, 1, 0},
+		{0, 0, 0, 1},
+	},
+}
 
 type Matrix struct {
 	Order int
@@ -184,6 +182,19 @@ func Scaling(x, y, z float64) *Matrix {
 	}
 }
 
+// ScalingU creates a uniform scaling matrix
+func ScalingU(n float64) *Matrix {
+	return &Matrix{
+		Order: 4,
+		Data: [][]float64{
+			{n, 0, 0, 0},
+			{0, n, 0, 0},
+			{0, 0, n, 0},
+			{0, 0, 0, 1},
+		},
+	}
+}
+
 func RotationX(r float64) *Matrix {
 	return &Matrix{
 		Order: 4,
@@ -247,4 +258,12 @@ func ViewTransform(from, to, up *tuple.Tuple) *Matrix {
 		},
 	}
 	return orientation.Mult(Translation(-from.X, -from.Y, -from.Z))
+}
+
+func Compose(ms ...*Matrix) *Matrix {
+	result := Identity
+	for _, m := range ms {
+		result = result.Mult(m)
+	}
+	return result
 }
