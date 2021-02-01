@@ -179,7 +179,7 @@ func drawSphereTest() {
 
 func drawTestScene() {
 	floor := geometry.NewSphere(
-		matrix.Scaling(10, 10, 0.01),
+		matrix.Scaling(100, 100, 0.01),
 		shading.DefaultPhong.CopyWithColor(color.NewColor(1, 0.9, 0.9)))
 	floor.Mat.Specular = 0
 
@@ -187,24 +187,44 @@ func drawTestScene() {
 		matrix.Translation(0, 5, 0).Mult(
 			matrix.RotationY(-math.Pi/4).Mult(
 				matrix.RotationX(math.Pi/2).Mult(
-					matrix.Scaling(10, 10, 0.01)))),
+					matrix.Scaling(100, 100, 0.01)))),
 		floor.Mat)
 
 	rightWall := geometry.NewSphere(
 		matrix.Translation(5, 0, 0).Mult(
 			matrix.RotationZ(math.Pi/2).Mult(
 				matrix.RotationX(math.Pi/2).Mult(
-					matrix.Scaling(10, 10, 0.01)))),
+					matrix.Scaling(100, 100, 0.01)))),
 		floor.Mat)
 
 	middle := geometry.NewSphere(
-		matrix.Translation(0, 0, 1),
+		matrix.Translation(0, 0, 2.5).Mult(matrix.Scaling(2, 2, 2)),
+		&shading.PhongMat{
+			Ambient:   0.1,
+			Diffuse:   0.9,
+			Specular:  0.1,
+			Shininess: 10,
+			Color:     color.NewColor(0.1, 1, 0.5),
+		})
+
+	left := geometry.NewSphere(
+		matrix.Translation(1, -5, 3),
 		&shading.PhongMat{
 			Ambient:   0.1,
 			Diffuse:   0.9,
 			Specular:  0.9,
 			Shininess: 200,
-			Color:     color.NewColor(0.1, 1, 0.5),
+			Color:     color.NewColor(1, 0.1, 0.1),
+		})
+
+	right := geometry.NewSphere(
+		matrix.Translation(-4, 3, 1.5).Mult(matrix.Scaling(1.5, 1.5, 1.5)),
+		&shading.PhongMat{
+			Ambient:   0.1,
+			Diffuse:   0.9,
+			Specular:  0.9,
+			Shininess: 200,
+			Color:     color.NewColor(0.2, 0.2, 1),
 		})
 
 	w := &scene.World{
@@ -213,17 +233,19 @@ func drawTestScene() {
 			leftWall,
 			rightWall,
 			middle,
+			left,
+			right,
 		},
 		Light: &shading.PointLight{
-			Pos:   tuple.NewPoint(-7, -10, 10),
+			Pos:   tuple.NewPoint(-7, -10, 8),
 			Color: color.White,
 		},
 	}
 
 	c := scene.NewCamera(1000, 500, math.Pi/3,
 		matrix.ViewTransform(
-			tuple.NewPoint(-10, -7, 3),
-			tuple.NewPoint(0, 0, 1),
+			tuple.NewPoint(-15, -10, 5),
+			tuple.NewPoint(0, 0, 2),
 			tuple.Up))
 
 	c.Render(w).SaveImage("scene.png")
