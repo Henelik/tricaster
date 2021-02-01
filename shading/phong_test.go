@@ -1,11 +1,12 @@
 package shading
 
 import (
+	"math"
+	"testing"
+
 	"github.com/Henelik/tricaster/color"
 	"github.com/Henelik/tricaster/tuple"
 	"github.com/stretchr/testify/assert"
-	"math"
-	"testing"
 )
 
 func TestPhong(t *testing.T) {
@@ -14,6 +15,7 @@ func TestPhong(t *testing.T) {
 		eyeV    *tuple.Tuple
 		normalV *tuple.Tuple
 		light   *PointLight
+		shadow  bool
 		want    *color.Color
 	}{
 		{
@@ -66,6 +68,17 @@ func TestPhong(t *testing.T) {
 			},
 			want: color.NewColor(0.1, 0.1, 0.1),
 		},
+		{
+			name:    "Lighting with the surface in shadow",
+			eyeV:    tuple.NewVector(0, 0, -1),
+			normalV: tuple.NewVector(0, 0, -1),
+			light: &PointLight{
+				tuple.NewPoint(0, 0, 10),
+				color.White,
+			},
+			shadow: true,
+			want:   color.NewColor(0.1, 0.1, 0.1),
+		},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -73,7 +86,8 @@ func TestPhong(t *testing.T) {
 				tc.light,
 				tuple.Origin,
 				tc.eyeV,
-				tc.normalV)
+				tc.normalV,
+				tc.shadow)
 			assert.True(t, tc.want.Equal(result))
 			// assert.Equal(t, tc.want, result)
 		})

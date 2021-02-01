@@ -23,7 +23,10 @@ type PhongMat struct {
 	Color     *color.Color
 }
 
-func (m *PhongMat) Lighting(light *PointLight, pos, eyeV, normalV *tuple.Tuple) *color.Color {
+func (m *PhongMat) Lighting(light *PointLight, pos, eyeV, normalV *tuple.Tuple, inShadow bool) *color.Color {
+	if inShadow {
+		return m.Color.MultCol(light.Color).MultF(m.Ambient)
+	}
 	effectiveColor := m.Color.MultCol(light.Color)
 	lightV := light.Pos.Sub(pos).Norm()
 	ambient := effectiveColor.MultF(m.Ambient)
