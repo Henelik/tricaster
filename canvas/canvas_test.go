@@ -19,6 +19,12 @@ func TestNewCanvas(t *testing.T) {
 
 	assert.Equal(t, w*h, len(c.Pix))
 	assert.Equal(t, color.NewColor(0, 0, 0), &c.Pix[0])
+
+	c2 := NewCanvas(0, 10)
+	assert.Nil(t, c2)
+
+	c3 := NewCanvas(10, 0)
+	assert.Nil(t, c3)
 }
 
 func TestGet(t *testing.T) {

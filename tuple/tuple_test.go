@@ -214,3 +214,17 @@ func TestReflect(t *testing.T) {
 	e2 := Right
 	assert.True(t, e2.Equal(r2))
 }
+
+func TestIsPoint(t *testing.T) {
+	assert.True(t, (&Tuple{1, 2, 3, 1}).IsPoint())
+	assert.False(t, (&Tuple{1, 2, 3, 0}).IsPoint())
+}
+
+func TestIsVector(t *testing.T) {
+	assert.True(t, (&Tuple{1, 2, 3, 0}).IsVector())
+	assert.False(t, (&Tuple{1, 2, 3, 1}).IsVector())
+}
+
+func TestFmt(t *testing.T) {
+	assert.Equal(t, "X: 1.000000, Y: 2.000000, Z:3.000000, W:1.000000", (&Tuple{1, 2, 3, 1}).Fmt())
+}
