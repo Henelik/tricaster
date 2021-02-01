@@ -1,9 +1,10 @@
 package geometry
 
 import (
+	"math"
+
 	"github.com/Henelik/tricaster/color"
 	"github.com/Henelik/tricaster/shading"
-	"math"
 
 	"github.com/Henelik/tricaster/matrix"
 	"github.com/Henelik/tricaster/ray"
@@ -68,6 +69,5 @@ func (s *Sphere) NormalAt(p *tuple.Tuple) *tuple.Tuple {
 }
 
 func (s *Sphere) Shade(light *shading.PointLight, c *Comp) *color.Color {
-	return s.Mat.Lighting(light, c.Point, c.EyeV, c.NormalV)
+	return s.Mat.Lighting(light, c.Point, c.EyeV, c.NormalV, false)
 }
-

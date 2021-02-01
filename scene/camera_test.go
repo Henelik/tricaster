@@ -117,7 +117,7 @@ func BenchmarkRender(b *testing.B) {
 				tuple.NewPoint(3, 3, 2),
 				tuple.Up))
 
-		canv = c.Render(w)
+		canv = c.GoRender(w)
 	}
 	assert.NotNil(b, canv)
 }

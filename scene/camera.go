@@ -2,6 +2,7 @@ package scene
 
 import (
 	"math"
+	"sync"
 
 	"github.com/Henelik/tricaster/canvas"
 	"github.com/Henelik/tricaster/matrix"
@@ -103,5 +104,30 @@ func (c *Camera) Render(w *World) *canvas.Canvas {
 			canv.Set(x, y, col)
 		}
 	}
+	return canv
+}
+
+func (c *Camera) GoRender(w *World) *canvas.Canvas {
+	canv := canvas.NewCanvas(c.hSize, c.vSize)
+	var wg sync.WaitGroup
+	wg.Add(4)
+	halfH := c.hSize / 2
+	halfV := c.vSize / 2
+
+	worker := func(xs, ys int) {
+		defer wg.Done()
+		for x := xs; x < halfH+xs; x++ {
+			for y := ys; y < halfV+ys; y++ {
+				canv.Set(x, y, w.ColorAt(c.RayForPixel(x, y)))
+			}
+		}
+	}
+
+	go worker(0, 0)
+	go worker(0, halfV)
+	go worker(halfH, 0)
+	go worker(halfH, halfV)
+
+	wg.Wait()
 	return canv
 }

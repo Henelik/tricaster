@@ -250,5 +250,5 @@ func drawTestScene() {
 			tuple.NewPoint(3, 3, 2),
 			tuple.Up))
 
-	c.Render(w).SaveImage("scene.png")
+	c.GoRender(w).SaveImage("scene.png")
 }
