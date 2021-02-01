@@ -1,9 +1,10 @@
 package shading
 
 import (
+	"math"
+
 	"github.com/Henelik/tricaster/color"
 	"github.com/Henelik/tricaster/tuple"
-	"math"
 )
 
 var DefaultPhong = &PhongMat{
@@ -36,24 +37,25 @@ func (m *PhongMat) Lighting(light *PointLight, pos, eyeV, normalV *tuple.Tuple) 
 		// compute the diffuse contribution
 		diffuse = effectiveColor.MultF(m.Diffuse * lightDotNormal)
 
-		// reflect_dot_eye represents the cosine of the angle between the
-		// reflection vector and the eye vector. A negative number means the
-		// light reflects away from the eye.
-		reflectV := lightV.Neg().Reflect(normalV)
-		reflectDotEye := reflectV.DotProd(eyeV)
+		if m.Specular != 0 {
+			// reflect_dot_eye represents the cosine of the angle between the
+			// reflection vector and the eye vector. A negative number means the
+			// light reflects away from the eye.
+			reflectDotEye := lightV.Neg().Reflect(normalV).DotProd(eyeV)
 
-		if reflectDotEye > 0 {
-			// compute the specular reflection
-			factor := math.Pow(reflectDotEye, m.Shininess)
-			specular = light.Color.MultF(m.Specular * factor)
+			if reflectDotEye > 0 {
+				// compute the specular reflection
+				factor := math.Pow(reflectDotEye, m.Shininess)
+				specular = light.Color.MultF(m.Specular * factor)
+			}
 		}
 	}
 	return ambient.Add(diffuse.Add(specular))
 }
 
 // CopyWithColor returns a new material with modified color
-func (p *PhongMat) CopyWithColor(c *color.Color) *PhongMat {
-	mat := *p
+func (m *PhongMat) CopyWithColor(c *color.Color) *PhongMat {
+	mat := *m
 	mat.Color = c
 	return &mat
 }
