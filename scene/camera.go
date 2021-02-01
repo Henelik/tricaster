@@ -107,26 +107,28 @@ func (c *Camera) Render(w *World) *canvas.Canvas {
 	return canv
 }
 
-func (c *Camera) GoRender(w *World) *canvas.Canvas {
+// GoRender divides the image into an n*n grid and renders each cell in a goroutine
+func (c *Camera) GoRender(n int, w *World) *canvas.Canvas {
 	canv := canvas.NewCanvas(c.hSize, c.vSize)
 	var wg sync.WaitGroup
-	wg.Add(4)
-	halfH := c.hSize / 2
-	halfV := c.vSize / 2
+	wg.Add(n * n)
+	subH := c.hSize / n
+	subV := c.vSize / n
 
 	worker := func(xs, ys int) {
 		defer wg.Done()
-		for x := xs; x < halfH+xs; x++ {
-			for y := ys; y < halfV+ys; y++ {
+		for x := xs; x < subH+xs; x++ {
+			for y := ys; y < subV+ys; y++ {
 				canv.Set(x, y, w.ColorAt(c.RayForPixel(x, y)))
 			}
 		}
 	}
 
-	go worker(0, 0)
-	go worker(0, halfV)
-	go worker(halfH, 0)
-	go worker(halfH, halfV)
+	for sh := 0; sh < n; sh++ {
+		for sv := 0; sv < n; sv++ {
+			go worker(sh*subH, sv*subV)
+		}
+	}
 
 	wg.Wait()
 	return canv
