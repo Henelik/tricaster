@@ -54,11 +54,11 @@ func (w *World) IntersectNoSort(r *ray.Ray) []geometry.Intersection {
 
 func (w *World) Shade(c *geometry.Comp) *color.Color {
 	if !w.Config.Shadows {
-		return c.P.Shade(w.Light, c, false)
+		return c.P.Shade(w.Light, c)
 	}
 	overP := c.Point.Add(c.NormalV.Mult(util.Epsilon))
-	inShadow := w.IsShadowed(overP)
-	return c.P.Shade(w.Light, c, inShadow)
+	c.InShadow = w.IsShadowed(overP)
+	return c.P.Shade(w.Light, c)
 }
 
 func (w *World) ColorAt(r *ray.Ray) *color.Color {
