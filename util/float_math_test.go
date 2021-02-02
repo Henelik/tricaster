@@ -7,13 +7,13 @@ import (
 )
 
 func TestEqual(t *testing.T) {
-	f1 := 1.0 + .5*epsilon
+	f1 := 1.0 + .5*Epsilon
 	f2 := 1.0
 
 	assert.True(t, Equal(f1, f2))
 	assert.NotEqual(t, f1, f2)
 
-	f1 = 1.0 + 2*epsilon
+	f1 = 1.0 + 2*Epsilon
 
 	assert.False(t, Equal(f1, f2))
 	assert.NotEqual(t, f1, f2)

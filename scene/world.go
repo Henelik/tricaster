@@ -48,7 +48,9 @@ func (w *World) IntersectNoSort(r *ray.Ray) []geometry.Intersection {
 }
 
 func (w *World) Shade(c *geometry.Comp) *color.Color {
-	return c.P.Shade(w.Light, c)
+	overP := c.Point.Add(c.NormalV.Mult(.001))
+	inShadow := w.IsShadowed(overP)
+	return c.P.Shade(w.Light, c, inShadow)
 }
 
 func (w *World) ColorAt(r *ray.Ray) *color.Color {
@@ -57,4 +59,21 @@ func (w *World) ColorAt(r *ray.Ray) *color.Color {
 		return color.Black
 	}
 	return w.Shade(h.Precompute(r))
+}
+
+func (w *World) IsShadowed(p *tuple.Tuple) bool {
+	v := w.Light.Pos.Sub(p)
+	distance := v.Mag()
+	direction := v.Norm()
+
+	r := ray.NewRay(p, direction)
+
+	inters := w.IntersectNoSort(r)
+
+	h := geometry.Hit(inters)
+
+	if *h != *geometry.NilHit || h.T < distance {
+		return true
+	}
+	return false
 }

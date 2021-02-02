@@ -68,6 +68,6 @@ func (s *Sphere) NormalAt(p *tuple.Tuple) *tuple.Tuple {
 	return worldNormal.Norm()
 }
 
-func (s *Sphere) Shade(light *shading.PointLight, c *Comp) *color.Color {
-	return s.Mat.Lighting(light, c.Point, c.EyeV, c.NormalV, false)
+func (s *Sphere) Shade(light *shading.PointLight, c *Comp, inShadow bool) *color.Color {
+	return s.Mat.Lighting(light, c.Point, c.EyeV, c.NormalV, inShadow)
 }

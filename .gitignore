@@ -15,7 +15,7 @@
 # vendor/
 
 # Rendered images
-*.png
+# *.png
 
 # benchmarks
 bench/*

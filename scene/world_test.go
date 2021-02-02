@@ -1,6 +1,8 @@
 package scene
 
 import (
+	"testing"
+
 	"github.com/Henelik/tricaster/color"
 	"github.com/Henelik/tricaster/geometry"
 	"github.com/Henelik/tricaster/matrix"
@@ -8,7 +10,6 @@ import (
 	"github.com/Henelik/tricaster/shading"
 	"github.com/Henelik/tricaster/tuple"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestIntersect(t *testing.T) {
@@ -80,4 +81,38 @@ func TestColorAtHitBehind(t *testing.T) {
 	r := ray.NewRay(tuple.NewPoint(0.75, 0, 0), tuple.Left)
 	col := w.ColorAt(r)
 	assert.Equal(t, color.Blue, col)
+}
+
+func TestShadow(t *testing.T) {
+	testCases := []struct {
+		name string
+		p    *tuple.Tuple
+		want bool
+	}{
+		{
+			name: "There is no shadow when nothing is collinear with point and light",
+			p:    tuple.NewPoint(0, 0, 10),
+			want: false,
+		},
+		{
+			name: "The shadow when an object is between the point and the light",
+			p:    tuple.NewPoint(10, 10, -10),
+			want: true,
+		},
+		{
+			name: "There is no shadow when an object is behind the light",
+			p:    tuple.NewPoint(-20, -20, 20),
+			want: false,
+		},
+		{
+			name: "There is no shadow when an object is behind the point",
+			p:    tuple.NewPoint(-2, -2, 2),
+			want: false,
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			assert.Equal(t, tc.want, DefaultWorld.IsShadowed(tc.p))
+		})
+	}
 }
