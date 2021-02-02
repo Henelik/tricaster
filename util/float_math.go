@@ -2,7 +2,7 @@ package util
 
 import "math"
 
-const Epsilon = .000000000001
+const Epsilon = .0000000001
 
 func Equal(x, y float64) bool {
 	if math.Abs(x-y) < Epsilon {
