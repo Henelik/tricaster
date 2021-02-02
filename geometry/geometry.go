@@ -20,7 +20,7 @@ type Primitive interface {
 	// Intersects returns an array of intersections where the ray meets the primitive
 	Intersects(r *ray.Ray) []Intersection
 	// NormalAt returns the normal vector at a given scene point
-	NormalAt(p *tuple.Tuple) *tuple.Tuple
+	NormalAt(pos *tuple.Tuple) *tuple.Tuple
 	Shade(light *shading.PointLight, c *Comp) *color.Color
 }
 

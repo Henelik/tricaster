@@ -60,8 +60,8 @@ func (s *Sphere) Intersects(r *ray.Ray) []Intersection {
 	}
 }
 
-func (s *Sphere) NormalAt(p *tuple.Tuple) *tuple.Tuple {
-	objectPoint := s.im.MultTuple(p)
+func (s *Sphere) NormalAt(pos *tuple.Tuple) *tuple.Tuple {
+	objectPoint := s.im.MultTuple(pos)
 	objectNormal := objectPoint.Sub(tuple.Origin)
 	worldNormal := s.im.Transpose().MultTuple(objectNormal)
 	worldNormal.W = 0

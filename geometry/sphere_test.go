@@ -1,9 +1,10 @@
 package geometry
 
 import (
-	"github.com/Henelik/tricaster/shading"
 	"math"
 	"testing"
+
+	"github.com/Henelik/tricaster/shading"
 
 	"github.com/Henelik/tricaster/matrix"
 	"github.com/Henelik/tricaster/ray"
@@ -11,7 +12,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestIntersects(t *testing.T) {
+func TestSphere_Intersects(t *testing.T) {
 	s := NewSphere(matrix.Identity, shading.DefaultPhong)
 	testCases := []struct {
 		name string
@@ -45,7 +46,7 @@ func TestIntersects(t *testing.T) {
 		{
 			name: "A ray originates inside a sphere",
 			r: ray.NewRay(
-				tuple.NewPoint(0, 0, 0),
+				tuple.Origin,
 				tuple.Up,
 			),
 			want: []Intersection{{-1, s}, {1, s}},
@@ -67,7 +68,7 @@ func TestIntersects(t *testing.T) {
 	}
 }
 
-func TestIntersectsTransformed(t *testing.T) {
+func TestSphere_IntersectsTransformed(t *testing.T) {
 	r := ray.NewRay(
 		tuple.NewPoint(0, 0, -5),
 		tuple.Up,
@@ -89,7 +90,7 @@ func TestIntersectsTransformed(t *testing.T) {
 	assert.Equal(t, want2, s2.Intersects(r))
 }
 
-func TestNormalAt(t *testing.T) {
+func TestSphere_NormalAt(t *testing.T) {
 	testCases := []struct {
 		name string
 		s    *Sphere
@@ -100,7 +101,7 @@ func TestNormalAt(t *testing.T) {
 			name: "The normal on a sphere at a point on the x axis",
 			s:    NewSphere(matrix.Identity, shading.DefaultPhong),
 			p:    tuple.NewPoint(1, 0, 0),
-			want: tuple.NewVector(1, 0, 0),
+			want: tuple.Right,
 		},
 		{
 			name: "The normal on a sphere at a point on the y axis",
