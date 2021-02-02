@@ -17,10 +17,10 @@ type Sphere struct {
 	// the inverse transformation matrix
 	im *matrix.Matrix
 	// the material
-	Mat *shading.PhongMat
+	Mat shading.Material
 }
 
-func NewSphere(m *matrix.Matrix, mat *shading.PhongMat) *Sphere {
+func NewSphere(m *matrix.Matrix, mat shading.Material) *Sphere {
 	s := &Sphere{
 		matrix.Identity,
 		matrix.Identity,

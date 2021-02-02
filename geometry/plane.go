@@ -11,5 +11,5 @@ type Plane struct {
 	// the inverse transformation matrix
 	im *matrix.Matrix
 	// the material
-	Mat *shading.PhongMat
+	Mat shading.Material
 }
