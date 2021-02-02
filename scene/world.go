@@ -7,6 +7,7 @@ import (
 	"github.com/Henelik/tricaster/ray"
 	"github.com/Henelik/tricaster/shading"
 	"github.com/Henelik/tricaster/tuple"
+	"github.com/Henelik/tricaster/util"
 )
 
 var DefaultWorld = &World{
@@ -48,7 +49,7 @@ func (w *World) IntersectNoSort(r *ray.Ray) []geometry.Intersection {
 }
 
 func (w *World) Shade(c *geometry.Comp) *color.Color {
-	overP := c.Point.Add(c.NormalV.Mult(.001))
+	overP := c.Point.Add(c.NormalV.Mult(util.Epsilon))
 	inShadow := w.IsShadowed(overP)
 	return c.P.Shade(w.Light, c, inShadow)
 }
