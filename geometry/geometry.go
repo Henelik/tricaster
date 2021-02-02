@@ -21,7 +21,7 @@ type Primitive interface {
 	Intersects(r *ray.Ray) []Intersection
 	// NormalAt returns the normal vector at a given scene point
 	NormalAt(p *tuple.Tuple) *tuple.Tuple
-	Shade(light *shading.PointLight, c *Comp, inShadow bool) *color.Color
+	Shade(light *shading.PointLight, c *Comp) *color.Color
 }
 
 // Intersection stores the t value of a ray intersection and a pointer to the intersected primitive
@@ -32,12 +32,13 @@ type Intersection struct {
 
 // intersection precomputation
 type Comp struct {
-	T       float64
-	P       Primitive
-	Point   *tuple.Tuple
-	EyeV    *tuple.Tuple
-	NormalV *tuple.Tuple
-	Inside  bool
+	T        float64
+	P        Primitive
+	Point    *tuple.Tuple
+	EyeV     *tuple.Tuple
+	NormalV  *tuple.Tuple
+	Inside   bool
+	InShadow bool
 }
 
 func (i *Intersection) Precompute(r *ray.Ray) *Comp {

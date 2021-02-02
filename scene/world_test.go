@@ -84,6 +84,8 @@ func TestColorAtHitBehind(t *testing.T) {
 }
 
 func TestShadow(t *testing.T) {
+	w := *DefaultWorld
+	w.Config = WorldConfig{Shadows: true}
 	testCases := []struct {
 		name string
 		p    *tuple.Tuple
@@ -112,7 +114,7 @@ func TestShadow(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			assert.Equal(t, tc.want, DefaultWorld.IsShadowed(tc.p))
+			assert.Equal(t, tc.want, w.IsShadowed(tc.p))
 		})
 	}
 }

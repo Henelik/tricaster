@@ -108,6 +108,9 @@ func BenchmarkRender(b *testing.B) {
 			Pos:   tuple.NewPoint(0, -10, 10),
 			Color: color.White,
 		},
+		Config: WorldConfig{
+			Shadows: true,
+		},
 	}
 
 	c := NewCamera(1000, 500, math.Pi/3,

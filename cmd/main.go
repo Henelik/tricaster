@@ -242,6 +242,9 @@ func drawTestScene() {
 			Pos:   tuple.NewPoint(0, -10, 10),
 			Color: color.White,
 		},
+		Config: scene.WorldConfig{
+			Shadows: true,
+		},
 	}
 
 	c := scene.NewCamera(1000, 500, math.Pi/3,
