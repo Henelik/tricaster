@@ -25,11 +25,15 @@ var DefaultWorld = &World{
 		tuple.NewPoint(-10, -10, 10),
 		color.White,
 	},
+	Config: WorldConfig{
+		Shadows: false,
+	},
 }
 
 type World struct {
 	Geometry []geometry.Primitive
 	Light    *shading.PointLight
+	Config   WorldConfig
 }
 
 func (w *World) Intersect(r *ray.Ray) []geometry.Intersection {
@@ -49,6 +53,9 @@ func (w *World) IntersectNoSort(r *ray.Ray) []geometry.Intersection {
 }
 
 func (w *World) Shade(c *geometry.Comp) *color.Color {
+	if !w.Config.Shadows {
+		return c.P.Shade(w.Light, c, false)
+	}
 	overP := c.Point.Add(c.NormalV.Mult(util.Epsilon))
 	inShadow := w.IsShadowed(overP)
 	return c.P.Shade(w.Light, c, inShadow)
@@ -73,7 +80,7 @@ func (w *World) IsShadowed(p *tuple.Tuple) bool {
 
 	h := geometry.Hit(inters)
 
-	if *h != *geometry.NilHit || h.T < distance {
+	if *h != *geometry.NilHit && h.T < distance {
 		return true
 	}
 	return false
