@@ -17,17 +17,17 @@ import (
 
 func TestPixelSize(t *testing.T) {
 	// The pixel size for a horizontal canvas
-	c1 := NewCamera(200, 125, 0, nil)
+	c1 := NewCamera(200, 125, 0, nil, 0)
 	assert.Equal(t, 0.01, c1.pixelSize)
 
 	// The pixel size for a vertical canvas
-	c2 := NewCamera(125, 200, 0, nil)
+	c2 := NewCamera(125, 200, 0, nil, 0)
 	assert.Equal(t, 0.01, c2.pixelSize)
 }
 
 func TestRayForPixel(t *testing.T) {
 	// Constructing a ray through the center of the canvas
-	c := NewCamera(201, 101, 0, nil)
+	c := NewCamera(201, 101, 0, nil, 0)
 	r := c.RayForPixel(100, 50)
 	assert.Equal(t, tuple.Origin, r.Origin)
 	assert.Equal(t, tuple.Down, r.Direction)
@@ -102,7 +102,7 @@ func BenchmarkRender(b *testing.B) {
 		matrix.ViewTransform(
 			tuple.NewPoint(-15, -10, 5),
 			tuple.NewPoint(3, 3, 2),
-			tuple.Up))
+			tuple.Up), 0)
 
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
