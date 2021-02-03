@@ -139,7 +139,7 @@ func drawSphereTest() {
 		matrix.ViewTransform(
 			tuple.Origin,
 			tuple.NewPoint(0, 5, 0),
-			tuple.Up))
+			tuple.Up), 16)
 
 	cam.Render(world).SaveImage("new_sphere.png")
 
@@ -262,7 +262,7 @@ func drawTestScene() {
 		matrix.ViewTransform(
 			tuple.NewPoint(-15, -10, 5),
 			tuple.NewPoint(3, 3, 2),
-			tuple.Up))
+			tuple.Up), 4)
 
-	c.GoRender(2, w).SaveImage("scene.png")
+	c.GoRender(2, w).SaveImage("scene_aax4.png")
 }

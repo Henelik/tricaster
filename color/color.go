@@ -48,3 +48,11 @@ func (c *Color) Equal(o *Color) bool {
 		util.Equal(c.G, o.G) &&
 		util.Equal(c.B, o.B)
 }
+
+func Avg(cs []*Color) *Color {
+	avg := cs[0]
+	for i := 1; i < len(cs); i++ {
+		avg = avg.Add(cs[i])
+	}
+	return avg.MultF(1.0 / float64(len(cs)))
+}
