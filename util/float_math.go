@@ -48,3 +48,7 @@ func AbsInt(n int) int {
 	}
 	return n
 }
+
+func Lerp(start, end, factor float64) float64 {
+	return start*(1-factor) + end*factor
+}

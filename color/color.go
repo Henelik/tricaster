@@ -56,3 +56,11 @@ func Avg(cs []*Color) *Color {
 	}
 	return avg.MultF(1.0 / float64(len(cs)))
 }
+
+func (c *Color) Lerp(o *Color, factor float64) *Color {
+	return &Color{
+		util.Lerp(c.R, o.R, factor),
+		util.Lerp(c.G, o.G, factor),
+		util.Lerp(c.B, o.B, factor),
+	}
+}
