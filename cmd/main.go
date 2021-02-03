@@ -142,41 +142,6 @@ func drawSphereTest() {
 			tuple.Up), 16)
 
 	cam.Render(world).SaveImage("new_sphere.png")
-
-	/*for x := 0; x < w; x++ {
-		for y := 0; y < h; y++ {
-			// shoot a ray at the sphere
-			xPos := (float64(x) - float64(w)/2.0) / (float64(w) * 0.4)
-			yPos := -(float64(y) - float64(h)/2.0) / (float64(h) * 0.4)
-			r := ray.NewRay(
-				tuple.NewPoint(xPos, 0, yPos),
-				tuple.Backward,
-			)
-			h := geometry.Hit(s.Intersects(r))
-			if h != geometry.NilHit {
-				// canv.Set(x, y, color.Red)
-				hitPoint := r.Position(h.T)
-				c := s.Mat.Lighting(
-					light,
-					hitPoint,
-					r.Direction.Neg(),
-					s.NormalAt(hitPoint))
-				// fmt.Printf("col: (%v, %v, %v)\n", c.R, c.G, c.B)
-				canv.Set(x, y, c)
-			}
-		}
-	}
-
-	img := canv.ToImage()
-
-	outputFile, err := os.Create("sphere.png")
-	if err != nil {
-		panic(err)
-	}
-
-	png.Encode(outputFile, img)
-
-	outputFile.Close()*/
 }
 
 func drawTestScene() {
