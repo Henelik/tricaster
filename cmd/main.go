@@ -194,7 +194,7 @@ func drawTestScene() {
 			Specular:  0.0,
 			Shininess: 10,
 			Color:     color.NewColor(0.1, 1, 0.5),
-			Pattern: shading.NewStripePattern(
+			Pattern: shading.NewCheckerPattern2D(
 				matrix.Compose(
 					matrix.RotationZ(-math.Pi/6),
 					matrix.RotationY(-math.Pi/6),
