@@ -48,22 +48,8 @@ func BenchmarkRender(b *testing.B) {
 	var canv *canvas.Canvas
 	floorMat := shading.DefaultPhong.CopyWithColor(color.NewColor(1, 0.9, 0.9))
 	floorMat.Specular = 0
-	floor := geometry.NewSphere(
-		matrix.Scaling(15, 15, 0.01),
-		floorMat)
-
-	leftWall := geometry.NewSphere(
-		matrix.Translation(0, 10, 0).Mult(
-			matrix.RotationY(-math.Pi/4).Mult(
-				matrix.RotationX(math.Pi/2).Mult(
-					matrix.Scaling(15, 15, 0.01)))),
-		floorMat)
-
-	rightWall := geometry.NewSphere(
-		matrix.Translation(10, 0, 0).Mult(
-			matrix.RotationZ(math.Pi/2).Mult(
-				matrix.RotationX(math.Pi/2).Mult(
-					matrix.Scaling(15, 15, 0.01)))),
+	floor := geometry.NewPlane(
+		matrix.Identity,
 		floorMat)
 
 	middle := geometry.NewSphere(
@@ -99,8 +85,6 @@ func BenchmarkRender(b *testing.B) {
 	w := &World{
 		Geometry: []geometry.Primitive{
 			floor,
-			leftWall,
-			rightWall,
 			middle,
 			left,
 			right,

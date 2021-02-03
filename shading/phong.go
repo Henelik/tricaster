@@ -20,14 +20,21 @@ type PhongMat struct {
 	Diffuse   float64
 	Specular  float64
 	Shininess float64
-	Color     *color.Color
+	Color     *color.Color // used as a fallback if there is no pattern
+	Pattern   Pattern
 }
 
 func (m PhongMat) Lighting(light *PointLight, pos, eyeV, normalV *tuple.Tuple, inShadow bool) *color.Color {
-	if inShadow {
-		return m.Color.MultCol(light.Color).MultF(m.Ambient)
+	var col *color.Color
+	if m.Pattern != nil {
+		col = m.Pattern.Process(pos)
+	} else {
+		col = m.Color
 	}
-	effectiveColor := m.Color.MultCol(light.Color)
+	if inShadow {
+		return col.MultCol(light.Color).MultF(m.Ambient)
+	}
+	effectiveColor := col.MultCol(light.Color)
 	lightV := light.Pos.Sub(pos).Norm()
 	ambient := effectiveColor.MultF(m.Ambient)
 	// light_dot_normal represents the cosine of the angle between the

@@ -182,22 +182,8 @@ func drawSphereTest() {
 func drawTestScene() {
 	floorMat := shading.DefaultPhong.CopyWithColor(color.NewColor(1, 0.9, 0.9))
 	floorMat.Specular = 0
-	floor := geometry.NewSphere(
-		matrix.Scaling(15, 15, 0.01),
-		floorMat)
-
-	leftWall := geometry.NewSphere(
-		matrix.Translation(0, 10, 0).Mult(
-			matrix.RotationY(-math.Pi/4).Mult(
-				matrix.RotationX(math.Pi/2).Mult(
-					matrix.Scaling(15, 15, 0.01)))),
-		floorMat)
-
-	rightWall := geometry.NewSphere(
-		matrix.Translation(10, 0, 0).Mult(
-			matrix.RotationZ(math.Pi/2).Mult(
-				matrix.RotationX(math.Pi/2).Mult(
-					matrix.Scaling(15, 15, 0.01)))),
+	floor := geometry.NewPlane(
+		matrix.Identity,
 		floorMat)
 
 	middle := geometry.NewSphere(
@@ -208,6 +194,14 @@ func drawTestScene() {
 			Specular:  0.0,
 			Shininess: 10,
 			Color:     color.NewColor(0.1, 1, 0.5),
+			Pattern: shading.NewStripePattern(
+				matrix.Compose(
+					matrix.RotationZ(-math.Pi/6),
+					matrix.RotationY(-math.Pi/6),
+					matrix.ScalingU(.5),
+				),
+				color.NewColor(0.1, 1, 0.5),
+				color.NewColor(0.1, 0.5, 0.4)),
 		})
 
 	left := geometry.NewSphere(
@@ -228,13 +222,19 @@ func drawTestScene() {
 			Specular:  0.9,
 			Shininess: 200,
 			Color:     color.NewColor(0.2, 0.2, 1),
+			Pattern: shading.NewStripePattern(
+				matrix.Compose(
+					matrix.Translation(0, 0, .25),
+					matrix.RotationY(math.Pi/2),
+					matrix.ScalingU(.5),
+				),
+				color.NewColor(0.2, 0.2, 1),
+				color.NewColor(0.2, 0.2, 0.4)),
 		})
 
 	w := &scene.World{
 		Geometry: []geometry.Primitive{
 			floor,
-			leftWall,
-			rightWall,
 			middle,
 			left,
 			right,
