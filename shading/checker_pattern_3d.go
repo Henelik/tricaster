@@ -3,21 +3,20 @@ package shading
 import (
 	"math"
 
-	"github.com/Henelik/tricaster/util"
-
 	"github.com/Henelik/tricaster/color"
 	"github.com/Henelik/tricaster/matrix"
 	"github.com/Henelik/tricaster/tuple"
+	"github.com/Henelik/tricaster/util"
 )
 
-type CheckerPattern2D struct {
+type CheckerPattern3D struct {
 	m      *matrix.Matrix
 	im     *matrix.Matrix
 	Colors []*color.Color
 }
 
-func NewCheckerPattern2D(m *matrix.Matrix, c1, c2 *color.Color) *CheckerPattern2D {
-	result := &CheckerPattern2D{
+func NewCheckerPattern3D(m *matrix.Matrix, c1, c2 *color.Color) *CheckerPattern3D {
+	result := &CheckerPattern3D{
 		m:      matrix.Identity,
 		im:     matrix.Identity,
 		Colors: []*color.Color{c1, c2},
@@ -29,16 +28,16 @@ func NewCheckerPattern2D(m *matrix.Matrix, c1, c2 *color.Color) *CheckerPattern2
 	return result
 }
 
-func (p *CheckerPattern2D) SetMatrix(m *matrix.Matrix) {
+func (p *CheckerPattern3D) SetMatrix(m *matrix.Matrix) {
 	p.m = m
 	p.im = m.Inverse()
 }
 
-func (p *CheckerPattern2D) GetMatrix() *matrix.Matrix {
+func (p *CheckerPattern3D) GetMatrix() *matrix.Matrix {
 	return p.m
 }
 
-func (p *CheckerPattern2D) Process(pos *tuple.Tuple) *color.Color {
+func (p *CheckerPattern3D) Process(pos *tuple.Tuple) *color.Color {
 	tpos := p.im.MultTuple(pos)
-	return p.Colors[util.AbsInt(int(math.Round(tpos.X))+int(math.Round(tpos.Y)))%2]
+	return p.Colors[util.AbsInt(int(math.Round(tpos.X))+int(math.Round(tpos.Y))+int(math.Round(tpos.Z)))%2]
 }

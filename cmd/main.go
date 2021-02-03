@@ -180,7 +180,17 @@ func drawSphereTest() {
 }
 
 func drawTestScene() {
-	floorMat := shading.DefaultPhong.CopyWithColor(color.NewColor(1, 0.9, 0.9))
+	floorMat := &shading.PhongMat{
+		Ambient:   0.1,
+		Diffuse:   0.9,
+		Specular:  0.0,
+		Shininess: 10,
+		Color:     color.NewColor(1, 0.9, 0.9),
+		Pattern: shading.NewCheckerPattern3D(
+			matrix.ScalingU(20),
+			color.NewColor(1, 0.9, 0.9),
+			color.NewColor(0.2, 0.19, 0.19)),
+	}
 	floorMat.Specular = 0
 	floor := geometry.NewPlane(
 		matrix.Identity,
@@ -194,7 +204,7 @@ func drawTestScene() {
 			Specular:  0.0,
 			Shininess: 10,
 			Color:     color.NewColor(0.1, 1, 0.5),
-			Pattern: shading.NewCheckerPattern2D(
+			Pattern: shading.NewCheckerPattern3D(
 				matrix.Compose(
 					matrix.RotationZ(-math.Pi/6),
 					matrix.RotationY(-math.Pi/6),
