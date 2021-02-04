@@ -153,8 +153,8 @@ func drawTestScene() {
 		Color:     color.NewColor(1, 0.9, 0.9),
 		Pattern: shading.NewCheckerPattern3D(
 			matrix.ScalingU(20),
-			color.NewColor(1, 0.9, 0.9),
-			color.NewColor(0.2, 0.19, 0.19)),
+			shading.SolidPat(1, 0.9, 0.9),
+			shading.SolidPat(0.2, 0.19, 0.19)),
 	}
 	floorMat.Specular = 0
 	floor := geometry.NewPlane(
@@ -175,8 +175,8 @@ func drawTestScene() {
 					matrix.RotationY(-math.Pi/6),
 					matrix.ScalingU(.5),
 				),
-				color.NewColor(0.1, 1, 0.5),
-				color.NewColor(0.1, 0.5, 0.4)),
+				shading.SolidPat(0.1, 1, 0.5),
+				shading.SolidPat(0.1, 0.5, 0.4)),
 		})
 
 	left := geometry.NewSphere(
@@ -203,8 +203,8 @@ func drawTestScene() {
 					matrix.RotationY(math.Pi/2),
 					matrix.ScalingU(.5),
 				),
-				color.NewColor(0.2, 0.2, 1),
-				color.NewColor(0.2, 0.2, 0.4)),
+				shading.SolidPat(0.2, 0.2, 1),
+				shading.SolidPat(0.2, 0.2, 0.4)),
 		})
 
 	w := &scene.World{
@@ -227,7 +227,7 @@ func drawTestScene() {
 		matrix.ViewTransform(
 			tuple.NewPoint(-15, -10, 5),
 			tuple.NewPoint(3, 3, 2),
-			tuple.Up), 16)
+			tuple.Up), 4)
 
-	c.GoRender(w).SaveImage("new_scene_aax16.png")
+	c.GoRender(w).SaveImage("new_scene_aax4.png")
 }

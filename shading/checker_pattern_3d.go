@@ -10,16 +10,16 @@ import (
 )
 
 type CheckerPattern3D struct {
-	m      *matrix.Matrix
-	im     *matrix.Matrix
-	Colors []*color.Color
+	m        *matrix.Matrix
+	im       *matrix.Matrix
+	Patterns []Pattern
 }
 
-func NewCheckerPattern3D(m *matrix.Matrix, c1, c2 *color.Color) *CheckerPattern3D {
+func NewCheckerPattern3D(m *matrix.Matrix, c1, c2 Pattern) *CheckerPattern3D {
 	result := &CheckerPattern3D{
-		m:      matrix.Identity,
-		im:     matrix.Identity,
-		Colors: []*color.Color{c1, c2},
+		m:        matrix.Identity,
+		im:       matrix.Identity,
+		Patterns: []Pattern{c1, c2},
 	}
 	if m != nil {
 		result.m = m
@@ -39,5 +39,5 @@ func (p *CheckerPattern3D) GetMatrix() *matrix.Matrix {
 
 func (p *CheckerPattern3D) Process(pos *tuple.Tuple) *color.Color {
 	tpos := p.im.MultTuple(pos)
-	return p.Colors[util.AbsInt(int(math.Round(tpos.X))+int(math.Round(tpos.Y))+int(math.Round(tpos.Z)))%2]
+	return p.Patterns[util.AbsInt(int(math.Round(tpos.X))+int(math.Round(tpos.Y))+int(math.Round(tpos.Z)))%2].Process(pos)
 }

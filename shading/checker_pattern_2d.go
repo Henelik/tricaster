@@ -11,16 +11,16 @@ import (
 )
 
 type CheckerPattern2D struct {
-	m      *matrix.Matrix
-	im     *matrix.Matrix
-	Colors []*color.Color
+	m        *matrix.Matrix
+	im       *matrix.Matrix
+	Patterns []Pattern
 }
 
-func NewCheckerPattern2D(m *matrix.Matrix, c1, c2 *color.Color) *CheckerPattern2D {
+func NewCheckerPattern2D(m *matrix.Matrix, p1, p2 Pattern) *CheckerPattern2D {
 	result := &CheckerPattern2D{
-		m:      matrix.Identity,
-		im:     matrix.Identity,
-		Colors: []*color.Color{c1, c2},
+		m:        matrix.Identity,
+		im:       matrix.Identity,
+		Patterns: []Pattern{p1, p2},
 	}
 	if m != nil {
 		result.m = m
@@ -40,5 +40,5 @@ func (p *CheckerPattern2D) GetMatrix() *matrix.Matrix {
 
 func (p *CheckerPattern2D) Process(pos *tuple.Tuple) *color.Color {
 	tpos := p.im.MultTuple(pos)
-	return p.Colors[util.AbsInt(int(math.Round(tpos.X))+int(math.Round(tpos.Y)))%2]
+	return p.Patterns[util.AbsInt(int(math.Round(tpos.X))+int(math.Round(tpos.Y)))%2].Process(pos)
 }

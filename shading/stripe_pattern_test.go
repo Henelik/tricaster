@@ -11,7 +11,7 @@ import (
 )
 
 func TestStripePattern_Process(t *testing.T) {
-	p := NewStripePattern(nil, color.White, color.Black)
+	p := NewStripePattern(nil, NewSolidPattern(color.White), NewSolidPattern(color.Black))
 	testCases := []struct {
 		name string
 		pos  *tuple.Tuple

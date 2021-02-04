@@ -106,7 +106,7 @@ func BenchmarkRender(b *testing.B) {
 
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		canv = c.GoRender(2, w)
+		canv = c.GoRender(w)
 	}
 	assert.NotNil(b, canv)
 }

@@ -9,18 +9,18 @@ import (
 )
 
 type GradientPattern struct {
-	m      *matrix.Matrix
-	im     *matrix.Matrix
-	Color1 *color.Color
-	Color2 *color.Color
+	m        *matrix.Matrix
+	im       *matrix.Matrix
+	Pattern1 Pattern
+	Pattern2 Pattern
 }
 
-func NewGradientPattern(m *matrix.Matrix, c1, c2 *color.Color) *GradientPattern {
+func NewGradientPattern(m *matrix.Matrix, c1, c2 Pattern) *GradientPattern {
 	result := &GradientPattern{
-		m:      matrix.Identity,
-		im:     matrix.Identity,
-		Color1: c1,
-		Color2: c2,
+		m:        matrix.Identity,
+		im:       matrix.Identity,
+		Pattern1: c1,
+		Pattern2: c2,
 	}
 	if m != nil {
 		result.m = m
@@ -40,5 +40,5 @@ func (p *GradientPattern) GetMatrix() *matrix.Matrix {
 
 func (p *GradientPattern) Process(pos *tuple.Tuple) *color.Color {
 	tpos := p.im.MultTuple(pos)
-	return p.Color1.Lerp(p.Color2, tpos.X-math.Floor(tpos.X))
+	return p.Pattern1.Process(pos).Lerp(p.Pattern2.Process(pos), tpos.X-math.Floor(tpos.X))
 }

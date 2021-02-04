@@ -8,16 +8,16 @@ import (
 )
 
 type StripePattern struct {
-	m      *matrix.Matrix
-	im     *matrix.Matrix
-	Colors []*color.Color
+	m        *matrix.Matrix
+	im       *matrix.Matrix
+	Patterns []Pattern
 }
 
-func NewStripePattern(m *matrix.Matrix, cs ...*color.Color) *StripePattern {
+func NewStripePattern(m *matrix.Matrix, ps ...Pattern) *StripePattern {
 	result := &StripePattern{
-		m:      matrix.Identity,
-		im:     matrix.Identity,
-		Colors: cs,
+		m:        matrix.Identity,
+		im:       matrix.Identity,
+		Patterns: ps,
 	}
 	if m != nil {
 		result.m = m
@@ -37,5 +37,5 @@ func (p *StripePattern) GetMatrix() *matrix.Matrix {
 
 func (p *StripePattern) Process(pos *tuple.Tuple) *color.Color {
 	tpos := p.im.MultTuple(pos)
-	return p.Colors[util.AbsInt(int(tpos.X)%len(p.Colors))]
+	return p.Patterns[util.AbsInt(int(tpos.X)%len(p.Patterns))].Process(pos)
 }

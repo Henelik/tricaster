@@ -11,16 +11,16 @@ import (
 )
 
 type CylinderRingPattern struct {
-	m      *matrix.Matrix
-	im     *matrix.Matrix
-	Colors []*color.Color
+	m        *matrix.Matrix
+	im       *matrix.Matrix
+	Patterns []Pattern
 }
 
-func NewCylinderRingPattern(m *matrix.Matrix, cs ...*color.Color) *CylinderRingPattern {
+func NewCylinderRingPattern(m *matrix.Matrix, ps ...Pattern) *CylinderRingPattern {
 	result := &CylinderRingPattern{
-		m:      matrix.Identity,
-		im:     matrix.Identity,
-		Colors: cs,
+		m:        matrix.Identity,
+		im:       matrix.Identity,
+		Patterns: ps,
 	}
 	if m != nil {
 		result.m = m
@@ -40,5 +40,5 @@ func (p *CylinderRingPattern) GetMatrix() *matrix.Matrix {
 
 func (p *CylinderRingPattern) Process(pos *tuple.Tuple) *color.Color {
 	tpos := p.im.MultTuple(pos)
-	return p.Colors[util.AbsInt(int(math.Sqrt(tpos.X*tpos.X+tpos.Y*tpos.Y)))%len(p.Colors)]
+	return p.Patterns[util.AbsInt(int(math.Sqrt(tpos.X*tpos.X+tpos.Y*tpos.Y)))%len(p.Patterns)].Process(pos)
 }
