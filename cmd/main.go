@@ -227,7 +227,7 @@ func drawTestScene() {
 		matrix.ViewTransform(
 			tuple.NewPoint(-15, -10, 5),
 			tuple.NewPoint(3, 3, 2),
-			tuple.Up), 4)
+			tuple.Up), 16)
 
-	c.GoRender(2, w).SaveImage("new_scene_aax4.png")
+	c.GoRender(w).SaveImage("new_scene_aax16.png")
 }

@@ -97,7 +97,7 @@ func (c *Camera) RayForPixel(x, y int) *ray.Ray {
 	yOffset := (float64(y) + 0.5) * c.pixelSize
 
 	// the untransformed coordinates of the pixel in world space.
-	// (remember that the camera looks toward -y, so +x is to the *right*.)
+	// (remember that the camera looks toward -z, so +x is to the *right*.)
 	worldX := c.halfWidth - xOffset
 	worldY := c.halfHeight - yOffset
 
@@ -121,13 +121,13 @@ func (c *Camera) AARaysForPixel(x, y int) []*ray.Ray {
 	xOffset := (float64(x) + 0.5) * c.pixelSize
 	yOffset := (float64(y) + 0.5) * c.pixelSize
 	// the distance between sampled sub-pixel points on the canvas
-	aaOffset := c.pixelSize / float64(c.AALevel+1)
+	aaOffset := c.pixelSize / float64(c.AALevel)
 	origin := c.im.MultTuple(tuple.Origin)
 
 	for aax := 0; aax < c.AALevel; aax++ {
 		for aay := 0; aay < c.AALevel; aay++ {
 			// the untransformed coordinates of the pixel in world space.
-			// (remember that the camera looks toward -y, so +x is to the *right*.)
+			// (remember that the camera looks toward -z, so +x is to the *right*.)
 			worldX := c.halfWidth - xOffset + float64(aax)*aaOffset
 			worldY := c.halfHeight - yOffset + float64(aay)*aaOffset
 
@@ -156,12 +156,12 @@ func (c *Camera) Render(w *World) *canvas.Canvas {
 }
 
 // GoRender divides the image into an n*n grid and renders each cell in a goroutine
-func (c *Camera) GoRender(n int, w *World) *canvas.Canvas {
+func (c *Camera) GoRender(w *World) *canvas.Canvas {
 	canv := canvas.NewCanvas(c.hSize, c.vSize)
 	var wg sync.WaitGroup
-	wg.Add(n * n)
-	subH := c.hSize / n
-	subV := c.vSize / n
+	wg.Add(c.AALevel * c.AALevel)
+	subH := c.hSize / c.AALevel
+	subV := c.vSize / c.AALevel
 
 	worker := func(xs, ys int) {
 		defer wg.Done()
@@ -177,8 +177,8 @@ func (c *Camera) GoRender(n int, w *World) *canvas.Canvas {
 		}
 	}
 
-	for sh := 0; sh < n; sh++ {
-		for sv := 0; sv < n; sv++ {
+	for sh := 0; sh < c.AALevel; sh++ {
+		for sv := 0; sv < c.AALevel; sv++ {
 			go worker(sh*subH, sv*subV)
 		}
 	}
