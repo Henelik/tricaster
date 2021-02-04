@@ -1,6 +1,8 @@
 package shading
 
 import (
+	"math"
+
 	"github.com/Henelik/tricaster/color"
 	"github.com/Henelik/tricaster/matrix"
 	"github.com/Henelik/tricaster/tuple"
@@ -37,5 +39,5 @@ func (p *StripePattern) GetMatrix() *matrix.Matrix {
 
 func (p *StripePattern) Process(pos *tuple.Tuple) *color.Color {
 	tpos := p.im.MultTuple(pos)
-	return p.Patterns[util.AbsInt(int(tpos.X)%len(p.Patterns))].Process(pos)
+	return p.Patterns[util.AbsInt(int(math.Round(tpos.X))%len(p.Patterns))].Process(pos)
 }

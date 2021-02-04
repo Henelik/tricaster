@@ -153,8 +153,16 @@ func drawTestScene() {
 		Color:     color.NewColor(1, 0.9, 0.9),
 		Pattern: shading.NewCheckerPattern3D(
 			matrix.ScalingU(20),
-			shading.SolidPat(1, 0.9, 0.9),
-			shading.SolidPat(0.2, 0.19, 0.19)),
+			shading.NewStripePattern(
+				matrix.RotationZ(math.Pi/4),
+				shading.SolidPat(1, 0.9, 0.9),
+				shading.SolidPat(.75, 0.7, 0.7),
+			),
+			shading.NewStripePattern(
+				matrix.RotationZ(-math.Pi/4),
+				shading.SolidPat(0.2, 0.19, 0.19),
+				shading.SolidPat(.3, 0.3, 0.3),
+			)),
 	}
 	floor := geometry.NewPlane(
 		matrix.Identity,
@@ -202,7 +210,14 @@ func drawTestScene() {
 					matrix.RotationY(math.Pi/2),
 					matrix.ScalingU(.5),
 				),
-				shading.SolidPat(0.2, 0.2, 1),
+				shading.NewGradientPattern(
+					matrix.Compose(
+						matrix.RotationY(math.Pi/2),
+						matrix.ScalingU(3),
+					),
+					shading.SolidPat(0.9, 0.9, 0.9),
+					shading.SolidPat(0.2, 0.2, 1),
+				),
 				shading.SolidPat(0.2, 0.2, 0.4)),
 		})
 
