@@ -56,7 +56,7 @@ func NewCamera(hSize, vSize int, fov float64, transform *matrix.Matrix, aaLevel 
 	case 16:
 		c.AALevel = 16
 	default:
-		c.AALevel = 0
+		c.AALevel = 1
 	}
 
 	halfView := math.Tan(c.FOV / 2)

@@ -156,7 +156,6 @@ func drawTestScene() {
 			shading.SolidPat(1, 0.9, 0.9),
 			shading.SolidPat(0.2, 0.19, 0.19)),
 	}
-	floorMat.Specular = 0
 	floor := geometry.NewPlane(
 		matrix.Identity,
 		floorMat)

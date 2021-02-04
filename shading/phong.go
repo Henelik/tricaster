@@ -24,7 +24,7 @@ type PhongMat struct {
 	Pattern   Pattern
 }
 
-func (m PhongMat) Lighting(light *PointLight, pos, eyeV, normalV *tuple.Tuple, inShadow bool) *color.Color {
+func (m *PhongMat) Lighting(light *PointLight, pos, eyeV, normalV *tuple.Tuple, inShadow bool) *color.Color {
 	var col *color.Color
 	if m.Pattern != nil {
 		col = m.Pattern.Process(pos)
