@@ -237,7 +237,7 @@ func drawTestScene() {
 		},
 	}
 
-	c := scene.NewCamera(1000, 500, math.Pi/3,
+	c := scene.NewCamera(1920, 1080, math.Pi/3,
 		matrix.ViewTransform(
 			tuple.NewPoint(-15, -10, 5),
 			tuple.NewPoint(3, 3, 2),
