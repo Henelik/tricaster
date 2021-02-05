@@ -31,18 +31,18 @@ type Hit struct {
 }
 
 func (i *Intersection) ToHit(r *Ray) *Hit {
-	c := &Hit{}
-	c.T = i.T
-	c.P = i.P
-	c.Pos = r.Position(i.T)
-	c.EyeV = r.Direction.Neg()
-	c.NormalV = i.P.NormalAt(c.Pos)
-	c.ReflectV = r.Direction.Reflect(c.NormalV)
-	c.Inside = c.NormalV.DotProd(c.EyeV) < 0
-	if c.Inside {
-		c.NormalV = c.NormalV.Neg()
+	h := &Hit{}
+	h.T = i.T
+	h.P = i.P
+	h.Pos = r.Position(i.T)
+	h.EyeV = r.Direction.Neg()
+	h.NormalV = i.P.NormalAt(h.Pos)
+	h.Inside = h.NormalV.DotProd(h.EyeV) < 0
+	if h.Inside {
+		h.NormalV = h.NormalV.Neg()
 	}
-	return c
+	h.ReflectV = r.Direction.Reflect(h.NormalV)
+	return h
 }
 
 // Hit returns the closest positive intersection

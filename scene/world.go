@@ -26,7 +26,8 @@ var DefaultWorld = &World{
 		color.White,
 	},
 	Config: WorldConfig{
-		Shadows: false,
+		Shadows:   false,
+		MaxBounce: 3,
 	},
 }
 
@@ -37,30 +38,50 @@ type World struct {
 }
 
 // Intersect returns all the intersections where a ray encounters an object in the world, unsorted.
-func (w *World) Intersect(r *ray.Ray) []ray.Intersection {
+func (w *World) Intersect(r *ray.Ray, ignore geometry.Primitive) []ray.Intersection {
 	var inters []ray.Intersection
 	for _, p := range w.Geometry {
+		if p == ignore {
+			continue
+		}
 		inters = append(inters, p.Intersects(r)...)
 	}
 	return inters
 }
 
-func (w *World) Shade(h *ray.Hit) *color.Color {
+// Shade finds the color of an object at a hit point
+func (w *World) Shade(h *ray.Hit, remainingBounce int) *color.Color {
 	prim := h.P.(geometry.Primitive)
-	if !w.Config.Shadows {
-		return prim.Shade(w.Light, h)
+
+	if w.Config.Shadows {
+		overP := h.Pos.Add(h.NormalV.Mult(util.Epsilon))
+		h.InShadow = w.IsShadowed(overP)
 	}
-	overP := h.Pos.Add(h.NormalV.Mult(util.Epsilon))
-	h.InShadow = w.IsShadowed(overP)
-	return prim.Shade(w.Light, h)
+	return prim.Shade(w.Light, h).Add(w.ReflectedColor(h, remainingBounce-1))
 }
 
-func (w *World) ColorAt(r *ray.Ray) *color.Color {
-	i := ray.GetClosest(w.Intersect(r))
+// ColorAt finds a ray's hit and then calls shade at that hit
+func (w *World) ColorAt(r *ray.Ray, remainingBounce int, ignore geometry.Primitive) *color.Color {
+	i := ray.GetClosest(w.Intersect(r, ignore))
 	if *i == *ray.NilIntersect {
 		return color.Black
 	}
-	return w.Shade(i.ToHit(r))
+	return w.Shade(i.ToHit(r), remainingBounce)
+}
+
+// ReflectedColor handles reflection ray culling and finds the next color on the light path
+func (w *World) ReflectedColor(h *ray.Hit, remainingBounce int) *color.Color {
+	if remainingBounce <= 0 {
+		return color.Black
+	}
+	prim := h.P.(geometry.Primitive)
+	if m, ok := prim.GetMaterial().(*shading.PhongMat); ok {
+		if m.Reflectivity == 0 {
+			return color.Black
+		}
+		return w.ColorAt(ray.NewRay(h.Pos, h.ReflectV), remainingBounce, prim).MultF(m.Reflectivity)
+	}
+	return color.Black
 }
 
 func (w *World) IsShadowed(p *tuple.Tuple) bool {
@@ -70,7 +91,7 @@ func (w *World) IsShadowed(p *tuple.Tuple) bool {
 
 	r := ray.NewRay(p, direction)
 
-	inters := w.Intersect(r)
+	inters := w.Intersect(r, nil)
 
 	h := ray.GetClosest(inters)
 

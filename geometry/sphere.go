@@ -71,3 +71,7 @@ func (s *Sphere) NormalAt(pos *tuple.Tuple) *tuple.Tuple {
 func (s *Sphere) Shade(light *shading.PointLight, h *ray.Hit) *color.Color {
 	return s.Mat.Lighting(light, h)
 }
+
+func (s *Sphere) GetMaterial() shading.Material {
+	return s.Mat
+}

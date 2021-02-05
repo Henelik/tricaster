@@ -148,7 +148,7 @@ func (c *Camera) Render(w *World) *canvas.Canvas {
 	for x := 0; x < c.hSize; x++ {
 		for y := 0; y < c.vSize; y++ {
 			r := c.RayForPixel(x, y)
-			col := w.ColorAt(r)
+			col := w.ColorAt(r, w.Config.MaxBounce, nil)
 			canv.Set(x, y, col)
 		}
 	}
@@ -156,12 +156,15 @@ func (c *Camera) Render(w *World) *canvas.Canvas {
 }
 
 // GoRender divides the image into an n*n grid and renders each cell in a goroutine
-func (c *Camera) GoRender(w *World) *canvas.Canvas {
+func (c *Camera) GoRender(w *World, gridNum int) *canvas.Canvas {
 	canv := canvas.NewCanvas(c.hSize, c.vSize)
+
+	// set up a wait group for the number of subdivisions
 	var wg sync.WaitGroup
-	wg.Add(c.AALevel * c.AALevel)
-	subH := c.hSize / c.AALevel
-	subV := c.vSize / c.AALevel
+	wg.Add(gridNum * gridNum)
+
+	subH := c.hSize / gridNum
+	subV := c.vSize / gridNum
 
 	worker := func(xs, ys int) {
 		defer wg.Done()
@@ -170,15 +173,15 @@ func (c *Camera) GoRender(w *World) *canvas.Canvas {
 				rs := c.AARaysForPixel(x, y)
 				cols := make([]*color.Color, len(rs))
 				for i, r := range rs {
-					cols[i] = w.ColorAt(r)
+					cols[i] = w.ColorAt(r, w.Config.MaxBounce, nil)
 				}
 				canv.Set(x, y, color.Avg(cols))
 			}
 		}
 	}
 
-	for sh := 0; sh < c.AALevel; sh++ {
-		for sv := 0; sv < c.AALevel; sv++ {
+	for sh := 0; sh < gridNum; sh++ {
+		for sv := 0; sv < gridNum; sv++ {
 			go worker(sh*subH, sv*subV)
 		}
 	}

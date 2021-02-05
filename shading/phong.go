@@ -8,20 +8,22 @@ import (
 )
 
 var DefaultPhong = &PhongMat{
-	Ambient:   0.1,
-	Diffuse:   0.9,
-	Specular:  0.9,
-	Shininess: 200,
-	Color:     color.White,
+	Ambient:      0.1,
+	Diffuse:      0.9,
+	Specular:     0.9,
+	Shininess:    200,
+	Reflectivity: 0,
+	Color:        color.White,
 }
 
 type PhongMat struct {
-	Ambient   float64
-	Diffuse   float64
-	Specular  float64
-	Shininess float64
-	Color     *color.Color // used as a fallback if there is no pattern
-	Pattern   Pattern
+	Ambient      float64
+	Diffuse      float64
+	Specular     float64
+	Shininess    float64
+	Reflectivity float64
+	Color        *color.Color // used as a fallback if there is no pattern
+	Pattern      Pattern
 }
 
 func (m *PhongMat) Lighting(light *PointLight, h *ray.Hit) *color.Color {

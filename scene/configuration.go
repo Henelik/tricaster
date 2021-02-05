@@ -1,5 +1,6 @@
 package scene
 
 type WorldConfig struct {
-	Shadows bool
+	Shadows   bool
+	MaxBounce int
 }

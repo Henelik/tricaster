@@ -18,4 +18,5 @@ type Primitive interface {
 	// NormalAt returns the normal vector at a given scene point
 	NormalAt(pos *tuple.Tuple) *tuple.Tuple
 	Shade(light *shading.PointLight, h *ray.Hit) *color.Color
+	GetMaterial() shading.Material
 }

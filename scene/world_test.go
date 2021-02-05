@@ -31,7 +31,7 @@ func TestShading(t *testing.T) {
 	r := ray.NewRay(tuple.NewPoint(-5, 0, 0), tuple.Right)
 	s := DefaultWorld.Geometry[0]
 	i := &ray.Intersection{4, s}
-	col := DefaultWorld.Shade(i.ToHit(r))
+	col := DefaultWorld.Shade(i.ToHit(r), 0)
 	assert.Equal(t, color.NewColor(0.38066119308103435, 0.47582649135129296, 0.28549589481077575), col)
 
 	// Shading an intersection from the inside
@@ -40,21 +40,21 @@ func TestShading(t *testing.T) {
 	r2 := ray.NewRay(tuple.Origin, tuple.Right)
 	s2 := DefaultWorld.Geometry[1]
 	i2 := &ray.Intersection{0.5, s2}
-	col2 := w.Shade(i2.ToHit(r2))
+	col2 := w.Shade(i2.ToHit(r2), 0)
 	assert.Equal(t, color.Grey(0.9049844720832575), col2)
 }
 
 func TestColorAtMiss(t *testing.T) {
 	// The color when a ray misses
 	r := ray.NewRay(tuple.NewPoint(0, 0, -5), tuple.Forward)
-	c := DefaultWorld.ColorAt(r)
+	c := DefaultWorld.ColorAt(r, 0)
 	assert.Equal(t, color.Black, c)
 }
 
 func TestColorAtHit(t *testing.T) {
 	// The color when a ray hits
 	r := ray.NewRay(tuple.NewPoint(-5, 0, 0), tuple.Right)
-	col := DefaultWorld.ColorAt(r)
+	col := DefaultWorld.ColorAt(r, 0)
 	assert.Equal(t, color.NewColor(0.38066119308103435, 0.47582649135129296, 0.28549589481077575), col)
 }
 
@@ -79,7 +79,7 @@ func TestColorAtHitBehind(t *testing.T) {
 		},
 	}
 	r := ray.NewRay(tuple.NewPoint(0.75, 0, 0), tuple.Left)
-	col := w.ColorAt(r)
+	col := w.ColorAt(r, 0)
 	assert.Equal(t, color.Blue, col)
 }
 

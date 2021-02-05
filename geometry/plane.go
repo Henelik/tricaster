@@ -66,3 +66,7 @@ func (p *Plane) NormalAt(pos *tuple.Tuple) *tuple.Tuple {
 func (p *Plane) Shade(light *shading.PointLight, h *ray.Hit) *color.Color {
 	return p.Mat.Lighting(light, h)
 }
+
+func (p *Plane) GetMaterial() shading.Material {
+	return p.Mat
+}
