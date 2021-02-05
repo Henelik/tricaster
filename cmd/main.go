@@ -61,8 +61,8 @@ func imageTest() {
 	for x := 0; x < canv.W; x++ {
 		for y := 0; y < canv.H; y++ {
 			col := color.NewColor(
-				float64(x)/float64(canv.W),
-				float64(y)/float64(canv.H),
+				float32(x)/float32(canv.W),
+				float32(y)/float32(canv.H),
 				0)
 			canv.Set(x, y, col)
 		}

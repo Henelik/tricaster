@@ -1,8 +1,6 @@
 package shading
 
 import (
-	"math"
-
 	"github.com/Henelik/tricaster/util"
 
 	"github.com/Henelik/tricaster/color"
@@ -40,5 +38,5 @@ func (p *CheckerPattern2D) GetMatrix() *matrix.Matrix {
 
 func (p *CheckerPattern2D) Process(pos *tuple.Tuple) *color.Color {
 	tpos := p.im.MultTuple(pos)
-	return p.Patterns[util.AbsInt(int(math.Round(tpos.X))+int(math.Round(tpos.Y)))%2].Process(pos)
+	return p.Patterns[util.AbsInt(int(tpos.X)+int(tpos.Y))%2].Process(pos)
 }

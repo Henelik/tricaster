@@ -2,8 +2,8 @@ package tuple
 
 import (
 	"fmt"
-	"math"
 
+	"git.maze.io/go/math32"
 	"github.com/Henelik/tricaster/util"
 )
 
@@ -18,21 +18,21 @@ var (
 )
 
 type Tuple struct {
-	X float64
-	Y float64
-	Z float64
-	W float64
+	X float32
+	Y float32
+	Z float32
+	W float32
 }
 
-func New(X, Y, Z, W float64) *Tuple {
+func New(X, Y, Z, W float32) *Tuple {
 	return &Tuple{X, Y, Z, W}
 }
 
-func NewPoint(X, Y, Z float64) *Tuple {
+func NewPoint(X, Y, Z float32) *Tuple {
 	return &Tuple{X, Y, Z, 1.0}
 }
 
-func NewVector(X, Y, Z float64) *Tuple {
+func NewVector(X, Y, Z float32) *Tuple {
 	return &Tuple{X, Y, Z, 0.0}
 }
 
@@ -63,16 +63,16 @@ func (t *Tuple) Neg() *Tuple {
 	return New(-t.X, -t.Y, -t.Z, -t.W)
 }
 
-func (t *Tuple) Mult(n float64) *Tuple {
+func (t *Tuple) Mult(n float32) *Tuple {
 	return New(t.X*n, t.Y*n, t.Z*n, t.W*n)
 }
 
-func (t *Tuple) Div(n float64) *Tuple {
+func (t *Tuple) Div(n float32) *Tuple {
 	return New(t.X/n, t.Y/n, t.Z/n, t.W/n)
 }
 
-func (t *Tuple) Mag() float64 {
-	return math.Sqrt(t.X*t.X + t.Y*t.Y + t.Z*t.Z + t.W*t.W)
+func (t *Tuple) Mag() float32 {
+	return math32.Sqrt(t.X*t.X + t.Y*t.Y + t.Z*t.Z + t.W*t.W)
 }
 
 func (t *Tuple) Norm() *Tuple {
@@ -80,7 +80,7 @@ func (t *Tuple) Norm() *Tuple {
 	return New(t.X/m, t.Y/m, t.Z/m, t.W/m)
 }
 
-func (t *Tuple) DotProd(o *Tuple) float64 {
+func (t *Tuple) DotProd(o *Tuple) float32 {
 	return t.X*o.X +
 		t.Y*o.Y +
 		t.Z*o.Z +

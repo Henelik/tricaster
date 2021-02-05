@@ -71,8 +71,8 @@ func BenchmarkIntersection128(b *testing.B) {
 		for x := 0; x < w; x++ {
 			for y := 0; y < h; y++ {
 				// shoot a ray at the sphere
-				xPos := (float64(x) - float64(w)/2.0) / (float64(w) * 0.4)
-				yPos := -(float64(y) - float64(h)/2.0) / (float64(h) * 0.4)
+				xPos := (float32(x) - float32(w)/2.0) / (float32(w) * 0.4)
+				yPos := -(float32(y) - float32(h)/2.0) / (float32(h) * 0.4)
 				r := ray.NewRay(
 					tuple.NewPoint(xPos, 0, yPos),
 					tuple.Backward,

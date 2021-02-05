@@ -7,8 +7,8 @@ import (
 )
 
 func TestEqual(t *testing.T) {
-	f1 := 1.0 + .5*Epsilon
-	f2 := 1.0
+	var f1 float32 = 1.0 + .5*Epsilon
+	var f2 float32 = 1.0
 
 	assert.True(t, Equal(f1, f2))
 	assert.NotEqual(t, f1, f2)
@@ -22,10 +22,10 @@ func TestEqual(t *testing.T) {
 func TestClamp(t *testing.T) {
 	testCases := []struct {
 		name string
-		n    float64
-		min  float64
-		max  float64
-		want float64
+		n    float32
+		min  float32
+		max  float32
+		want float32
 	}{
 		{
 			name: "unclamped return",

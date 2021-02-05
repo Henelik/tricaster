@@ -1,9 +1,9 @@
 package geometry
 
 import (
-	"math"
 	"testing"
 
+	"git.maze.io/go/math32"
 	"github.com/Henelik/tricaster/shading"
 
 	"github.com/Henelik/tricaster/matrix"
@@ -118,7 +118,7 @@ func TestSphere_NormalAt(t *testing.T) {
 		{
 			name: "The normal on a sphere at a nonaxial point",
 			s:    NewSphere(matrix.Identity, shading.DefaultPhong),
-			p:    tuple.NewPoint(math.Sqrt(3)/3, math.Sqrt(3)/3, math.Sqrt(3)/3),
+			p:    tuple.NewPoint(math32.Sqrt(3)/3, math32.Sqrt(3)/3, math32.Sqrt(3)/3),
 			want: tuple.NewVector(1, 1, 1).Norm(),
 		},
 		{
@@ -130,9 +130,9 @@ func TestSphere_NormalAt(t *testing.T) {
 		{
 			name: "Computing the normal on a transformed sphere",
 			s: NewSphere(
-				matrix.Scaling(1, 0.5, 1).Mult(matrix.RotationZ(math.Pi/5)),
+				matrix.Scaling(1, 0.5, 1).Mult(matrix.RotationZ(math32.Pi/5)),
 				shading.DefaultPhong),
-			p:    tuple.NewPoint(0, math.Sqrt(2)/2, -math.Sqrt(2)/2).Norm(),
+			p:    tuple.NewPoint(0, math32.Sqrt(2)/2, -math32.Sqrt(2)/2).Norm(),
 			want: tuple.NewVector(0, 0.970160000001, -0.24254).Norm(),
 		},
 	}

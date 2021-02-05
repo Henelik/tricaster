@@ -1,8 +1,7 @@
 package ray
 
 import (
-	"math"
-
+	"git.maze.io/go/math32"
 	"github.com/Henelik/tricaster/tuple"
 )
 
@@ -10,17 +9,17 @@ type NormalAter interface {
 	NormalAt(pos *tuple.Tuple) *tuple.Tuple
 }
 
-var NilIntersect = &Intersection{math.Inf(1), nil}
+var NilIntersect = &Intersection{math32.Inf(1), nil}
 
 // Intersection stores the t value of a ray intersection and a pointer to the intersected primitive
 type Intersection struct {
-	T float64
+	T float32
 	P NormalAter
 }
 
 // intersection precomputation
 type Hit struct {
-	T        float64
+	T        float32
 	P        NormalAter
 	Pos      *tuple.Tuple
 	EyeV     *tuple.Tuple

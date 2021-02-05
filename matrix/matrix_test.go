@@ -1,9 +1,9 @@
 package matrix
 
 import (
-	"math"
 	"testing"
 
+	"git.maze.io/go/math32"
 	"github.com/Henelik/tricaster/tuple"
 	"github.com/stretchr/testify/assert"
 )
@@ -16,13 +16,13 @@ func TestMatrix4x4(t *testing.T) {
 		13.5, 14.5, 15.5, 16.5,
 	)
 	assert.Nil(t, err)
-	assert.Equal(t, 1.0, m.Data[0][0])
-	assert.Equal(t, 4.0, m.Data[0][3])
-	assert.Equal(t, 5.5, m.Data[1][0])
-	assert.Equal(t, 7.5, m.Data[1][2])
-	assert.Equal(t, 11.0, m.Data[2][2])
-	assert.Equal(t, 13.5, m.Data[3][0])
-	assert.Equal(t, 15.5, m.Data[3][2])
+	assert.Equal(t, float32(1.0), m.Data[0][0])
+	assert.Equal(t, float32(4.0), m.Data[0][3])
+	assert.Equal(t, float32(5.5), m.Data[1][0])
+	assert.Equal(t, float32(7.5), m.Data[1][2])
+	assert.Equal(t, float32(11.0), m.Data[2][2])
+	assert.Equal(t, float32(13.5), m.Data[3][0])
+	assert.Equal(t, float32(15.5), m.Data[3][2])
 }
 
 func TestMatrix2x2(t *testing.T) {
@@ -31,10 +31,10 @@ func TestMatrix2x2(t *testing.T) {
 		1, -2,
 	)
 	assert.Nil(t, err)
-	assert.Equal(t, -3.0, m.Data[0][0])
-	assert.Equal(t, 5.0, m.Data[0][1])
-	assert.Equal(t, 1.0, m.Data[1][0])
-	assert.Equal(t, -2.0, m.Data[1][1])
+	assert.Equal(t, -float32(3.0), m.Data[0][0])
+	assert.Equal(t, float32(5.0), m.Data[0][1])
+	assert.Equal(t, float32(1.0), m.Data[1][0])
+	assert.Equal(t, -float32(2.0), m.Data[1][1])
 }
 
 func TestMatrix3x3(t *testing.T) {
@@ -44,11 +44,11 @@ func TestMatrix3x3(t *testing.T) {
 		0, 1, 1,
 	)
 	assert.Nil(t, err)
-	assert.Equal(t, -3.0, m.Data[0][0])
-	assert.Equal(t, 5.0, m.Data[0][1])
-	assert.Equal(t, 1.0, m.Data[1][0])
-	assert.Equal(t, -2.0, m.Data[1][1])
-	assert.Equal(t, 1.0, m.Data[2][2])
+	assert.Equal(t, -float32(3.0), m.Data[0][0])
+	assert.Equal(t, float32(5.0), m.Data[0][1])
+	assert.Equal(t, float32(1.0), m.Data[1][0])
+	assert.Equal(t, -float32(2.0), m.Data[1][1])
+	assert.Equal(t, float32(1.0), m.Data[2][2])
 }
 
 func TestEqual(t *testing.T) {
@@ -210,7 +210,7 @@ func TestMinor(t *testing.T) {
 	)
 	assert.Nil(t, err)
 
-	assert.Equal(t, -25.0, a.Minor(1, 0))
+	assert.Equal(t, -float32(25.0), a.Minor(1, 0))
 }
 
 func TestCofactor(t *testing.T) {
@@ -221,11 +221,11 @@ func TestCofactor(t *testing.T) {
 	)
 	assert.Nil(t, err)
 
-	assert.Equal(t, -12.0, m.Minor(0, 0))
-	assert.Equal(t, -12.0, m.Cofactor(0, 0))
+	assert.Equal(t, -float32(12.0), m.Minor(0, 0))
+	assert.Equal(t, -float32(12.0), m.Cofactor(0, 0))
 
-	assert.Equal(t, 25.0, m.Minor(1, 0))
-	assert.Equal(t, -25.0, m.Cofactor(1, 0))
+	assert.Equal(t, float32(25.0), m.Minor(1, 0))
+	assert.Equal(t, -float32(25.0), m.Cofactor(1, 0))
 }
 
 func TestDeterminant2(t *testing.T) {
@@ -235,7 +235,7 @@ func TestDeterminant2(t *testing.T) {
 	)
 	assert.Nil(t, err)
 
-	assert.Equal(t, 17.0, m.Determinant())
+	assert.Equal(t, float32(17.0), m.Determinant())
 }
 
 func TestDeterminant3(t *testing.T) {
@@ -246,7 +246,7 @@ func TestDeterminant3(t *testing.T) {
 	)
 	assert.Nil(t, err)
 
-	assert.Equal(t, -196.0, m.Determinant())
+	assert.Equal(t, -float32(196.0), m.Determinant())
 }
 
 func TestDeterminant4(t *testing.T) {
@@ -258,7 +258,7 @@ func TestDeterminant4(t *testing.T) {
 	)
 	assert.Nil(t, err)
 
-	assert.Equal(t, -4071.0, m.Determinant())
+	assert.Equal(t, float32(-4071.0), m.Determinant())
 }
 
 func TestIsInvertible(t *testing.T) {
@@ -292,7 +292,7 @@ func TestInverse(t *testing.T) {
 	)
 	assert.Nil(t, err)
 
-	e := &Matrix{Order: 4, Data: [][]float64{
+	e := &Matrix{Order: 4, Data: [][]float32{
 		{0.21804511278195488, 0.45112781954887216, 0.24060150375939848, -0.045112781954887216},
 		{-0.8082706766917294, -1.4567669172932332, -0.44360902255639095, 0.5206766917293233},
 		{-0.07894736842105263, -0.2236842105263158, -0.05263157894736842, 0.19736842105263158},
@@ -300,7 +300,7 @@ func TestInverse(t *testing.T) {
 	}}
 
 	assert.True(t, a.IsInvertible())
-	assert.Equal(t, 532.0, a.Determinant())
+	assert.Equal(t, float32(532.0), a.Determinant())
 	assert.Equal(t, e, a.Inverse())
 
 	b, err := NewMatrix(
@@ -311,7 +311,7 @@ func TestInverse(t *testing.T) {
 	)
 	assert.Nil(t, err)
 
-	e = &Matrix{Order: 4, Data: [][]float64{
+	e = &Matrix{Order: 4, Data: [][]float32{
 		{-0.15384615384615385, -0.15384615384615385, -0.28205128205128205, -0.5384615384615384},
 		{-0.07692307692307693, 0.12307692307692308, 0.02564102564102564, 0.03076923076923077},
 		{0.358974358974359, 0.358974358974359, 0.4358974358974359, 0.9230769230769231},
@@ -319,7 +319,7 @@ func TestInverse(t *testing.T) {
 	}}
 
 	assert.True(t, b.IsInvertible())
-	assert.Equal(t, -585.0, b.Determinant())
+	assert.Equal(t, float32(-585.0), b.Determinant())
 	assert.Equal(t, e, b.Inverse())
 
 	c, err := NewMatrix(
@@ -330,7 +330,7 @@ func TestInverse(t *testing.T) {
 	)
 	assert.Nil(t, err)
 
-	e = &Matrix{Order: 4, Data: [][]float64{
+	e = &Matrix{Order: 4, Data: [][]float32{
 		{-0.040740740740740744, -0.07777777777777778, 0.14444444444444443, -0.2222222222222222},
 		{-0.07777777777777778, 0.03333333333333333, 0.36666666666666664, -0.3333333333333333},
 		{-0.029012345679012345, -0.14629629629629629, -0.10925925925925926, 0.12962962962962962},
@@ -338,7 +338,7 @@ func TestInverse(t *testing.T) {
 	}}
 
 	assert.True(t, c.IsInvertible())
-	assert.Equal(t, 1620.0, c.Determinant())
+	assert.Equal(t, float32(1620.0), c.Determinant())
 	assert.Equal(t, e, c.Inverse())
 }
 
@@ -449,11 +449,11 @@ func TestScalingU(t *testing.T) {
 func TestRotationX(t *testing.T) {
 	p := tuple.NewPoint(0, 1, 0)
 
-	eighth := RotationX(math.Pi / 4)
-	eighthPoint := tuple.NewPoint(0, math.Sqrt(2)/2, math.Sqrt(2)/2)
+	eighth := RotationX(math32.Pi / 4)
+	eighthPoint := tuple.NewPoint(0, math32.Sqrt(2)/2, math32.Sqrt(2)/2)
 	assert.True(t, eighthPoint.Equal(eighth.MultTuple(p)))
 
-	quarter := RotationX(math.Pi / 2)
+	quarter := RotationX(math32.Pi / 2)
 	quarterPoint := tuple.NewPoint(0, 0, 1)
 	assert.True(t, quarterPoint.Equal(quarter.MultTuple(p)))
 }
@@ -461,19 +461,19 @@ func TestRotationX(t *testing.T) {
 func TestRotationXInverse(t *testing.T) {
 	p := tuple.NewPoint(0, 1, 0)
 
-	eighth := RotationX(math.Pi / 4)
-	e := tuple.NewPoint(0, math.Sqrt(2)/2, -math.Sqrt(2)/2)
+	eighth := RotationX(math32.Pi / 4)
+	e := tuple.NewPoint(0, math32.Sqrt(2)/2, -math32.Sqrt(2)/2)
 	assert.True(t, e.Equal(eighth.Inverse().MultTuple(p)))
 }
 
 func TestRotationY(t *testing.T) {
 	p := tuple.NewPoint(0, 0, 1)
 
-	eighth := RotationY(math.Pi / 4)
-	eighthPoint := tuple.NewPoint(math.Sqrt(2)/2, 0, math.Sqrt(2)/2)
+	eighth := RotationY(math32.Pi / 4)
+	eighthPoint := tuple.NewPoint(math32.Sqrt(2)/2, 0, math32.Sqrt(2)/2)
 	assert.True(t, eighthPoint.Equal(eighth.MultTuple(p)))
 
-	quarter := RotationY(math.Pi / 2)
+	quarter := RotationY(math32.Pi / 2)
 	quarterPoint := tuple.NewPoint(1, 0, 0)
 	assert.True(t, quarterPoint.Equal(quarter.MultTuple(p)))
 }
@@ -481,11 +481,11 @@ func TestRotationY(t *testing.T) {
 func TestRotationZ(t *testing.T) {
 	p := tuple.NewPoint(0, 1, 0)
 
-	eighth := RotationZ(math.Pi / 4)
-	eighthPoint := tuple.NewPoint(-math.Sqrt(2)/2, math.Sqrt(2)/2, 0)
+	eighth := RotationZ(math32.Pi / 4)
+	eighthPoint := tuple.NewPoint(-math32.Sqrt(2)/2, math32.Sqrt(2)/2, 0)
 	assert.True(t, eighthPoint.Equal(eighth.MultTuple(p)))
 
-	quarter := RotationZ(math.Pi / 2)
+	quarter := RotationZ(math32.Pi / 2)
 	quarterPoint := tuple.NewPoint(-1, 0, 0)
 	assert.True(t, quarterPoint.Equal(quarter.MultTuple(p)))
 }
@@ -544,7 +544,7 @@ func TestShearing(t *testing.T) {
 func TestTransformationsSequence(t *testing.T) {
 	p := tuple.NewPoint(1, 0, 1)
 
-	a := RotationX(math.Pi / 2)
+	a := RotationX(math32.Pi / 2)
 	b := Scaling(5, 5, 5)
 	c := Translation(10, 5, 7)
 
@@ -564,7 +564,7 @@ func TestTransformationsSequence(t *testing.T) {
 func TestTransformationsReverse(t *testing.T) {
 	p := tuple.NewPoint(1, 0, 1)
 
-	a := RotationX(math.Pi / 2)
+	a := RotationX(math32.Pi / 2)
 	b := Scaling(5, 5, 5)
 	c := Translation(10, 5, 7)
 
@@ -606,7 +606,7 @@ func TestViewTransform(t *testing.T) {
 			up:   tuple.Up,
 			want: &Matrix{
 				Order: 4,
-				Data: [][]float64{
+				Data: [][]float32{
 					{-1, 0, 0, 0},
 					{0, 0, 1, 0},
 					{0, 1, 0, 0},
@@ -635,7 +635,7 @@ func TestViewTransform(t *testing.T) {
 			up:   tuple.NewVector(1, 1, 0),
 			want: &Matrix{
 				Order: 4,
-				Data: [][]float64{
+				Data: [][]float32{
 					{-0.5070925528371099, 0.5070925528371099, 0.6761234037828132, -2.366431913239846},
 					{0.7677159338596801, 0.6060915267313263, 0.12121830534626524, -2.8284271247461894},
 					{-0.35856858280031806, 0.5976143046671968, -0.7171371656006361, 0},

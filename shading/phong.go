@@ -1,8 +1,7 @@
 package shading
 
 import (
-	"math"
-
+	"git.maze.io/go/math32"
 	"github.com/Henelik/tricaster/color"
 	"github.com/Henelik/tricaster/ray"
 )
@@ -17,11 +16,11 @@ var DefaultPhong = &PhongMat{
 }
 
 type PhongMat struct {
-	Ambient      float64
-	Diffuse      float64
-	Specular     float64
-	Shininess    float64
-	Reflectivity float64
+	Ambient      float32
+	Diffuse      float32
+	Specular     float32
+	Shininess    float32
+	Reflectivity float32
 	Color        *color.Color // used as a fallback if there is no pattern
 	Pattern      Pattern
 }
@@ -57,7 +56,7 @@ func (m *PhongMat) Lighting(light *PointLight, h *ray.Hit) *color.Color {
 
 			if reflectDotEye > 0 {
 				// compute the specular reflection
-				factor := math.Pow(reflectDotEye, m.Shininess)
+				factor := math32.Pow(reflectDotEye, m.Shininess)
 				specular = light.Color.MultF(m.Specular * factor)
 			}
 		}

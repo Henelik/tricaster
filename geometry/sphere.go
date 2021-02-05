@@ -1,8 +1,7 @@
 package geometry
 
 import (
-	"math"
-
+	"git.maze.io/go/math32"
 	"github.com/Henelik/tricaster/color"
 	"github.com/Henelik/tricaster/shading"
 
@@ -55,8 +54,8 @@ func (s *Sphere) Intersects(r *ray.Ray) []ray.Intersection {
 		return []ray.Intersection{}
 	}
 	return []ray.Intersection{
-		{(b - math.Sqrt(discriminant)) / (2 * a), s},
-		{(b + math.Sqrt(discriminant)) / (2 * a), s},
+		{(b - math32.Sqrt(discriminant)) / (2 * a), s},
+		{(b + math32.Sqrt(discriminant)) / (2 * a), s},
 	}
 }
 

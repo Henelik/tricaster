@@ -13,7 +13,7 @@ func NewSolidPattern(col *color.Color) *SolidPattern {
 	return &SolidPattern{Color: col}
 }
 
-func SolidPat(r, g, b float64) *SolidPattern {
+func SolidPat(r, g, b float32) *SolidPattern {
 	return NewSolidPattern(color.NewColor(r, g, b))
 }
 

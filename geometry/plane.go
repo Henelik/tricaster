@@ -1,8 +1,7 @@
 package geometry
 
 import (
-	"math"
-
+	"git.maze.io/go/math32"
 	"github.com/Henelik/tricaster/util"
 
 	"github.com/Henelik/tricaster/color"
@@ -52,7 +51,7 @@ func (p *Plane) GetMatrix() *matrix.Matrix {
 
 func (p *Plane) Intersects(r *ray.Ray) []ray.Intersection {
 	rt := r.Transform(p.im)
-	if math.Abs(rt.Direction.Z) < util.Epsilon {
+	if math32.Abs(rt.Direction.Z) < util.Epsilon {
 		return []ray.Intersection{}
 	}
 	t := -rt.Origin.Z / rt.Direction.Z

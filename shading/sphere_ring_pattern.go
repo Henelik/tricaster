@@ -1,8 +1,7 @@
 package shading
 
 import (
-	"math"
-
+	"git.maze.io/go/math32"
 	"github.com/Henelik/tricaster/util"
 
 	"github.com/Henelik/tricaster/color"
@@ -40,5 +39,5 @@ func (p *SphereRingPattern) GetMatrix() *matrix.Matrix {
 
 func (p *SphereRingPattern) Process(pos *tuple.Tuple) *color.Color {
 	tpos := p.im.MultTuple(pos)
-	return p.Patterns[util.AbsInt(int(math.Sqrt(tpos.X*tpos.X+tpos.Y*tpos.Y+tpos.Z*tpos.Z)))%len(p.Patterns)].Process(pos)
+	return p.Patterns[util.AbsInt(int(math32.Sqrt(tpos.X*tpos.X+tpos.Y*tpos.Y+tpos.Z*tpos.Z)))%len(p.Patterns)].Process(pos)
 }

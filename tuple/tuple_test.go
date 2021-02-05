@@ -9,20 +9,20 @@ import (
 
 func TestPoint(t *testing.T) {
 	a := NewPoint(4.3, -4.2, 3.1)
-	assert.Equal(t, 4.3, a.X)
-	assert.Equal(t, -4.2, a.Y)
-	assert.Equal(t, 3.1, a.Z)
-	assert.Equal(t, 1.0, a.W)
+	assert.Equal(t, float32(4.3), a.X)
+	assert.Equal(t, float32(-4.2), a.Y)
+	assert.Equal(t, float32(3.1), a.Z)
+	assert.Equal(t, float32(1.0), a.W)
 	assert.Equal(t, a.IsPoint(), true)
 	assert.Equal(t, a.IsVector(), false)
 }
 
 func TestVector(t *testing.T) {
 	a := NewVector(4.3, -4.2, 3.1)
-	assert.Equal(t, 4.3, a.X)
-	assert.Equal(t, -4.2, a.Y)
-	assert.Equal(t, 3.1, a.Z)
-	assert.Equal(t, 0.0, a.W)
+	assert.Equal(t, float32(4.3), a.X)
+	assert.Equal(t, float32(-4.2), a.Y)
+	assert.Equal(t, float32(3.1), a.Z)
+	assert.Equal(t, float32(0.0), a.W)
 	assert.Equal(t, a.IsPoint(), false)
 	assert.Equal(t, a.IsVector(), true)
 }
@@ -117,7 +117,7 @@ func TestMag(t *testing.T) {
 	testCases := []struct {
 		name string
 		v    *Tuple
-		want float64
+		want float32
 	}{
 		{
 			name: "X unit vector",
@@ -176,7 +176,8 @@ func TestNorm(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			assert.Equal(t, tc.want, tc.v.Norm())
+			// assert.Equal(t, tc.want, tc.v.Norm())
+			assert.True(t, tc.want.Equal(tc.v.Norm()))
 		})
 	}
 }
@@ -185,7 +186,7 @@ func TestDotProd(t *testing.T) {
 	v := NewVector(1, 2, 3)
 	o := NewVector(2, 3, 4)
 
-	assert.Equal(t, 20.0, v.DotProd(o))
+	assert.Equal(t, float32(20.0), v.DotProd(o))
 }
 
 func TestCrossProd(t *testing.T) {

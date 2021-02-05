@@ -1,17 +1,17 @@
 package util
 
-import "math"
+import "git.maze.io/go/math32"
 
-const Epsilon = .0000000001
+const Epsilon = .00007
 
-func Equal(x, y float64) bool {
-	if math.Abs(x-y) < Epsilon {
+func Equal(x, y float32) bool {
+	if math32.Abs(x-y) < Epsilon {
 		return true
 	}
 	return false
 }
 
-func Clamp(n, min, max float64) float64 {
+func Clamp(n, min, max float32) float32 {
 	if n < min {
 		return min
 	}
@@ -21,14 +21,14 @@ func Clamp(n, min, max float64) float64 {
 	return n
 }
 
-func Min(a, b float64) float64 {
+func Min(a, b float32) float32 {
 	if a < b {
 		return a
 	}
 	return b
 }
 
-func Max(a, b float64) float64 {
+func Max(a, b float32) float32 {
 	if a > b {
 		return a
 	}
@@ -49,6 +49,6 @@ func AbsInt(n int) int {
 	return n
 }
 
-func Lerp(start, end, factor float64) float64 {
+func Lerp(start, end, factor float32) float32 {
 	return start*(1-factor) + end*factor
 }

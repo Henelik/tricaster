@@ -14,16 +14,16 @@ var (
 )
 
 type Color struct {
-	R float64
-	G float64
-	B float64
+	R float32
+	G float32
+	B float32
 }
 
-func NewColor(r, g, b float64) *Color {
+func NewColor(r, g, b float32) *Color {
 	return &Color{r, g, b}
 }
 
-func Grey(v float64) *Color {
+func Grey(v float32) *Color {
 	return &Color{v, v, v}
 }
 
@@ -35,7 +35,7 @@ func (c *Color) Sub(o *Color) *Color {
 	return &Color{c.R - o.R, c.G - o.G, c.B - o.B}
 }
 
-func (c *Color) MultF(n float64) *Color {
+func (c *Color) MultF(n float32) *Color {
 	return &Color{c.R * n, c.G * n, c.B * n}
 }
 
@@ -54,10 +54,10 @@ func Avg(cs []*Color) *Color {
 	for i := 1; i < len(cs); i++ {
 		avg = avg.Add(cs[i])
 	}
-	return avg.MultF(1.0 / float64(len(cs)))
+	return avg.MultF(1.0 / float32(len(cs)))
 }
 
-func (c *Color) Lerp(o *Color, factor float64) *Color {
+func (c *Color) Lerp(o *Color, factor float32) *Color {
 	return &Color{
 		util.Lerp(c.R, o.R, factor),
 		util.Lerp(c.G, o.G, factor),

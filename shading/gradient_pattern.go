@@ -1,8 +1,7 @@
 package shading
 
 import (
-	"math"
-
+	"git.maze.io/go/math32"
 	"github.com/Henelik/tricaster/color"
 	"github.com/Henelik/tricaster/matrix"
 	"github.com/Henelik/tricaster/tuple"
@@ -40,5 +39,5 @@ func (p *GradientPattern) GetMatrix() *matrix.Matrix {
 
 func (p *GradientPattern) Process(pos *tuple.Tuple) *color.Color {
 	tpos := p.im.MultTuple(pos)
-	return p.Pattern1.Process(pos).Lerp(p.Pattern2.Process(pos), tpos.X-math.Floor(tpos.X))
+	return p.Pattern1.Process(pos).Lerp(p.Pattern2.Process(pos), tpos.X-math32.Floor(tpos.X))
 }

@@ -2,15 +2,15 @@ package matrix
 
 import (
 	"errors"
-	"math"
 
+	"git.maze.io/go/math32"
 	"github.com/Henelik/tricaster/tuple"
 	"github.com/Henelik/tricaster/util"
 )
 
 var Identity = &Matrix{
 	Order: 4,
-	Data: [][]float64{
+	Data: [][]float32{
 		{1, 0, 0, 0},
 		{0, 1, 0, 0},
 		{0, 0, 1, 0},
@@ -20,12 +20,12 @@ var Identity = &Matrix{
 
 type Matrix struct {
 	Order int
-	Data  [][]float64
+	Data  [][]float32
 }
 
 // NewMatrix makes a matrix.
 // only 2x2, 3x3, and 4x4 matrices are allowed for now
-func NewMatrix(ns ...float64) (*Matrix, error) {
+func NewMatrix(ns ...float32) (*Matrix, error) {
 	var o int
 	switch len(ns) {
 	case 4:
@@ -39,10 +39,10 @@ func NewMatrix(ns ...float64) (*Matrix, error) {
 	}
 	m := Matrix{
 		Order: o,
-		Data:  make([][]float64, o),
+		Data:  make([][]float32, o),
 	}
 	for i := 0; i < o; i++ {
-		row := make([]float64, o)
+		row := make([]float32, o)
 		for j := 0; j < o; j++ {
 			row[j] = ns[i*o+j]
 		}
@@ -67,9 +67,9 @@ func (m *Matrix) Equal(o *Matrix) bool {
 
 func (m *Matrix) Mult(o *Matrix) *Matrix {
 	order := util.MinInt(m.Order, o.Order)
-	data := make([][]float64, order)
+	data := make([][]float32, order)
 	for i := 0; i < order; i++ {
-		data[i] = make([]float64, order)
+		data[i] = make([]float32, order)
 		for j := 0; j < order; j++ {
 			for k := 0; k < order; k++ {
 				data[i][j] += m.Data[i][k] * o.Data[k][j]
@@ -89,9 +89,9 @@ func (m *Matrix) MultTuple(t *tuple.Tuple) *tuple.Tuple {
 }
 
 func (m *Matrix) Transpose() *Matrix {
-	data := make([][]float64, m.Order)
+	data := make([][]float32, m.Order)
 	for i := 0; i < m.Order; i++ {
-		data[i] = make([]float64, m.Order)
+		data[i] = make([]float32, m.Order)
 		for j := 0; j < m.Order; j++ {
 			data[i][j] = m.Data[j][i]
 		}
@@ -99,11 +99,11 @@ func (m *Matrix) Transpose() *Matrix {
 	return &Matrix{m.Order, data}
 }
 
-func (m *Matrix) Determinant() float64 {
+func (m *Matrix) Determinant() float32 {
 	if m.Order == 2 {
 		return m.Data[0][0]*m.Data[1][1] - m.Data[0][1]*m.Data[1][0]
 	}
-	det := 0.0
+	var det float32 = 0.0
 	for i := 0; i < m.Order; i++ {
 		det += m.Cofactor(0, i) * m.Data[0][i]
 	}
@@ -112,9 +112,9 @@ func (m *Matrix) Determinant() float64 {
 
 func (m *Matrix) Submatrix(x, y int) *Matrix {
 	order := m.Order - 1
-	data := make([][]float64, order)
+	data := make([][]float32, order)
 	for i := 0; i < order; i++ {
-		data[i] = make([]float64, order)
+		data[i] = make([]float32, order)
 		for j := 0; j < order; j++ {
 			switch {
 			case i >= x && j >= y:
@@ -131,11 +131,11 @@ func (m *Matrix) Submatrix(x, y int) *Matrix {
 	return &Matrix{order, data}
 }
 
-func (m *Matrix) Minor(x, y int) float64 {
+func (m *Matrix) Minor(x, y int) float32 {
 	return m.Submatrix(x, y).Determinant()
 }
 
-func (m *Matrix) Cofactor(x, y int) float64 {
+func (m *Matrix) Cofactor(x, y int) float32 {
 	if (x+y)%2 != 0 {
 		return m.Submatrix(x, y).Determinant() * -1
 	}
@@ -148,9 +148,9 @@ func (m *Matrix) IsInvertible() bool {
 
 func (m *Matrix) Inverse() *Matrix {
 	det := m.Determinant()
-	data := make([][]float64, m.Order)
+	data := make([][]float32, m.Order)
 	for i := 0; i < m.Order; i++ {
-		data[i] = make([]float64, m.Order)
+		data[i] = make([]float32, m.Order)
 		for j := 0; j < m.Order; j++ {
 			data[i][j] = m.Cofactor(j, i) / det
 		}
@@ -158,10 +158,10 @@ func (m *Matrix) Inverse() *Matrix {
 	return &Matrix{m.Order, data}
 }
 
-func Translation(x, y, z float64) *Matrix {
+func Translation(x, y, z float32) *Matrix {
 	return &Matrix{
 		Order: 4,
-		Data: [][]float64{
+		Data: [][]float32{
 			{1, 0, 0, x},
 			{0, 1, 0, y},
 			{0, 0, 1, z},
@@ -170,10 +170,10 @@ func Translation(x, y, z float64) *Matrix {
 	}
 }
 
-func Scaling(x, y, z float64) *Matrix {
+func Scaling(x, y, z float32) *Matrix {
 	return &Matrix{
 		Order: 4,
-		Data: [][]float64{
+		Data: [][]float32{
 			{x, 0, 0, 0},
 			{0, y, 0, 0},
 			{0, 0, z, 0},
@@ -183,10 +183,10 @@ func Scaling(x, y, z float64) *Matrix {
 }
 
 // ScalingU creates a uniform scaling matrix
-func ScalingU(n float64) *Matrix {
+func ScalingU(n float32) *Matrix {
 	return &Matrix{
 		Order: 4,
-		Data: [][]float64{
+		Data: [][]float32{
 			{n, 0, 0, 0},
 			{0, n, 0, 0},
 			{0, 0, n, 0},
@@ -195,46 +195,46 @@ func ScalingU(n float64) *Matrix {
 	}
 }
 
-func RotationX(r float64) *Matrix {
+func RotationX(r float32) *Matrix {
 	return &Matrix{
 		Order: 4,
-		Data: [][]float64{
+		Data: [][]float32{
 			{1, 0, 0, 0},
-			{0, math.Cos(r), -math.Sin(r), 0},
-			{0, math.Sin(r), math.Cos(r), 0},
+			{0, math32.Cos(r), -math32.Sin(r), 0},
+			{0, math32.Sin(r), math32.Cos(r), 0},
 			{0, 0, 0, 1},
 		},
 	}
 }
 
-func RotationY(r float64) *Matrix {
+func RotationY(r float32) *Matrix {
 	return &Matrix{
 		Order: 4,
-		Data: [][]float64{
-			{math.Cos(r), 0, math.Sin(r), 0},
+		Data: [][]float32{
+			{math32.Cos(r), 0, math32.Sin(r), 0},
 			{0, 1, 0, 0},
-			{-math.Sin(r), 0, math.Cos(r), 0},
+			{-math32.Sin(r), 0, math32.Cos(r), 0},
 			{0, 0, 0, 1},
 		},
 	}
 }
 
-func RotationZ(r float64) *Matrix {
+func RotationZ(r float32) *Matrix {
 	return &Matrix{
 		Order: 4,
-		Data: [][]float64{
-			{math.Cos(r), -math.Sin(r), 0, 0},
-			{math.Sin(r), math.Cos(r), 0, 0},
+		Data: [][]float32{
+			{math32.Cos(r), -math32.Sin(r), 0, 0},
+			{math32.Sin(r), math32.Cos(r), 0, 0},
 			{0, 0, 1, 0},
 			{0, 0, 0, 1},
 		},
 	}
 }
 
-func Shearing(xy, xz, yx, yz, zx, zy float64) *Matrix {
+func Shearing(xy, xz, yx, yz, zx, zy float32) *Matrix {
 	return &Matrix{
 		Order: 4,
-		Data: [][]float64{
+		Data: [][]float32{
 			{1, xy, xz, 0},
 			{yx, 1, yz, 0},
 			{zx, zy, 1, 0},
@@ -250,7 +250,7 @@ func ViewTransform(from, to, up *tuple.Tuple) *Matrix {
 	trueUp := left.CrossProd(forward)
 	orientation := &Matrix{
 		Order: 4,
-		Data: [][]float64{
+		Data: [][]float32{
 			{left.X, left.Y, left.Z, 0},
 			{trueUp.X, trueUp.Y, trueUp.Z, 0},
 			{-forward.X, -forward.Y, -forward.Z, 0},

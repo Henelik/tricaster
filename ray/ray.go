@@ -24,7 +24,7 @@ func NewRay(origin, direction *tuple.Tuple) *Ray {
 }
 
 // Position gets a point along the ray
-func (r *Ray) Position(t float64) *tuple.Tuple {
+func (r *Ray) Position(t float32) *tuple.Tuple {
 	return r.Origin.Add(r.Direction.Mult(t))
 }
 

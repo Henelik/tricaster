@@ -1,9 +1,9 @@
 package scene
 
 import (
-	"math"
 	"sync"
 
+	"git.maze.io/go/math32"
 	"github.com/Henelik/tricaster/color"
 
 	"github.com/Henelik/tricaster/canvas"
@@ -12,23 +12,23 @@ import (
 	"github.com/Henelik/tricaster/tuple"
 )
 
-var DefaultFOV = math.Pi / 2
+var DefaultFOV float32 = math32.Pi / 2
 
 type Camera struct {
 	hSize      int
 	vSize      int
-	FOV        float64
+	FOV        float32
 	m          *matrix.Matrix
 	im         *matrix.Matrix
-	halfWidth  float64
-	halfHeight float64
-	pixelSize  float64
+	halfWidth  float32
+	halfHeight float32
+	pixelSize  float32
 	AALevel    int
 }
 
 // NewCamera creates a new camera.
 // Set fov to 0 and transform to nil to use defaults.
-func NewCamera(hSize, vSize int, fov float64, transform *matrix.Matrix, aaLevel int) *Camera {
+func NewCamera(hSize, vSize int, fov float32, transform *matrix.Matrix, aaLevel int) *Camera {
 	c := &Camera{
 		hSize: hSize,
 		vSize: vSize,
@@ -59,8 +59,8 @@ func NewCamera(hSize, vSize int, fov float64, transform *matrix.Matrix, aaLevel 
 		c.AALevel = 1
 	}
 
-	halfView := math.Tan(c.FOV / 2)
-	aspect := float64(hSize) / float64(vSize)
+	halfView := math32.Tan(c.FOV / 2)
+	aspect := float32(hSize) / float32(vSize)
 	if aspect >= 1 {
 		c.halfWidth = halfView
 		c.halfHeight = halfView / aspect
@@ -68,7 +68,7 @@ func NewCamera(hSize, vSize int, fov float64, transform *matrix.Matrix, aaLevel 
 		c.halfWidth = halfView * aspect
 		c.halfHeight = halfView
 	}
-	c.pixelSize = (c.halfWidth * 2) / float64(c.hSize)
+	c.pixelSize = (c.halfWidth * 2) / float32(c.hSize)
 
 	return c
 }
@@ -93,8 +93,8 @@ func (c *Camera) SetTransform(im *matrix.Matrix) {
 
 func (c *Camera) RayForPixel(x, y int) *ray.Ray {
 	// the offset from the edge of the canvas to the pixel's center
-	xOffset := (float64(x) + 0.5) * c.pixelSize
-	yOffset := (float64(y) + 0.5) * c.pixelSize
+	xOffset := (float32(x) + 0.5) * c.pixelSize
+	yOffset := (float32(y) + 0.5) * c.pixelSize
 
 	// the untransformed coordinates of the pixel in world space.
 	// (remember that the camera looks toward -z, so +x is to the *right*.)
@@ -118,18 +118,18 @@ func (c *Camera) AARaysForPixel(x, y int) []*ray.Ray {
 	rs := make([]*ray.Ray, 0, c.AALevel*c.AALevel)
 
 	// the offset from the edge of the canvas to the pixel's center
-	xOffset := (float64(x) + 0.5) * c.pixelSize
-	yOffset := (float64(y) + 0.5) * c.pixelSize
+	xOffset := (float32(x) + 0.5) * c.pixelSize
+	yOffset := (float32(y) + 0.5) * c.pixelSize
 	// the distance between sampled sub-pixel points on the canvas
-	aaOffset := c.pixelSize / float64(c.AALevel)
+	aaOffset := c.pixelSize / float32(c.AALevel)
 	origin := c.im.MultTuple(tuple.Origin)
 
 	for aax := 0; aax < c.AALevel; aax++ {
 		for aay := 0; aay < c.AALevel; aay++ {
 			// the untransformed coordinates of the pixel in world space.
 			// (remember that the camera looks toward -z, so +x is to the *right*.)
-			worldX := c.halfWidth - xOffset + float64(aax)*aaOffset
-			worldY := c.halfHeight - yOffset + float64(aay)*aaOffset
+			worldX := c.halfWidth - xOffset + float32(aax)*aaOffset
+			worldY := c.halfHeight - yOffset + float32(aay)*aaOffset
 
 			// using the camera matrix, transform the canvas point and the origin,
 			// and then compute the ray's direction vector.
