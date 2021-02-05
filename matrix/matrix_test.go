@@ -646,7 +646,7 @@ func TestViewTransform(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			assert.Equal(t, tc.want, ViewTransform(tc.from, tc.to, tc.up))
+			assert.True(t, tc.want.Equal(ViewTransform(tc.from, tc.to, tc.up)))
 		})
 	}
 }

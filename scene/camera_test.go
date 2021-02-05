@@ -4,6 +4,8 @@ import (
 	"math"
 	"testing"
 
+	"github.com/Henelik/tricaster/util"
+
 	"github.com/Henelik/tricaster/canvas"
 
 	"github.com/Henelik/tricaster/color"
@@ -18,11 +20,11 @@ import (
 func TestPixelSize(t *testing.T) {
 	// The pixel size for a horizontal canvas
 	c1 := NewCamera(200, 125, 0, nil, 0)
-	assert.Equal(t, 0.01, c1.pixelSize)
+	assert.True(t, util.Equal(0.01, c1.pixelSize))
 
 	// The pixel size for a vertical canvas
 	c2 := NewCamera(125, 200, 0, nil, 0)
-	assert.Equal(t, 0.01, c2.pixelSize)
+	assert.True(t, util.Equal(0.01, c2.pixelSize))
 }
 
 func TestRayForPixel(t *testing.T) {
@@ -35,7 +37,7 @@ func TestRayForPixel(t *testing.T) {
 	// Constructing a ray through a corner of the canvas
 	r1 := c.RayForPixel(0, 0)
 	assert.Equal(t, tuple.Origin, r1.Origin)
-	assert.Equal(t, tuple.NewVector(0.6651864261194509, 0.33259321305972545, -0.6685123582500481), r1.Direction)
+	assert.True(t, tuple.NewVector(0.6651864261194509, 0.33259321305972545, -0.6685123582500481).Equal(r1.Direction))
 
 	// Constructing a ray when the camera is transformed
 	c.SetMatrix(matrix.RotationX(math.Pi / 4).Mult(matrix.Translation(0, -2, 5)))
