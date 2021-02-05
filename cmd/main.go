@@ -253,12 +253,12 @@ func RGBSphereScene() {
 
 func reflectionScene() {
 	floorMat := &shading.PhongMat{
-		Ambient:      0.1,
-		Diffuse:      0.9,
-		Specular:     0.0,
-		Shininess:    10,
-		Reflectivity: .01,
-		Color:        color.NewColor(1, 0.9, 0.9),
+		Ambient:   0.1,
+		Diffuse:   0.9,
+		Specular:  0.0,
+		Shininess: 10,
+		// Reflectivity: .01,
+		Color: color.NewColor(1, 0.9, 0.9),
 		Pattern: shading.NewCheckerPattern3D(
 			matrix.ScalingU(5).Mult(
 				matrix.Translation(2.5, 2.5, 2.5)),
@@ -312,12 +312,12 @@ func reflectionScene() {
 	middle := geometry.NewSphere(
 		matrix.Translation(-10, -10, 2).Mult(matrix.Scaling(2, 2, 2)),
 		&shading.PhongMat{
-			Ambient:      0.1,
-			Diffuse:      0.9,
-			Specular:     0.0,
-			Shininess:    10,
-			Reflectivity: .01,
-			Color:        color.NewColor(0.1, 1, 0.5),
+			Ambient:   0.1,
+			Diffuse:   0.9,
+			Specular:  0.0,
+			Shininess: 10,
+			// Reflectivity: .01,
+			Color: color.NewColor(0.1, 1, 0.5),
 			Pattern: shading.NewCheckerPattern3D(
 				matrix.Compose(
 					matrix.RotationZ(-math.Pi/6),
@@ -330,22 +330,22 @@ func reflectionScene() {
 	left := geometry.NewSphere(
 		matrix.Translation(7, -7, 1),
 		&shading.PhongMat{
-			Ambient:      0.1,
-			Diffuse:      0.9,
-			Specular:     0.9,
-			Shininess:    200,
-			Reflectivity: .05,
-			Color:        color.NewColor(1, 0.1, 0.1),
+			Ambient:   0.1,
+			Diffuse:   0.9,
+			Specular:  0.9,
+			Shininess: 200,
+			// Reflectivity: .05,
+			Color: color.NewColor(1, 0.1, 0.1),
 		})
 	right := geometry.NewSphere(
 		matrix.Translation(-4, 3, 1.25).Mult(matrix.ScalingU(1.25)),
 		&shading.PhongMat{
-			Ambient:      0.1,
-			Diffuse:      0.9,
-			Specular:     0.9,
-			Shininess:    200,
-			Reflectivity: .025,
-			Color:        color.NewColor(0.2, 0.2, 1),
+			Ambient:   0.1,
+			Diffuse:   0.9,
+			Specular:  0.9,
+			Shininess: 200,
+			// Reflectivity: .025,
+			Color: color.NewColor(0.2, 0.2, 1),
 			Pattern: shading.NewStripePattern(
 				matrix.Compose(
 					matrix.Translation(0, 0, .25),
@@ -390,7 +390,7 @@ func reflectionScene() {
 		matrix.ViewTransform(
 			tuple.NewPoint(-15, -10, 5),
 			tuple.NewPoint(3, 3, 2),
-			tuple.Up), 16)
+			tuple.Up), 0)
 
-	c.GoRender(w, 8).SaveImage("reflection_overkill.png")
+	c.GoRender(w, 8).SaveImage("reflection.png")
 }
