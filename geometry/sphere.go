@@ -45,16 +45,16 @@ func (s *Sphere) GetMatrix() *matrix.Matrix {
 	return s.m
 }
 
-func (s *Sphere) Intersects(r *ray.Ray) []Intersection {
+func (s *Sphere) Intersects(r *ray.Ray) []ray.Intersection {
 	rt := r.Transform(s.im)
 	sphereToRay := rt.Origin.Sub(tuple.Origin)
 	a := rt.Direction.DotProd(rt.Direction)
 	b := -2 * rt.Direction.DotProd(sphereToRay)
 	discriminant := b*b - 4*a*(sphereToRay.DotProd(sphereToRay)-1)
 	if discriminant < 0 {
-		return []Intersection{}
+		return []ray.Intersection{}
 	}
-	return []Intersection{
+	return []ray.Intersection{
 		{(b - math.Sqrt(discriminant)) / (2 * a), s},
 		{(b + math.Sqrt(discriminant)) / (2 * a), s},
 	}
@@ -68,6 +68,6 @@ func (s *Sphere) NormalAt(pos *tuple.Tuple) *tuple.Tuple {
 	return worldNormal.Norm()
 }
 
-func (s *Sphere) Shade(light *shading.PointLight, c *Comp) *color.Color {
-	return s.Mat.Lighting(light, c.Point, c.EyeV, c.NormalV, c.InShadow)
+func (s *Sphere) Shade(light *shading.PointLight, h *ray.Hit) *color.Color {
+	return s.Mat.Lighting(light, h)
 }

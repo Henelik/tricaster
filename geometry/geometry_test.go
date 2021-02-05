@@ -1,11 +1,12 @@
 package geometry
 
 import (
-	"github.com/Henelik/tricaster/shading"
 	"testing"
 
-	"github.com/Henelik/tricaster/matrix"
 	"github.com/Henelik/tricaster/ray"
+
+	"github.com/Henelik/tricaster/matrix"
+	"github.com/Henelik/tricaster/shading"
 	"github.com/Henelik/tricaster/tuple"
 	"github.com/stretchr/testify/assert"
 )
@@ -14,47 +15,47 @@ func TestHit(t *testing.T) {
 	s := NewSphere(matrix.Identity, shading.DefaultPhong)
 	testCases := []struct {
 		name   string
-		inters []Intersection
-		want   Intersection
+		inters []ray.Intersection
+		want   ray.Intersection
 	}{
 		{
 			name: "The hit, when all intersections have positive t",
-			inters: []Intersection{
+			inters: []ray.Intersection{
 				{1, s},
 				{2, s},
 			},
-			want: Intersection{1, s},
+			want: ray.Intersection{1, s},
 		},
 		{
 			name: "The hit, when some intersections have negative t",
-			inters: []Intersection{
+			inters: []ray.Intersection{
 				{-1, s},
 				{1, s},
 			},
-			want: Intersection{1, s},
+			want: ray.Intersection{1, s},
 		},
 		{
 			name: "The hit, when all intersections have negative t",
-			inters: []Intersection{
+			inters: []ray.Intersection{
 				{-2, s},
 				{-1, s},
 			},
-			want: *NilHit,
+			want: *ray.NilIntersect,
 		},
 		{
 			name: "The hit is always the lowest nonnegative intersection",
-			inters: []Intersection{
+			inters: []ray.Intersection{
 				{5, s},
 				{7, s},
 				{-3, s},
 				{2, s},
 			},
-			want: Intersection{2, s},
+			want: ray.Intersection{2, s},
 		},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			assert.Equal(t, tc.want, *Hit(tc.inters))
+			assert.Equal(t, tc.want, *ray.GetClosest(tc.inters))
 		})
 	}
 }
@@ -76,8 +77,8 @@ func BenchmarkIntersection128(b *testing.B) {
 					tuple.NewPoint(xPos, 0, yPos),
 					tuple.Backward,
 				)
-				h := Hit(s.Intersects(r))
-				if h != NilHit {
+				i := ray.GetClosest(s.Intersects(r))
+				if i != ray.NilIntersect {
 					hit = true
 				} else {
 					hit = false
@@ -90,36 +91,36 @@ func BenchmarkIntersection128(b *testing.B) {
 	}
 }
 
-func TestPrecompute(t *testing.T) {
+func TestToHit(t *testing.T) {
 	r := ray.NewRay(
 		tuple.NewPoint(0, 0, -5),
 		tuple.Up)
 	s := NewSphere(nil, nil)
-	i := &Intersection{4, s}
+	i := &ray.Intersection{4, s}
 
-	c := i.Precompute(r)
+	h := i.ToHit(r)
 
-	assert.Equal(t, i.T, c.T)
-	assert.Equal(t, i.P, c.P)
-	assert.Equal(t, tuple.NewPoint(0, 0, -1), c.Point)
-	assert.Equal(t, tuple.Down, c.EyeV)
-	assert.Equal(t, tuple.Down, c.NormalV)
-	assert.Equal(t, false, c.Inside)
+	assert.Equal(t, i.T, h.T)
+	assert.Equal(t, i.P, h.P)
+	assert.Equal(t, tuple.NewPoint(0, 0, -1), h.Pos)
+	assert.Equal(t, tuple.Down, h.EyeV)
+	assert.Equal(t, tuple.Down, h.NormalV)
+	assert.Equal(t, false, h.Inside)
 }
 
-func TestPrecomputeInside(t *testing.T) {
+func TestToHitInside(t *testing.T) {
 	r := ray.NewRay(
 		tuple.Origin,
 		tuple.Up)
 	s := NewSphere(nil, nil)
-	i := &Intersection{1, s}
+	i := &ray.Intersection{1, s}
 
-	c := i.Precompute(r)
+	h := i.ToHit(r)
 
-	assert.Equal(t, i.T, c.T)
-	assert.Equal(t, i.P, c.P)
-	assert.Equal(t, tuple.NewPoint(0, 0, 1), c.Point)
-	assert.Equal(t, tuple.Down, c.EyeV)
-	assert.Equal(t, tuple.Down, c.NormalV)
-	assert.Equal(t, true, c.Inside)
+	assert.Equal(t, i.T, h.T)
+	assert.Equal(t, i.P, h.P)
+	assert.Equal(t, tuple.NewPoint(0, 0, 1), h.Pos)
+	assert.Equal(t, tuple.Down, h.EyeV)
+	assert.Equal(t, tuple.Down, h.NormalV)
+	assert.Equal(t, true, h.Inside)
 }

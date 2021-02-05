@@ -14,10 +14,10 @@ import (
 
 func TestIntersect(t *testing.T) {
 	// Intersect a world with a ray
-	got := DefaultWorld.Intersect(
+	got := ray.SortI(DefaultWorld.Intersect(
 		ray.NewRay(
 			tuple.NewPoint(0, 0, -5),
-			tuple.NewVector(0, 0, 1)))
+			tuple.NewVector(0, 0, 1))))
 
 	assert.Equal(t, 4, len(got))
 	assert.Equal(t, 4.0, got[0].T)
@@ -30,8 +30,8 @@ func TestShading(t *testing.T) {
 	// Shading an intersection
 	r := ray.NewRay(tuple.NewPoint(-5, 0, 0), tuple.Right)
 	s := DefaultWorld.Geometry[0]
-	i := &geometry.Intersection{4, s}
-	col := DefaultWorld.Shade(i.Precompute(r))
+	i := &ray.Intersection{4, s}
+	col := DefaultWorld.Shade(i.ToHit(r))
 	assert.Equal(t, color.NewColor(0.38066119308103435, 0.47582649135129296, 0.28549589481077575), col)
 
 	// Shading an intersection from the inside
@@ -39,8 +39,8 @@ func TestShading(t *testing.T) {
 	w.Light = &shading.PointLight{tuple.NewPoint(0, 0.25, 0), color.White}
 	r2 := ray.NewRay(tuple.Origin, tuple.Right)
 	s2 := DefaultWorld.Geometry[1]
-	i2 := &geometry.Intersection{0.5, s2}
-	col2 := w.Shade(i2.Precompute(r2))
+	i2 := &ray.Intersection{0.5, s2}
+	col2 := w.Shade(i2.ToHit(r2))
 	assert.Equal(t, color.Grey(0.9049844720832575), col2)
 }
 

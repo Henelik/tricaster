@@ -17,7 +17,7 @@ func TestSphere_Intersects(t *testing.T) {
 	testCases := []struct {
 		name string
 		r    *ray.Ray
-		want []Intersection
+		want []ray.Intersection
 	}{
 		{
 			name: "A ray intersects a sphere at two points",
@@ -25,7 +25,7 @@ func TestSphere_Intersects(t *testing.T) {
 				tuple.NewPoint(0, 0, -5),
 				tuple.Up,
 			),
-			want: []Intersection{{4, s}, {6, s}},
+			want: []ray.Intersection{{4, s}, {6, s}},
 		},
 		{
 			name: "A ray intersects a sphere at a tangent",
@@ -33,7 +33,7 @@ func TestSphere_Intersects(t *testing.T) {
 				tuple.NewPoint(0, 1, -5),
 				tuple.Up,
 			),
-			want: []Intersection{{5, s}, {5, s}},
+			want: []ray.Intersection{{5, s}, {5, s}},
 		},
 		{
 			name: "A ray misses a sphere",
@@ -41,7 +41,7 @@ func TestSphere_Intersects(t *testing.T) {
 				tuple.NewPoint(0, 2, -5),
 				tuple.Up,
 			),
-			want: []Intersection{},
+			want: []ray.Intersection{},
 		},
 		{
 			name: "A ray originates inside a sphere",
@@ -49,7 +49,7 @@ func TestSphere_Intersects(t *testing.T) {
 				tuple.Origin,
 				tuple.Up,
 			),
-			want: []Intersection{{-1, s}, {1, s}},
+			want: []ray.Intersection{{-1, s}, {1, s}},
 		},
 		{
 			name: "A sphere is behind a ray",
@@ -57,7 +57,7 @@ func TestSphere_Intersects(t *testing.T) {
 				tuple.NewPoint(0, 0, 5),
 				tuple.Up,
 			),
-			want: []Intersection{{-6, s}, {-4, s}},
+			want: []ray.Intersection{{-6, s}, {-4, s}},
 		},
 	}
 	for _, tc := range testCases {
@@ -76,7 +76,7 @@ func TestSphere_IntersectsTransformed(t *testing.T) {
 
 	// Intersecting a scaled sphere with a ray
 	s := NewSphere(matrix.Scaling(2, 2, 2), shading.DefaultPhong)
-	want := []Intersection{
+	want := []ray.Intersection{
 		{3, s},
 		{7, s},
 	}
@@ -85,7 +85,7 @@ func TestSphere_IntersectsTransformed(t *testing.T) {
 
 	// Intersecting a translated sphere with a ray
 	s2 := NewSphere(matrix.Translation(5, 0, 0), shading.DefaultPhong)
-	want2 := []Intersection{}
+	want2 := []ray.Intersection{}
 
 	assert.Equal(t, want2, s2.Intersects(r))
 }

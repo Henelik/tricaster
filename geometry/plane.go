@@ -50,19 +50,19 @@ func (p *Plane) GetMatrix() *matrix.Matrix {
 	return p.m
 }
 
-func (p *Plane) Intersects(r *ray.Ray) []Intersection {
+func (p *Plane) Intersects(r *ray.Ray) []ray.Intersection {
 	rt := r.Transform(p.im)
 	if math.Abs(rt.Direction.Z) < util.Epsilon {
-		return []Intersection{}
+		return []ray.Intersection{}
 	}
 	t := -rt.Origin.Z / rt.Direction.Z
-	return []Intersection{{t, p}}
+	return []ray.Intersection{{t, p}}
 }
 
 func (p *Plane) NormalAt(pos *tuple.Tuple) *tuple.Tuple {
 	return p.n
 }
 
-func (p *Plane) Shade(light *shading.PointLight, c *Comp) *color.Color {
-	return p.Mat.Lighting(light, c.Point, c.EyeV, c.NormalV, c.InShadow)
+func (p *Plane) Shade(light *shading.PointLight, h *ray.Hit) *color.Color {
+	return p.Mat.Lighting(light, h)
 }

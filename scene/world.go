@@ -36,37 +36,31 @@ type World struct {
 	Config   WorldConfig
 }
 
-func (w *World) Intersect(r *ray.Ray) []geometry.Intersection {
-	var inters []geometry.Intersection
-	for _, p := range w.Geometry {
-		inters = append(inters, p.Intersects(r)...)
-	}
-	return geometry.SortI(inters)
-}
-
-func (w *World) IntersectNoSort(r *ray.Ray) []geometry.Intersection {
-	var inters []geometry.Intersection
+// Intersect returns all the intersections where a ray encounters an object in the world, unsorted.
+func (w *World) Intersect(r *ray.Ray) []ray.Intersection {
+	var inters []ray.Intersection
 	for _, p := range w.Geometry {
 		inters = append(inters, p.Intersects(r)...)
 	}
 	return inters
 }
 
-func (w *World) Shade(c *geometry.Comp) *color.Color {
+func (w *World) Shade(h *ray.Hit) *color.Color {
+	prim := h.P.(geometry.Primitive)
 	if !w.Config.Shadows {
-		return c.P.Shade(w.Light, c)
+		return prim.Shade(w.Light, h)
 	}
-	overP := c.Point.Add(c.NormalV.Mult(util.Epsilon))
-	c.InShadow = w.IsShadowed(overP)
-	return c.P.Shade(w.Light, c)
+	overP := h.Pos.Add(h.NormalV.Mult(util.Epsilon))
+	h.InShadow = w.IsShadowed(overP)
+	return prim.Shade(w.Light, h)
 }
 
 func (w *World) ColorAt(r *ray.Ray) *color.Color {
-	h := geometry.Hit(w.IntersectNoSort(r))
-	if *h == *geometry.NilHit {
+	i := ray.GetClosest(w.Intersect(r))
+	if *i == *ray.NilIntersect {
 		return color.Black
 	}
-	return w.Shade(h.Precompute(r))
+	return w.Shade(i.ToHit(r))
 }
 
 func (w *World) IsShadowed(p *tuple.Tuple) bool {
@@ -76,11 +70,11 @@ func (w *World) IsShadowed(p *tuple.Tuple) bool {
 
 	r := ray.NewRay(p, direction)
 
-	inters := w.IntersectNoSort(r)
+	inters := w.Intersect(r)
 
-	h := geometry.Hit(inters)
+	h := ray.GetClosest(inters)
 
-	if *h != *geometry.NilHit && h.T < distance {
+	if *h != *ray.NilIntersect && h.T < distance {
 		return true
 	}
 	return false

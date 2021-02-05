@@ -16,7 +16,7 @@ func TestPlane_Intersects(t *testing.T) {
 	testCases := []struct {
 		name string
 		r    *ray.Ray
-		want []Intersection
+		want []ray.Intersection
 	}{
 		{
 			name: "Intersect with a ray parallel to the plane",
@@ -24,7 +24,7 @@ func TestPlane_Intersects(t *testing.T) {
 				tuple.NewPoint(0, 0, 10),
 				tuple.Forward,
 			),
-			want: []Intersection{},
+			want: []ray.Intersection{},
 		},
 		{
 			name: "Intersect with a coplanar ray",
@@ -32,7 +32,7 @@ func TestPlane_Intersects(t *testing.T) {
 				tuple.NewPoint(0, 0, 0),
 				tuple.Forward,
 			),
-			want: []Intersection{},
+			want: []ray.Intersection{},
 		},
 		{
 			name: "A ray intersecting a plane from above",
@@ -40,7 +40,7 @@ func TestPlane_Intersects(t *testing.T) {
 				tuple.NewPoint(0, 0, 1),
 				tuple.Down,
 			),
-			want: []Intersection{{1, p}},
+			want: []ray.Intersection{{1, p}},
 		},
 		{
 			name: "A ray intersecting a plane from below",
@@ -48,7 +48,7 @@ func TestPlane_Intersects(t *testing.T) {
 				tuple.NewPoint(0, 0, -1),
 				tuple.Up,
 			),
-			want: []Intersection{{1, p}},
+			want: []ray.Intersection{{1, p}},
 		},
 	}
 	for _, tc := range testCases {

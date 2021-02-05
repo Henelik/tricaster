@@ -4,6 +4,8 @@ import (
 	"math"
 	"testing"
 
+	"github.com/Henelik/tricaster/ray"
+
 	"github.com/Henelik/tricaster/color"
 	"github.com/Henelik/tricaster/tuple"
 	"github.com/stretchr/testify/assert"
@@ -82,12 +84,13 @@ func TestPhong(t *testing.T) {
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			result := DefaultPhong.Lighting(
-				tc.light,
-				tuple.Origin,
-				tc.eyeV,
-				tc.normalV,
-				tc.shadow)
+			result := DefaultPhong.Lighting(tc.light,
+				&ray.Hit{
+					Pos:      tuple.Origin,
+					EyeV:     tc.eyeV,
+					NormalV:  tc.normalV,
+					InShadow: tc.shadow,
+				})
 			assert.True(t, tc.want.Equal(result))
 			// assert.Equal(t, tc.want, result)
 		})
