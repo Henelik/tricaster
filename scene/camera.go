@@ -148,7 +148,7 @@ func (c *Camera) Render(w *World) *canvas.Canvas {
 	for x := 0; x < c.hSize; x++ {
 		for y := 0; y < c.vSize; y++ {
 			r := c.RayForPixel(x, y)
-			col := w.ColorAt(r, w.Config.MaxBounce, nil)
+			col := w.ColorAt(r, w.Config.MaxBounce)
 			canv.Set(x, y, col)
 		}
 	}
@@ -173,7 +173,7 @@ func (c *Camera) GoRender(w *World, gridNum int) *canvas.Canvas {
 				rs := c.AARaysForPixel(x, y)
 				cols := make([]*color.Color, len(rs))
 				for i, r := range rs {
-					cols[i] = w.ColorAt(r, w.Config.MaxBounce, nil)
+					cols[i] = w.ColorAt(r, w.Config.MaxBounce)
 				}
 				canv.Set(x, y, color.Avg(cols))
 			}

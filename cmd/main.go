@@ -3,7 +3,6 @@
 package main
 
 import (
-	"fmt"
 	"image/png"
 	"log"
 	"math"
@@ -23,9 +22,12 @@ import (
 
 func main() {
 	start := time.Now()
-	reflectionScene()
+
+	// reflectionScene()
+	refractionScene()
+
 	t := time.Now()
-	fmt.Printf("Render time was %v\n", t.Sub(start))
+	log.Printf("Render time was %v\n", t.Sub(start))
 }
 
 func physicsTest() {
@@ -246,7 +248,7 @@ func RGBSphereScene() {
 		matrix.ViewTransform(
 			tuple.NewPoint(-15, -10, 5),
 			tuple.NewPoint(3, 3, 2),
-			tuple.Up), 4)
+			tuple.Up), 0)
 
 	c.GoRender(w, 2).SaveImage("new_scene_aax4.png")
 }
@@ -393,4 +395,169 @@ func reflectionScene() {
 			tuple.Up), 0)
 
 	c.GoRender(w, 8).SaveImage("reflection.png")
+}
+
+func refractionScene() {
+	floorMat := &shading.PhongMat{
+		Ambient:   0.1,
+		Diffuse:   0.9,
+		Specular:  0.0,
+		Shininess: 10,
+		// Reflectivity: .01,
+		IOR:   1,
+		Color: color.NewColor(1, 0.9, 0.9),
+		Pattern: shading.NewCheckerPattern3D(
+			matrix.ScalingU(1).Mult(
+				matrix.Translation(2.5, 2.5, 2.5)),
+			shading.SolidPat(1, 0.9, 0.9),
+			shading.SolidPat(0.2, 0.19, 0.19),
+		),
+	}
+	floor := geometry.NewPlane(
+		matrix.Identity,
+		floorMat)
+	lWall := geometry.NewPlane(
+		matrix.Compose(
+			matrix.Translation(20, 0, 0),
+			matrix.RotationY(math.Pi/2),
+		),
+		floorMat)
+	rWall := geometry.NewPlane(
+		matrix.Compose(
+			matrix.Translation(0, 20, 0),
+			matrix.RotationX(math.Pi/2),
+		),
+		floorMat)
+	blWall := geometry.NewPlane(
+		matrix.Compose(
+			matrix.Translation(-20, 0, 0),
+			matrix.RotationY(math.Pi/2),
+		),
+		floorMat)
+	brWall := geometry.NewPlane(
+		matrix.Compose(
+			matrix.Translation(0, -20, 0),
+			matrix.RotationX(math.Pi/2),
+		),
+		floorMat)
+	ceiling := geometry.NewPlane(
+		matrix.Translation(0, 0, 40),
+		floorMat)
+
+	glassBall := geometry.NewSphere(
+		matrix.Translation(0, 0, 3).Mult(matrix.Scaling(2, 2, 2)),
+		&shading.PhongMat{
+			Ambient:      0.1,
+			Diffuse:      0.9,
+			Specular:     0.8,
+			Shininess:    300,
+			Reflectivity: .1,
+			Transparency: .9,
+			IOR:          1.5,
+			Color:        color.NewColor(0.7, 0.7, 0.7),
+			Pattern:      nil,
+		})
+
+	airBall := geometry.NewSphere(
+		matrix.Translation(0, 0, 3),
+		&shading.PhongMat{
+			Ambient:      0.1,
+			Diffuse:      0.9,
+			Specular:     0.8,
+			Shininess:    300,
+			Reflectivity: 0,
+			Transparency: 1,
+			IOR:          1,
+			Color:        color.NewColor(0.7, 0.7, 0.7),
+			Pattern:      nil,
+		})
+
+	middle := geometry.NewSphere(
+		matrix.Translation(-10, -10, 2).Mult(matrix.Scaling(2, 2, 2)),
+		&shading.PhongMat{
+			Ambient:   0.1,
+			Diffuse:   0.9,
+			Specular:  0.0,
+			Shininess: 10,
+			// Reflectivity: .01,
+			IOR:   1,
+			Color: color.NewColor(0.1, 1, 0.5),
+			Pattern: shading.NewCheckerPattern3D(
+				matrix.Compose(
+					matrix.RotationZ(-math.Pi/6),
+					matrix.RotationY(-math.Pi/6),
+					matrix.ScalingU(.5),
+				),
+				shading.SolidPat(0.1, 1, 0.5),
+				shading.SolidPat(0.1, 0.5, 0.4)),
+		})
+	left := geometry.NewSphere(
+		matrix.Translation(7, -7, 1),
+		&shading.PhongMat{
+			Ambient:   0.1,
+			Diffuse:   0.9,
+			Specular:  0.9,
+			Shininess: 200,
+			// Reflectivity: .05,
+			IOR:   1,
+			Color: color.NewColor(1, 0.1, 0.1),
+		})
+	right := geometry.NewSphere(
+		matrix.Translation(-4, 3, 1.25).Mult(matrix.ScalingU(1.25)),
+		&shading.PhongMat{
+			Ambient:   0.1,
+			Diffuse:   0.9,
+			Specular:  0.9,
+			Shininess: 200,
+			// Reflectivity: .025,
+			IOR:   1,
+			Color: color.NewColor(0.2, 0.2, 1),
+			Pattern: shading.NewStripePattern(
+				matrix.Compose(
+					matrix.Translation(0, 0, .25),
+					matrix.RotationY(math.Pi/2),
+					matrix.ScalingU(.5),
+				),
+				shading.NewGradientPattern(
+					matrix.Compose(
+						matrix.RotationY(math.Pi/2),
+						matrix.ScalingU(3),
+					),
+					shading.SolidPat(0.9, 0.9, 0.9),
+					shading.SolidPat(0.2, 0.2, 1),
+				),
+				shading.SolidPat(0.2, 0.2, 0.4)),
+		})
+
+	w := &scene.World{
+		Geometry: []geometry.Primitive{
+			floor,
+			ceiling,
+			lWall,
+			rWall,
+			blWall,
+			brWall,
+			glassBall,
+			airBall,
+			middle,
+			right,
+			left,
+		},
+		Light: &shading.PointLight{
+			Pos:   tuple.NewPoint(0, -10, 10),
+			Color: color.White,
+		},
+		Config: scene.WorldConfig{
+			Shadows:   true,
+			MaxBounce: 7,
+		},
+	}
+
+	c := scene.NewCamera(1920, 1080, math.Pi/3,
+		matrix.ViewTransform(
+			tuple.NewPoint(-15, -10, 5),
+			tuple.NewPoint(3, 3, 2),
+			tuple.Up), 2)
+
+	c.GoRender(w, 8).SaveImage("refraction.png")
 }

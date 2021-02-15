@@ -3,6 +3,8 @@ package ray
 import (
 	"math"
 
+	"github.com/Henelik/tricaster/util"
+
 	"github.com/Henelik/tricaster/tuple"
 )
 
@@ -28,6 +30,8 @@ type Hit struct {
 	ReflectV *tuple.Tuple
 	Inside   bool
 	InShadow bool
+	OverP    *tuple.Tuple
+	UnderP   *tuple.Tuple
 }
 
 func (i *Intersection) ToHit(r *Ray) *Hit {
@@ -41,6 +45,8 @@ func (i *Intersection) ToHit(r *Ray) *Hit {
 	if h.Inside {
 		h.NormalV = h.NormalV.Neg()
 	}
+	h.OverP = h.Pos.Add(h.NormalV.Mult(util.Epsilon * 1000.0))
+	h.UnderP = h.Pos.Sub(h.NormalV.Mult(util.Epsilon * 1000.0))
 	h.ReflectV = r.Direction.Reflect(h.NormalV)
 	return h
 }

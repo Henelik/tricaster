@@ -13,6 +13,8 @@ var DefaultPhong = &PhongMat{
 	Specular:     0.9,
 	Shininess:    200,
 	Reflectivity: 0,
+	Transparency: 0,
+	IOR:          1,
 	Color:        color.White,
 }
 
@@ -22,6 +24,8 @@ type PhongMat struct {
 	Specular     float64
 	Shininess    float64
 	Reflectivity float64
+	Transparency float64
+	IOR          float64
 	Color        *color.Color // used as a fallback if there is no pattern
 	Pattern      Pattern
 }
