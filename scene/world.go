@@ -55,9 +55,24 @@ func (w *World) Shade(h *ray.Hit, remainingBounce int, inters []ray.Intersection
 	if w.Config.Shadows {
 		h.InShadow = w.IsShadowed(h.OverP)
 	}
-	return prim.Shade(w.Light, h).MultF(1 - prim.GetMaterial().(*shading.PhongMat).Transparency).
-		Add(w.ReflectedColor(h, remainingBounce-1)).
-		Add(w.RefractedColor(h, remainingBounce-1, inters))
+
+	n1, n2 := ComputeRefractIOR(h, inters)
+
+	surface := prim.Shade(w.Light, h).MultF(1 - prim.GetMaterial().(*shading.PhongMat).Transparency)
+	reflected := w.ReflectedColor(h, remainingBounce-1)
+	refracted := w.RefractedColor(h, remainingBounce-1, inters, n1, n2)
+
+	mat := prim.GetMaterial().(*shading.PhongMat)
+
+	if mat.Reflectivity > 0 && mat.Transparency > 0 {
+		reflectance := h.Schlick(n1, n2)
+
+		return surface.
+			Add(reflected.MultF(reflectance)).
+			Add(refracted.MultF(1 - reflectance))
+	}
+
+	return surface.Add(reflected).Add(refracted)
 }
 
 // ColorAt finds a ray's hit and then calls shade at that hit
@@ -85,7 +100,7 @@ func (w *World) ReflectedColor(h *ray.Hit, remainingBounce int) *color.Color {
 	return color.Black
 }
 
-func (w *World) RefractedColor(h *ray.Hit, remainingBounce int, inters []ray.Intersection) *color.Color {
+func (w *World) RefractedColor(h *ray.Hit, remainingBounce int, inters []ray.Intersection, n1, n2 float64) *color.Color {
 	if remainingBounce <= 0 {
 		return color.Black
 	}
@@ -94,15 +109,9 @@ func (w *World) RefractedColor(h *ray.Hit, remainingBounce int, inters []ray.Int
 		if m.Transparency == 0 {
 			return color.Black
 		}
-		n1, n2 := ComputeRefractIOR(h, inters)
-		// compute fresnel vial Snell's Law
 		nRatio := n1 / n2
 		cosI := h.EyeV.DotProd(h.NormalV)
 		sin2T := nRatio * nRatio * (1 - cosI*cosI)
-		// cull total internal reflection
-		if sin2T > 1 {
-			return color.Black
-		}
 		// find the new ray's direction
 		cosT := math.Sqrt(1.0 - sin2T)
 		dir := h.NormalV.Mult(nRatio*cosI - cosT).Sub(h.EyeV.Mult(nRatio))

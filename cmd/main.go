@@ -451,26 +451,26 @@ func refractionScene() {
 			Diffuse:      0.9,
 			Specular:     0.8,
 			Shininess:    300,
-			Reflectivity: .1,
+			Reflectivity: .9,
 			Transparency: .9,
 			IOR:          1.5,
 			Color:        color.NewColor(0.7, 0.7, 0.7),
 			Pattern:      nil,
 		})
 
-	airBall := geometry.NewSphere(
-		matrix.Translation(0, 0, 3),
-		&shading.PhongMat{
-			Ambient:      0.1,
-			Diffuse:      0.9,
-			Specular:     0.8,
-			Shininess:    300,
-			Reflectivity: 0,
-			Transparency: 1,
-			IOR:          1,
-			Color:        color.NewColor(0.7, 0.7, 0.7),
-			Pattern:      nil,
-		})
+	/*airBall := geometry.NewSphere(
+	matrix.Translation(0, 0, 3),
+	&shading.PhongMat{
+		Ambient:      0.1,
+		Diffuse:      0.9,
+		Specular:     0.8,
+		Shininess:    300,
+		Reflectivity: 0,
+		Transparency: 1,
+		IOR:          1,
+		Color:        color.NewColor(0.7, 0.7, 0.7),
+		Pattern:      nil,
+	})*/
 
 	middle := geometry.NewSphere(
 		matrix.Translation(-10, -10, 2).Mult(matrix.Scaling(2, 2, 2)),
@@ -538,7 +538,7 @@ func refractionScene() {
 			blWall,
 			brWall,
 			glassBall,
-			airBall,
+			// airBall,
 			middle,
 			right,
 			left,

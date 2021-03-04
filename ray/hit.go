@@ -88,3 +88,22 @@ func SortI(inters []Intersection) []Intersection {
 	result = append(result, r[j:]...)
 	return result
 }
+
+func (h *Hit) Schlick(n1, n2 float64) float64 {
+	cos := h.EyeV.DotProd(h.NormalV)
+
+	if n1 > n2 {
+		n := n1 / n2
+
+		sin2t := n * n * (1 - cos*cos)
+
+		if sin2t > 1 {
+			return 1
+		}
+
+		cos = math.Sqrt(1 - sin2t)
+	}
+	r0 := (n1 - n2) / (n1 + n2)
+	r0 *= r0
+	return r0 + (1-r0)*math.Pow(1-cos, 5)
+}
