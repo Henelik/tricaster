@@ -6,16 +6,29 @@ import (
 	"github.com/Henelik/tricaster/color"
 )
 
-var DefaultPhong = &PhongMat{
-	Ambient:      0.1,
-	Diffuse:      0.9,
-	Specular:     0.9,
-	Shininess:    200,
-	Reflectivity: 0,
-	Transparency: 0,
-	IOR:          1,
-	Color:        color.White,
-}
+var (
+	DefaultPhong = &PhongMat{
+		Ambient:      0.1,
+		Diffuse:      0.9,
+		Specular:     0.9,
+		Shininess:    200,
+		Reflectivity: 0,
+		Transparency: 0,
+		IOR:          1,
+		Color:        color.White,
+	}
+	Glass = &PhongMat{
+		Ambient:      0.1,
+		Diffuse:      0.9,
+		Specular:     0.8,
+		Shininess:    300,
+		Reflectivity: .9,
+		Transparency: .9,
+		IOR:          1.5,
+		Color:        color.Grey(.9),
+		Pattern:      nil,
+	}
+)
 
 type PhongMat struct {
 	Ambient      float64
