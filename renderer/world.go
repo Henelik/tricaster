@@ -46,17 +46,15 @@ func (w *World) Intersect(r *Ray) []Intersection {
 
 // Shade finds the color of an object at a hit point
 func (w *World) Shade(h *Hit, remainingBounce int) *color.Color {
-	prim := h.P.(Primitive)
-
 	if w.Config.Shadows {
 		h.InShadow = w.IsShadowed(h.OverP)
 	}
 
-	surface := prim.Shade(w.Light, h).MultF(1 - prim.GetMaterial().(*PhongMat).Transparency)
+	surface := h.P.Shade(w.Light, h).MultF(1 - h.P.GetMaterial().(*PhongMat).Transparency)
 	reflected := w.ReflectedColor(h, remainingBounce-1)
 	refracted := w.RefractedColor(h, remainingBounce-1)
 
-	mat := prim.GetMaterial().(*PhongMat)
+	mat := h.P.GetMaterial().(*PhongMat)
 
 	if mat.Reflectivity > 0 && mat.Transparency > 0 {
 		reflectance := h.Schlick()
@@ -84,8 +82,7 @@ func (w *World) ReflectedColor(h *Hit, remainingBounce int) *color.Color {
 	if remainingBounce <= 0 {
 		return color.Black
 	}
-	prim := h.P.(Primitive)
-	if m, ok := prim.GetMaterial().(*PhongMat); ok {
+	if m, ok := h.P.GetMaterial().(*PhongMat); ok {
 		if m.Reflectivity == 0 {
 			return color.Black
 		}
@@ -98,8 +95,7 @@ func (w *World) RefractedColor(h *Hit, remainingBounce int) *color.Color {
 	if remainingBounce <= 0 {
 		return color.Black
 	}
-	prim := h.P.(Primitive)
-	if m, ok := prim.GetMaterial().(*PhongMat); ok {
+	if m, ok := h.P.GetMaterial().(*PhongMat); ok {
 		if m.Transparency == 0 {
 			return color.Black
 		}
