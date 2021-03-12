@@ -9,14 +9,11 @@ import (
 	"os"
 	"time"
 
-	"github.com/Henelik/tricaster/scene"
-	"github.com/Henelik/tricaster/shading"
-
 	"github.com/Henelik/tricaster/canvas"
 	"github.com/Henelik/tricaster/color"
-	"github.com/Henelik/tricaster/geometry"
 	"github.com/Henelik/tricaster/matrix"
 	"github.com/Henelik/tricaster/physics"
+	"github.com/Henelik/tricaster/renderer"
 	"github.com/Henelik/tricaster/tuple"
 )
 
@@ -122,9 +119,9 @@ func projectilePlot() {
 }
 
 func drawSphereTest() {
-	s := geometry.NewSphere(
+	s := renderer.NewSphere(
 		matrix.Translation(0, 5, 0),
-		&shading.PhongMat{
+		&renderer.PhongMat{
 			Ambient:   0.1,
 			Diffuse:   0.9,
 			Specular:  0.9,
@@ -132,17 +129,17 @@ func drawSphereTest() {
 			Color:     color.Red,
 		})
 
-	light := &shading.PointLight{
+	light := &renderer.PointLight{
 		tuple.NewPoint(10, -5, 10),
 		color.White,
 	}
 
-	world := &scene.World{
-		Geometry: []geometry.Primitive{s},
+	world := &renderer.World{
+		Geometry: []renderer.Primitive{s},
 		Light:    light,
 	}
 
-	cam := scene.NewCamera(512, 512, 0,
+	cam := renderer.NewCamera(512, 512, 0,
 		matrix.ViewTransform(
 			tuple.Origin,
 			tuple.NewPoint(0, 5, 0),
@@ -152,50 +149,50 @@ func drawSphereTest() {
 }
 
 func RGBSphereScene() {
-	floorMat := &shading.PhongMat{
+	floorMat := &renderer.PhongMat{
 		Ambient:   0.1,
 		Diffuse:   0.9,
 		Specular:  0.0,
 		Shininess: 10,
 		Color:     color.NewColor(1, 0.9, 0.9),
-		Pattern: shading.NewCheckerPattern3D(
+		Pattern: renderer.NewCheckerPattern3D(
 			matrix.ScalingU(20),
-			shading.NewStripePattern(
+			renderer.NewStripePattern(
 				matrix.RotationZ(math.Pi/4),
-				shading.SolidPat(1, 0.9, 0.9),
-				shading.SolidPat(.75, 0.7, 0.7),
+				renderer.SolidPat(1, 0.9, 0.9),
+				renderer.SolidPat(.75, 0.7, 0.7),
 			),
-			shading.NewStripePattern(
+			renderer.NewStripePattern(
 				matrix.RotationZ(-math.Pi/4),
-				shading.SolidPat(0.2, 0.19, 0.19),
-				shading.SolidPat(.3, 0.3, 0.3),
+				renderer.SolidPat(0.2, 0.19, 0.19),
+				renderer.SolidPat(.3, 0.3, 0.3),
 			)),
 	}
-	floor := geometry.NewPlane(
+	floor := renderer.NewPlane(
 		matrix.Identity,
 		floorMat)
 
-	middle := geometry.NewSphere(
+	middle := renderer.NewSphere(
 		matrix.Translation(5, 5, 2).Mult(matrix.Scaling(2, 2, 2)),
-		&shading.PhongMat{
+		&renderer.PhongMat{
 			Ambient:   0.1,
 			Diffuse:   0.9,
 			Specular:  0.0,
 			Shininess: 10,
 			Color:     color.NewColor(0.1, 1, 0.5),
-			Pattern: shading.NewCheckerPattern3D(
+			Pattern: renderer.NewCheckerPattern3D(
 				matrix.Compose(
 					matrix.RotationZ(-math.Pi/6),
 					matrix.RotationY(-math.Pi/6),
 					matrix.ScalingU(.5),
 				),
-				shading.SolidPat(0.1, 1, 0.5),
-				shading.SolidPat(0.1, 0.5, 0.4)),
+				renderer.SolidPat(0.1, 1, 0.5),
+				renderer.SolidPat(0.1, 0.5, 0.4)),
 		})
 
-	left := geometry.NewSphere(
+	left := renderer.NewSphere(
 		matrix.Translation(2, -2, 1),
-		&shading.PhongMat{
+		&renderer.PhongMat{
 			Ambient:   0.1,
 			Diffuse:   0.9,
 			Specular:  0.9,
@@ -203,48 +200,48 @@ func RGBSphereScene() {
 			Color:     color.NewColor(1, 0.1, 0.1),
 		})
 
-	right := geometry.NewSphere(
+	right := renderer.NewSphere(
 		matrix.Translation(-4, 3, 1.25).Mult(matrix.ScalingU(1.25)),
-		&shading.PhongMat{
+		&renderer.PhongMat{
 			Ambient:   0.1,
 			Diffuse:   0.9,
 			Specular:  0.9,
 			Shininess: 200,
 			Color:     color.NewColor(0.2, 0.2, 1),
-			Pattern: shading.NewStripePattern(
+			Pattern: renderer.NewStripePattern(
 				matrix.Compose(
 					matrix.Translation(0, 0, .25),
 					matrix.RotationY(math.Pi/2),
 					matrix.ScalingU(.5),
 				),
-				shading.NewGradientPattern(
+				renderer.NewGradientPattern(
 					matrix.Compose(
 						matrix.RotationY(math.Pi/2),
 						matrix.ScalingU(3),
 					),
-					shading.SolidPat(0.9, 0.9, 0.9),
-					shading.SolidPat(0.2, 0.2, 1),
+					renderer.SolidPat(0.9, 0.9, 0.9),
+					renderer.SolidPat(0.2, 0.2, 1),
 				),
-				shading.SolidPat(0.2, 0.2, 0.4)),
+				renderer.SolidPat(0.2, 0.2, 0.4)),
 		})
 
-	w := &scene.World{
-		Geometry: []geometry.Primitive{
+	w := &renderer.World{
+		Geometry: []renderer.Primitive{
 			floor,
 			middle,
 			left,
 			right,
 		},
-		Light: &shading.PointLight{
+		Light: &renderer.PointLight{
 			Pos:   tuple.NewPoint(0, -10, 10),
 			Color: color.White,
 		},
-		Config: scene.WorldConfig{
+		Config: renderer.WorldConfig{
 			Shadows: true,
 		},
 	}
 
-	c := scene.NewCamera(1920, 1080, math.Pi/3,
+	c := renderer.NewCamera(1920, 1080, math.Pi/3,
 		matrix.ViewTransform(
 			tuple.NewPoint(-15, -10, 5),
 			tuple.NewPoint(3, 3, 2),
@@ -254,54 +251,54 @@ func RGBSphereScene() {
 }
 
 func reflectionScene() {
-	floorMat := &shading.PhongMat{
+	floorMat := &renderer.PhongMat{
 		Ambient:   0.1,
 		Diffuse:   0.9,
 		Specular:  0.0,
 		Shininess: 10,
 		// Reflectivity: .01,
 		Color: color.NewColor(1, 0.9, 0.9),
-		Pattern: shading.NewCheckerPattern3D(
+		Pattern: renderer.NewCheckerPattern3D(
 			matrix.ScalingU(5).Mult(
 				matrix.Translation(2.5, 2.5, 2.5)),
-			shading.SolidPat(1, 0.9, 0.9),
-			shading.SolidPat(0.2, 0.19, 0.19),
+			renderer.SolidPat(1, 0.9, 0.9),
+			renderer.SolidPat(0.2, 0.19, 0.19),
 		),
 	}
-	floor := geometry.NewPlane(
+	floor := renderer.NewPlane(
 		matrix.Identity,
 		floorMat)
-	lWall := geometry.NewPlane(
+	lWall := renderer.NewPlane(
 		matrix.Compose(
 			matrix.Translation(20, 0, 0),
 			matrix.RotationY(math.Pi/2),
 		),
 		floorMat)
-	rWall := geometry.NewPlane(
+	rWall := renderer.NewPlane(
 		matrix.Compose(
 			matrix.Translation(0, 20, 0),
 			matrix.RotationX(math.Pi/2),
 		),
 		floorMat)
-	blWall := geometry.NewPlane(
+	blWall := renderer.NewPlane(
 		matrix.Compose(
 			matrix.Translation(-20, 0, 0),
 			matrix.RotationY(math.Pi/2),
 		),
 		floorMat)
-	brWall := geometry.NewPlane(
+	brWall := renderer.NewPlane(
 		matrix.Compose(
 			matrix.Translation(0, -20, 0),
 			matrix.RotationX(math.Pi/2),
 		),
 		floorMat)
-	ceiling := geometry.NewPlane(
+	ceiling := renderer.NewPlane(
 		matrix.Translation(0, 0, 40),
 		floorMat)
 
-	mirrorBall := geometry.NewSphere(
+	mirrorBall := renderer.NewSphere(
 		matrix.Translation(5, 5, 2).Mult(matrix.Scaling(2, 2, 2)),
-		&shading.PhongMat{
+		&renderer.PhongMat{
 			Ambient:      0.1,
 			Diffuse:      0.9,
 			Specular:     0.8,
@@ -311,27 +308,27 @@ func reflectionScene() {
 			Pattern:      nil,
 		})
 
-	middle := geometry.NewSphere(
+	middle := renderer.NewSphere(
 		matrix.Translation(-10, -10, 2).Mult(matrix.Scaling(2, 2, 2)),
-		&shading.PhongMat{
+		&renderer.PhongMat{
 			Ambient:   0.1,
 			Diffuse:   0.9,
 			Specular:  0.0,
 			Shininess: 10,
 			// Reflectivity: .01,
 			Color: color.NewColor(0.1, 1, 0.5),
-			Pattern: shading.NewCheckerPattern3D(
+			Pattern: renderer.NewCheckerPattern3D(
 				matrix.Compose(
 					matrix.RotationZ(-math.Pi/6),
 					matrix.RotationY(-math.Pi/6),
 					matrix.ScalingU(.5),
 				),
-				shading.SolidPat(0.1, 1, 0.5),
-				shading.SolidPat(0.1, 0.5, 0.4)),
+				renderer.SolidPat(0.1, 1, 0.5),
+				renderer.SolidPat(0.1, 0.5, 0.4)),
 		})
-	left := geometry.NewSphere(
+	left := renderer.NewSphere(
 		matrix.Translation(7, -7, 1),
-		&shading.PhongMat{
+		&renderer.PhongMat{
 			Ambient:   0.1,
 			Diffuse:   0.9,
 			Specular:  0.9,
@@ -339,34 +336,34 @@ func reflectionScene() {
 			// Reflectivity: .05,
 			Color: color.NewColor(1, 0.1, 0.1),
 		})
-	right := geometry.NewSphere(
+	right := renderer.NewSphere(
 		matrix.Translation(-4, 3, 1.25).Mult(matrix.ScalingU(1.25)),
-		&shading.PhongMat{
+		&renderer.PhongMat{
 			Ambient:   0.1,
 			Diffuse:   0.9,
 			Specular:  0.9,
 			Shininess: 200,
 			// Reflectivity: .025,
 			Color: color.NewColor(0.2, 0.2, 1),
-			Pattern: shading.NewStripePattern(
+			Pattern: renderer.NewStripePattern(
 				matrix.Compose(
 					matrix.Translation(0, 0, .25),
 					matrix.RotationY(math.Pi/2),
 					matrix.ScalingU(.5),
 				),
-				shading.NewGradientPattern(
+				renderer.NewGradientPattern(
 					matrix.Compose(
 						matrix.RotationY(math.Pi/2),
 						matrix.ScalingU(3),
 					),
-					shading.SolidPat(0.9, 0.9, 0.9),
-					shading.SolidPat(0.2, 0.2, 1),
+					renderer.SolidPat(0.9, 0.9, 0.9),
+					renderer.SolidPat(0.2, 0.2, 1),
 				),
-				shading.SolidPat(0.2, 0.2, 0.4)),
+				renderer.SolidPat(0.2, 0.2, 0.4)),
 		})
 
-	w := &scene.World{
-		Geometry: []geometry.Primitive{
+	w := &renderer.World{
+		Geometry: []renderer.Primitive{
 			floor,
 			ceiling,
 			lWall,
@@ -378,17 +375,17 @@ func reflectionScene() {
 			right,
 			left,
 		},
-		Light: &shading.PointLight{
+		Light: &renderer.PointLight{
 			Pos:   tuple.NewPoint(0, -10, 10),
 			Color: color.White,
 		},
-		Config: scene.WorldConfig{
+		Config: renderer.WorldConfig{
 			Shadows:   true,
 			MaxBounce: 3,
 		},
 	}
 
-	c := scene.NewCamera(1920, 1080, math.Pi/3,
+	c := renderer.NewCamera(1920, 1080, math.Pi/3,
 		matrix.ViewTransform(
 			tuple.NewPoint(-15, -10, 5),
 			tuple.NewPoint(3, 3, 2),
@@ -398,7 +395,7 @@ func reflectionScene() {
 }
 
 func refractionScene() {
-	floorMat := &shading.PhongMat{
+	floorMat := &renderer.PhongMat{
 		Ambient:   0.1,
 		Diffuse:   0.9,
 		Specular:  0.0,
@@ -406,47 +403,47 @@ func refractionScene() {
 		// Reflectivity: .01,
 		IOR:   1,
 		Color: color.NewColor(1, 0.9, 0.9),
-		Pattern: shading.NewCheckerPattern3D(
+		Pattern: renderer.NewCheckerPattern3D(
 			matrix.ScalingU(1).Mult(
 				matrix.Translation(2.5, 2.5, 2.5)),
-			shading.SolidPat(1, 0.9, 0.9),
-			shading.SolidPat(0.2, 0.19, 0.19),
+			renderer.SolidPat(1, 0.9, 0.9),
+			renderer.SolidPat(0.2, 0.19, 0.19),
 		),
 	}
-	floor := geometry.NewPlane(
+	floor := renderer.NewPlane(
 		matrix.Identity,
 		floorMat)
-	lWall := geometry.NewPlane(
+	lWall := renderer.NewPlane(
 		matrix.Compose(
 			matrix.Translation(20, 0, 0),
 			matrix.RotationY(math.Pi/2),
 		),
 		floorMat)
-	rWall := geometry.NewPlane(
+	rWall := renderer.NewPlane(
 		matrix.Compose(
 			matrix.Translation(0, 20, 0),
 			matrix.RotationX(math.Pi/2),
 		),
 		floorMat)
-	blWall := geometry.NewPlane(
+	blWall := renderer.NewPlane(
 		matrix.Compose(
 			matrix.Translation(-20, 0, 0),
 			matrix.RotationY(math.Pi/2),
 		),
 		floorMat)
-	brWall := geometry.NewPlane(
+	brWall := renderer.NewPlane(
 		matrix.Compose(
 			matrix.Translation(0, -20, 0),
 			matrix.RotationX(math.Pi/2),
 		),
 		floorMat)
-	ceiling := geometry.NewPlane(
+	ceiling := renderer.NewPlane(
 		matrix.Translation(0, 0, 40),
 		floorMat)
 
-	glassBall := geometry.NewSphere(
+	glassBall := renderer.NewSphere(
 		matrix.Translation(0, 0, 3).Mult(matrix.Scaling(2, 2, 2)),
-		&shading.PhongMat{
+		&renderer.PhongMat{
 			Ambient:      0.1,
 			Diffuse:      0.9,
 			Specular:     0.8,
@@ -458,9 +455,9 @@ func refractionScene() {
 			Pattern:      nil,
 		})
 
-	airBall := geometry.NewSphere(
+	airBall := renderer.NewSphere(
 		matrix.Translation(0, 0, 3),
-		&shading.PhongMat{
+		&renderer.PhongMat{
 			Ambient:      0.1,
 			Diffuse:      0.9,
 			Specular:     0.8,
@@ -472,9 +469,9 @@ func refractionScene() {
 			Pattern:      nil,
 		})
 
-	middle := geometry.NewSphere(
+	/*middle := renderer.NewSphere(
 		matrix.Translation(-10, -8, 2).Mult(matrix.Scaling(2, 2, 2)),
-		&shading.PhongMat{
+		&renderer.PhongMat{
 			Ambient:   0.1,
 			Diffuse:   0.9,
 			Specular:  0.0,
@@ -482,18 +479,18 @@ func refractionScene() {
 			// Reflectivity: .01,
 			IOR:   1,
 			Color: color.NewColor(0.1, 1, 0.5),
-			Pattern: shading.NewCheckerPattern3D(
+			Pattern: renderer.NewCheckerPattern3D(
 				matrix.Compose(
 					matrix.RotationZ(-math.Pi/6),
 					matrix.RotationY(-math.Pi/6),
 					matrix.ScalingU(.5),
 				),
-				shading.SolidPat(0.1, 1, 0.5),
-				shading.SolidPat(0.1, 0.5, 0.4)),
+				renderer.SolidPat(0.1, 1, 0.5),
+				renderer.SolidPat(0.1, 0.5, 0.4)),
 		})
-	left := geometry.NewSphere(
+	left := renderer.NewSphere(
 		matrix.Translation(7, -7, 1),
-		&shading.PhongMat{
+		&renderer.PhongMat{
 			Ambient:   0.1,
 			Diffuse:   0.9,
 			Specular:  0.9,
@@ -502,9 +499,9 @@ func refractionScene() {
 			IOR:   1,
 			Color: color.NewColor(1, 0.1, 0.1),
 		})
-	right := geometry.NewSphere(
+	right := renderer.NewSphere(
 		matrix.Translation(-4, 3, 1.25).Mult(matrix.ScalingU(1.25)),
-		&shading.PhongMat{
+		&renderer.PhongMat{
 			Ambient:   0.1,
 			Diffuse:   0.9,
 			Specular:  0.9,
@@ -512,25 +509,25 @@ func refractionScene() {
 			// Reflectivity: .025,
 			IOR:   1,
 			Color: color.NewColor(0.2, 0.2, 1),
-			Pattern: shading.NewStripePattern(
+			Pattern: renderer.NewStripePattern(
 				matrix.Compose(
 					matrix.Translation(0, 0, .25),
 					matrix.RotationY(math.Pi/2),
 					matrix.ScalingU(.5),
 				),
-				shading.NewGradientPattern(
+				renderer.NewGradientPattern(
 					matrix.Compose(
 						matrix.RotationY(math.Pi/2),
 						matrix.ScalingU(3),
 					),
-					shading.SolidPat(0.9, 0.9, 0.9),
-					shading.SolidPat(0.2, 0.2, 1),
+					renderer.SolidPat(0.9, 0.9, 0.9),
+					renderer.SolidPat(0.2, 0.2, 1),
 				),
-				shading.SolidPat(0.2, 0.2, 0.4)),
-		})
+				renderer.SolidPat(0.2, 0.2, 0.4)),
+		})*/
 
-	w := &scene.World{
-		Geometry: []geometry.Primitive{
+	w := &renderer.World{
+		Geometry: []renderer.Primitive{
 			floor,
 			ceiling,
 			lWall,
@@ -539,21 +536,21 @@ func refractionScene() {
 			brWall,
 			glassBall,
 			airBall,
-			middle,
-			right,
-			left,
+			// middle,
+			// right,
+			// left,
 		},
-		Light: &shading.PointLight{
+		Light: &renderer.PointLight{
 			Pos:   tuple.NewPoint(0, -10, 10),
 			Color: color.White,
 		},
-		Config: scene.WorldConfig{
+		Config: renderer.WorldConfig{
 			Shadows:   true,
 			MaxBounce: 7,
 		},
 	}
 
-	c := scene.NewCamera(1920, 1080, math.Pi/3,
+	c := renderer.NewCamera(1920, 1080, math.Pi/3,
 		matrix.ViewTransform(
 			tuple.NewPoint(-15, -10, 5),
 			tuple.NewPoint(3, 3, 2),
