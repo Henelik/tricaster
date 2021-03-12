@@ -113,7 +113,7 @@ func (w *World) RefractedColor(h *ray.Hit, remainingBounce int, inters []ray.Int
 		cosI := h.EyeV.DotProd(h.NormalV)
 		sin2T := nRatio * nRatio * (1 - cosI*cosI)
 		// find the new ray's direction
-		cosT := math.Sqrt(1.0 - sin2T)
+		cosT := math.Sqrt(math.Abs(1.0 - sin2T))
 		dir := h.NormalV.Mult(nRatio*cosI - cosT).Sub(h.EyeV.Mult(nRatio))
 		return w.ColorAt(ray.NewRay(h.UnderP, dir), remainingBounce).MultF(m.Transparency)
 	}
