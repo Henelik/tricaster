@@ -29,7 +29,7 @@ func TestShading(t *testing.T) {
 	r := NewRay(tuple.NewPoint(-5, 0, 0), tuple.Right)
 	s := DefaultWorld.Geometry[0]
 	i := &Intersection{4, s}
-	col := DefaultWorld.Shade(i.ToHit(r), 0, []Intersection{*i})
+	col := DefaultWorld.Shade(i.ToHit(r, []Intersection{*i}), 0)
 	assert.Equal(t, color.NewColor(0.38066119308103435, 0.47582649135129296, 0.28549589481077575), col)
 
 	// Shading an intersection from the inside
@@ -38,7 +38,7 @@ func TestShading(t *testing.T) {
 	r2 := NewRay(tuple.Origin, tuple.Right)
 	s2 := DefaultWorld.Geometry[1]
 	i2 := &Intersection{0.5, s2}
-	col2 := w.Shade(i2.ToHit(r2), 0, []Intersection{*i2})
+	col2 := w.Shade(i2.ToHit(r2, []Intersection{*i2}), 0)
 	assert.Equal(t, color.Grey(0.9049844720832575), col2)
 }
 
@@ -122,8 +122,8 @@ func TestWorldRefractOpaque(t *testing.T) {
 	s := DefaultWorld.Geometry[0]
 	r := NewRay(tuple.NewPoint(0, 0, -5), tuple.NewVector(0, 0, 1))
 	inters := []Intersection{{4, s}, {6, s}}
-	h := inters[0].ToHit(r)
-	col := DefaultWorld.RefractedColor(h, 3, inters)
+	h := inters[0].ToHit(r, inters)
+	col := DefaultWorld.RefractedColor(h, 3)
 	assert.Equal(t, color.Black, col)
 }
 
@@ -144,8 +144,8 @@ func TestWorldRefractMax(t *testing.T) {
 	}
 	r := NewRay(tuple.NewPoint(0, 0, -5), tuple.NewVector(0, 0, 1))
 	inters := []Intersection{{4, s}, {6, s}}
-	h := inters[0].ToHit(r)
-	col := DefaultWorld.RefractedColor(h, 0, inters)
+	h := inters[0].ToHit(r, inters)
+	col := DefaultWorld.RefractedColor(h, 0)
 	assert.Equal(t, color.Black, col)
 }
 
@@ -166,8 +166,8 @@ func TestWorldRefractTotalInternalReflection(t *testing.T) {
 	}
 	r := NewRay(tuple.NewPoint(0, 0, math.Sqrt2/2), tuple.NewVector(0, 1, 0))
 	inters := []Intersection{{-math.Sqrt2 / 2, s}, {math.Sqrt2 / 2, s}}
-	h := inters[1].ToHit(r)
-	col := w.RefractedColor(h, 3, inters)
+	h := inters[1].ToHit(r, inters)
+	col := w.RefractedColor(h, 3)
 	assert.Equal(t, color.Black, col)
 }
 
@@ -198,7 +198,7 @@ func TestWorldRefractRefract(t *testing.T) {
 	}
 	r := NewRay(tuple.NewPoint(0, 0, 0.1), tuple.NewVector(0, 1, 0))
 	inters := []Intersection{{-0.9899, a}, {-0.4899, b}, {0.4899, b}, {0.9899, a}}
-	h := inters[2].ToHit(r)
-	col := w.RefractedColor(h, 5, inters)
+	h := inters[2].ToHit(r, inters)
+	col := w.RefractedColor(h, 5)
 	assert.Equal(t, col, color.NewColor(0, 0.9988846813665367, 0.04721645191320928))
 }
