@@ -81,6 +81,12 @@ func (m *PhongMat) Lighting(light *PointLight, h *Hit) *color.Color {
 	return ambient.Add(diffuse.Add(specular))
 }
 
+// Copy returns a new duplicate material
+func (m *PhongMat) Copy() *PhongMat {
+	mat := *m
+	return &mat
+}
+
 // CopyWithColor returns a new material with modified color
 func (m *PhongMat) CopyWithColor(c *color.Color) *PhongMat {
 	mat := *m
