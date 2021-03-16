@@ -469,15 +469,14 @@ func refractionScene() {
 			Pattern:      nil,
 		})
 
-	/*middle := renderer.NewSphere(
-		matrix.Translation(-10, -8, 2).Mult(matrix.Scaling(2, 2, 2)),
+	middle := renderer.NewSphere(
+		matrix.Translation(-10, -10, 2).Mult(matrix.Scaling(2, 2, 2)),
 		&renderer.PhongMat{
 			Ambient:   0.1,
 			Diffuse:   0.9,
 			Specular:  0.0,
 			Shininess: 10,
 			// Reflectivity: .01,
-			IOR:   1,
 			Color: color.NewColor(0.1, 1, 0.5),
 			Pattern: renderer.NewCheckerPattern3D(
 				matrix.Compose(
@@ -496,7 +495,6 @@ func refractionScene() {
 			Specular:  0.9,
 			Shininess: 200,
 			// Reflectivity: .05,
-			IOR:   1,
 			Color: color.NewColor(1, 0.1, 0.1),
 		})
 	right := renderer.NewSphere(
@@ -507,7 +505,6 @@ func refractionScene() {
 			Specular:  0.9,
 			Shininess: 200,
 			// Reflectivity: .025,
-			IOR:   1,
 			Color: color.NewColor(0.2, 0.2, 1),
 			Pattern: renderer.NewStripePattern(
 				matrix.Compose(
@@ -524,7 +521,7 @@ func refractionScene() {
 					renderer.SolidPat(0.2, 0.2, 1),
 				),
 				renderer.SolidPat(0.2, 0.2, 0.4)),
-		})*/
+		})
 
 	w := &renderer.World{
 		Geometry: []renderer.Primitive{
@@ -536,9 +533,9 @@ func refractionScene() {
 			brWall,
 			glassBall,
 			airBall,
-			// middle,
-			// right,
-			// left,
+			middle,
+			right,
+			left,
 		},
 		Light: &renderer.PointLight{
 			Pos:   tuple.NewPoint(0, -10, 10),

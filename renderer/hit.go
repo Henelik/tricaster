@@ -53,7 +53,7 @@ func (i *Intersection) ToHit(r *Ray, inters []Intersection) *Hit {
 	h.UnderP = h.Pos.Sub(h.NormalV.Mult(util.Epsilon * 1000.0))
 
 	h.Inters = inters
-	h.N1, h.N2 = ComputeRefractIOR(h, inters)
+	ComputeRefractIOR(h)
 
 	return h
 }
@@ -115,36 +115,34 @@ func (h *Hit) Schlick() float64 {
 	return r0 + (1-r0)*math.Pow(1-cos, 5)
 }
 
-func ComputeRefractIOR(h *Hit, inters []Intersection) (float64, float64) {
-	inters = SortI(inters)
-	containers := make([]Primitive, 0, len(inters))
-	var n1, n2 float64
-	for _, inter := range inters {
+func ComputeRefractIOR(h *Hit) {
+	containers := make([]Primitive, 0, len(h.Inters))
+	var removed bool
+	for _, inter := range h.Inters {
 		if h.T == inter.T && h.P == inter.P {
 			if len(containers) == 0 {
-				n1 = 1
+				h.N1 = 1
 			} else {
-				m := inters[len(containers)-1].P.(Primitive).GetMaterial().(*PhongMat)
-				n1 = m.IOR
+				h.N1 = containers[len(containers)-1].GetMaterial().(*PhongMat).IOR
 			}
 		}
-		var removed bool
+
+		// if this object is in the containers, remove it.  Otherwise, append it.
 		containers, removed = removePrimitiveFromArr(inter.P, containers)
 		if !removed {
 			containers = append(containers, inter.P.(Primitive))
 		}
+
 		if h.T == inter.T && h.P == inter.P {
 			if len(containers) == 0 {
-				n2 = 1
+				h.N2 = 1
 			} else {
-				m := inters[len(containers)-1].P.(Primitive).GetMaterial().(*PhongMat)
-				n2 = m.IOR
+				h.N2 = containers[len(containers)-1].GetMaterial().(*PhongMat).IOR
 			}
-			return n1, n2
+			return
 		}
 	}
 	log.Fatal("ComputeRefractIOR: Hit was not included in the intersections!")
-	return 0, 0
 }
 
 func removePrimitiveFromArr(item Primitive, arr []Primitive) ([]Primitive, bool) {

@@ -91,6 +91,7 @@ func (w *World) ReflectedColor(h *Hit, remainingBounce int) *color.Color {
 	return color.Black
 }
 
+// RefractedColor handles refraction ray culling and finds the next color on the light path
 func (w *World) RefractedColor(h *Hit, remainingBounce int) *color.Color {
 	if remainingBounce <= 0 {
 		return color.Black
