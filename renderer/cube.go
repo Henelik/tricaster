@@ -84,11 +84,21 @@ func checkAxis(origin, dir float64) (float64, float64) {
 }
 
 func (c *Cube) NormalAt(pos *tuple.Tuple) *tuple.Tuple {
-	objectPoint := c.im.MultTuple(pos)
-	objectNormal := objectPoint.Sub(tuple.Origin)
-	worldNormal := c.im.Transpose().MultTuple(objectNormal)
-	worldNormal.W = 0
-	return worldNormal.Norm()
+	n := c.im.Transpose().MultTuple(c.LocalNormalAt(c.im.MultTuple(pos))).Norm()
+	n.W = 0
+	return n
+}
+
+func (c *Cube) LocalNormalAt(pos *tuple.Tuple) *tuple.Tuple {
+	maxc := util.Max(util.Max(math.Abs(pos.X), math.Abs(pos.Y)), math.Abs(pos.Z))
+
+	if maxc == math.Abs(pos.X) {
+		return tuple.NewVector(pos.X, 0, 0)
+	}
+	if maxc == math.Abs(pos.Y) {
+		return tuple.NewVector(0, pos.Y, 0)
+	}
+	return tuple.NewVector(0, 0, pos.Z)
 }
 
 func (c *Cube) Shade(light *PointLight, h *Hit) *color.Color {

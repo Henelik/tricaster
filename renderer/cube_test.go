@@ -117,3 +117,50 @@ func TestCube_Intersects_Miss(t *testing.T) {
 		})
 	}
 }
+
+func TestCube_NormalAt(t *testing.T) {
+	c := NewCube(nil, nil)
+	testCases := []struct {
+		point *tuple.Tuple
+		want  *tuple.Tuple
+	}{
+		{
+			point: tuple.NewPoint(1, 0.5, -0.8),
+			want:  tuple.NewVector(1, 0, 0),
+		},
+		{
+			point: tuple.NewPoint(-1, -0.2, 0.9),
+			want:  tuple.NewVector(-1, 0, 0),
+		},
+		{
+			point: tuple.NewPoint(-0.4, 1, -0.1),
+			want:  tuple.NewVector(0, 1, 0),
+		},
+		{
+			point: tuple.NewPoint(0.3, -1, -0.7),
+			want:  tuple.NewVector(0, -1, 0),
+		},
+		{
+			point: tuple.NewPoint(-0.6, 0.3, 1),
+			want:  tuple.NewVector(0, 0, 1),
+		},
+		{
+			point: tuple.NewPoint(0.4, 0.4, -1),
+			want:  tuple.NewVector(0, 0, -1),
+		},
+		{
+			point: tuple.NewPoint(1, 1, 1),
+			want:  tuple.NewVector(1, 0, 0),
+		},
+		{
+			point: tuple.NewPoint(-1, -1, -1),
+			want:  tuple.NewVector(-1, 0, 0),
+		},
+	}
+	for _, tc := range testCases {
+		t.Run(tc.point.Fmt(), func(t *testing.T) {
+			got := c.NormalAt(tc.point)
+			assert.Equal(t, tc.want, got)
+		})
+	}
+}
