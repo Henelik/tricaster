@@ -15,6 +15,8 @@ type Cube struct {
 	m *matrix.Matrix
 	// the inverse transformation matrix
 	im *matrix.Matrix
+	// the transposition of the inverse matrix
+	imt *matrix.Matrix
 	// the material
 	Mat Material
 }
@@ -23,11 +25,13 @@ func NewCube(m *matrix.Matrix, mat Material) *Cube {
 	c := &Cube{
 		matrix.Identity,
 		matrix.Identity,
+		matrix.Identity,
 		DefaultPhong,
 	}
 	if m != nil {
 		c.m = m
 		c.im = m.Inverse()
+		c.imt = c.im.Transpose()
 	}
 	if mat != nil {
 		c.Mat = mat
@@ -84,7 +88,7 @@ func checkAxis(origin, dir float64) (float64, float64) {
 }
 
 func (c *Cube) NormalAt(pos *tuple.Tuple) *tuple.Tuple {
-	n := c.im.Transpose().MultTuple(c.LocalNormalAt(c.im.MultTuple(pos)))
+	n := c.imt.MultTuple(c.LocalNormalAt(c.im.MultTuple(pos)))
 	n.W = 0
 	return n.Norm()
 }

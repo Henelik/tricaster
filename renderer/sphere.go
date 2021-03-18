@@ -14,6 +14,8 @@ type Sphere struct {
 	m *matrix.Matrix
 	// the inverse transformation matrix
 	im *matrix.Matrix
+	// the transposition of the inverse matrix
+	imt *matrix.Matrix
 	// the material
 	Mat Material
 }
@@ -22,11 +24,13 @@ func NewSphere(m *matrix.Matrix, mat Material) *Sphere {
 	s := &Sphere{
 		matrix.Identity,
 		matrix.Identity,
+		matrix.Identity,
 		DefaultPhong,
 	}
 	if m != nil {
 		s.m = m
 		s.im = m.Inverse()
+		s.imt = s.im.Transpose()
 	}
 	if mat != nil {
 		s.Mat = mat
@@ -59,9 +63,7 @@ func (s *Sphere) Intersects(r *Ray) []Intersection {
 }
 
 func (s *Sphere) NormalAt(pos *tuple.Tuple) *tuple.Tuple {
-	objectPoint := s.im.MultTuple(pos)
-	objectNormal := objectPoint.Sub(tuple.Origin)
-	worldNormal := s.im.Transpose().MultTuple(objectNormal)
+	worldNormal := s.imt.MultTuple(s.im.MultTuple(pos).Sub(tuple.Origin))
 	worldNormal.W = 0
 	return worldNormal.Norm()
 }
