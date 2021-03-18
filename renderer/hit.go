@@ -49,8 +49,8 @@ func (i *Intersection) ToHit(r *Ray, inters []Intersection) *Hit {
 	}
 	h.ReflectV = r.Direction.Reflect(h.NormalV)
 
-	h.OverP = h.Pos.Add(h.NormalV.Mult(util.Epsilon * 1000.0))
-	h.UnderP = h.Pos.Sub(h.NormalV.Mult(util.Epsilon * 1000.0))
+	h.OverP = h.Pos.Add(h.NormalV.Mult(util.Epsilon))
+	h.UnderP = h.Pos.Sub(h.NormalV.Mult(util.Epsilon))
 
 	h.Inters = inters
 	ComputeRefractIOR(h)
