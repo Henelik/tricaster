@@ -50,7 +50,7 @@ func (w *World) Shade(h *Hit, remainingBounce int) *color.Color {
 		h.InShadow = w.IsShadowed(h.OverP)
 	}
 
-	surface := h.P.Shade(w.Light, h).MultF(1 - h.P.GetMaterial().(*PhongMat).Transparency)
+	surface := h.P.Shade(w.Light, h)
 	reflected := w.ReflectedColor(h, remainingBounce-1)
 	refracted := w.RefractedColor(h, remainingBounce-1)
 
