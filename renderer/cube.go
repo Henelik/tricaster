@@ -84,9 +84,9 @@ func checkAxis(origin, dir float64) (float64, float64) {
 }
 
 func (c *Cube) NormalAt(pos *tuple.Tuple) *tuple.Tuple {
-	n := c.im.Transpose().MultTuple(c.LocalNormalAt(c.im.MultTuple(pos))).Norm()
+	n := c.im.Transpose().MultTuple(c.LocalNormalAt(c.im.MultTuple(pos)))
 	n.W = 0
-	return n
+	return n.Norm()
 }
 
 func (c *Cube) LocalNormalAt(pos *tuple.Tuple) *tuple.Tuple {
