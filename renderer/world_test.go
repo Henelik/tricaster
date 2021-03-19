@@ -200,5 +200,5 @@ func TestWorldRefractRefract(t *testing.T) {
 	inters := []Intersection{{-0.9899, a}, {-0.4899, b}, {0.4899, b}, {0.9899, a}}
 	h := inters[2].ToHit(r, inters)
 	col := w.RefractedColor(h, 5)
-	assert.Equal(t, col, color.NewColor(0, 0.9988846813665367, 0.04721645191320928))
+	assert.Equal(t, color.NewColor(0, 0.998884682797801, 0.04721642163417859), col)
 }
