@@ -442,8 +442,8 @@ func refractionScene() {
 			Pattern:      nil,
 		})
 
-	middle := renderer.NewSphere(
-		matrix.Translation(-10, -10, 2).Mult(matrix.Scaling(2, 2, 2)),
+	green := renderer.NewSphere(
+		matrix.Translation(4, -5, 2).Mult(matrix.Scaling(2, 2, 2)),
 		&renderer.PhongMat{
 			Ambient:      0.1,
 			Diffuse:      0.9,
@@ -460,8 +460,8 @@ func refractionScene() {
 				renderer.SolidPat(0.1, 1, 0.5),
 				renderer.SolidPat(0.1, 0.5, 0.4)),
 		})
-	left := renderer.NewSphere(
-		matrix.Translation(7, -7, 1),
+	red := renderer.NewSphere(
+		matrix.Translation(7, -.25, 1),
 		&renderer.PhongMat{
 			Ambient:      0.1,
 			Diffuse:      0.9,
@@ -470,8 +470,8 @@ func refractionScene() {
 			Reflectivity: .1,
 			Color:        color.NewColor(1, 0.1, 0.1),
 		})
-	right := renderer.NewSphere(
-		matrix.Translation(-4, 3, 1.25).Mult(matrix.ScalingU(1.25)),
+	blue := renderer.NewSphere(
+		matrix.Translation(4, 7, 1.25).Mult(matrix.ScalingU(1.25)),
 		&renderer.PhongMat{
 			Ambient:      0.1,
 			Diffuse:      0.9,
@@ -501,9 +501,9 @@ func refractionScene() {
 			room,
 			glassBall,
 			airBall,
-			middle,
-			right,
-			left,
+			green,
+			blue,
+			red,
 		},
 		Light: &renderer.PointLight{
 			Pos:   tuple.NewPoint(0, -10, 10),
@@ -511,15 +511,16 @@ func refractionScene() {
 		},
 		Config: renderer.WorldConfig{
 			Shadows:   true,
-			MaxBounce: 5,
+			MaxBounce: 7,
 		},
 	}
 
-	c := renderer.NewCamera(1920, 1080, math.Pi/3,
+	// 3840, 2160
+	c := renderer.NewCamera(3840, 2160, math.Pi/7,
 		matrix.ViewTransform(
 			tuple.NewPoint(-15, -10, 5),
-			tuple.NewPoint(3, 3, 2),
-			tuple.Up), 2)
+			tuple.NewPoint(0, 0, 3),
+			tuple.Up), 8)
 
-	c.GoRender(w, 8).SaveImage("refraction.png")
+	c.GoRender(w, 8).SaveImage("refraction_narrow.png")
 }
