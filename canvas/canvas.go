@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/Henelik/tricaster/color"
-	"github.com/Henelik/tricaster/util"
 )
 
 type Canvas struct {
@@ -49,16 +48,19 @@ func (c *Canvas) SetSafe(x, y int, col *color.Color) {
 
 func (c *Canvas) ToImage() *image.RGBA {
 	img := image.NewRGBA(image.Rect(0, 0, c.W, c.H))
+	var r, g, b uint8
+	var i int
 
 	for x := 0; x < c.W; x++ {
 		for y := 0; y < c.H; y++ {
-			r := uint8(util.Clamp(c.Pix[x+y*c.W].R, 0, 1) * 255)
-			g := uint8(util.Clamp(c.Pix[x+y*c.W].G, 0, 1) * 255)
-			b := uint8(util.Clamp(c.Pix[x+y*c.W].B, 0, 1) * 255)
-			img.Pix[(x+y*c.W)*4] = r
-			img.Pix[(x+y*c.W)*4+1] = g
-			img.Pix[(x+y*c.W)*4+2] = b
-			img.Pix[(x+y*c.W)*4+3] = 255
+			i = x + y*c.W
+			r = uint8(c.Pix[i].R * 255)
+			g = uint8(c.Pix[i].G * 255)
+			b = uint8(c.Pix[i].B * 255)
+			img.Pix[i*4] = r
+			img.Pix[i*4+1] = g
+			img.Pix[i*4+2] = b
+			img.Pix[i*4+3] = 255
 		}
 	}
 

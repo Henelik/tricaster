@@ -84,3 +84,63 @@ func TestToImage(t *testing.T) {
 	assert.Equal(t, wantStride, img.Stride)
 	assert.Equal(t, wantRect, img.Rect)
 }
+
+func BenchmarkCanvas_ToImage32(b *testing.B) {
+	canv := NewCanvas(32, 32)
+
+	for x := 0; x < canv.W; x++ {
+		for y := 0; y < canv.H; y++ {
+			col := color.NewColor(
+				float64(x)/float64(canv.W),
+				float64(y)/float64(canv.H),
+				0)
+			canv.Set(x, y, col)
+		}
+	}
+
+	b.ResetTimer()
+
+	for n := 0; n < b.N; n++ {
+		canv.ToImage()
+	}
+}
+
+func BenchmarkCanvas_ToImage64(b *testing.B) {
+	canv := NewCanvas(64, 64)
+
+	for x := 0; x < canv.W; x++ {
+		for y := 0; y < canv.H; y++ {
+			col := color.NewColor(
+				float64(x)/float64(canv.W),
+				float64(y)/float64(canv.H),
+				0)
+			canv.Set(x, y, col)
+		}
+	}
+
+	b.ResetTimer()
+
+	for n := 0; n < b.N; n++ {
+		canv.ToImage()
+	}
+}
+
+func BenchmarkCanvas_ToImage128(b *testing.B) {
+	canv := NewCanvas(128, 128)
+
+	for x := 0; x < canv.W; x++ {
+		for y := 0; y < canv.H; y++ {
+			col := color.NewColor(
+				float64(x)/float64(canv.W),
+				float64(y)/float64(canv.H),
+				0)
+			canv.Set(x, y, col)
+		}
+	}
+
+	b.ResetTimer()
+
+	for n := 0; n < b.N; n++ {
+		canv.ToImage()
+	}
+}
