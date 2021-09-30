@@ -4,18 +4,37 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/Henelik/tricaster/pkg/geometry"
-	"github.com/Henelik/tricaster/pkg/material"
-	"github.com/Henelik/tricaster/pkg/matrix"
+	"github.com/Henelik/tricaster/pkg/color"
+	"github.com/Henelik/tricaster/pkg/light"
 	"github.com/Henelik/tricaster/pkg/tuple"
 
 	"github.com/stretchr/testify/assert"
 )
 
+type TestPrimitive struct {
+	IOR float64
+}
+
+func (prim *TestPrimitive) Intersects(r *Ray) []Intersection {
+	return nil
+}
+
+func (prim *TestPrimitive) NormalAt(pos *tuple.Tuple) *tuple.Tuple {
+	return tuple.NewVector(0, 0, -1)
+}
+
+func (prim *TestPrimitive) Shade(light *light.PointLight, h *Hit) *color.Color {
+	return nil
+}
+
+func (prim *TestPrimitive) GetIOR() float64 {
+	return prim.IOR
+}
+
 func TestRemovePrimitiveFromArr(t *testing.T) {
-	s1 := geometry.NewSphere(nil, nil)
-	s2 := geometry.NewSphere(nil, nil)
-	s3 := geometry.NewSphere(nil, nil)
+	s1 := &TestPrimitive{1}
+	s2 := &TestPrimitive{1}
+	s3 := &TestPrimitive{1}
 
 	testCases := []struct {
 		name     string
@@ -70,20 +89,9 @@ func TestRemovePrimitiveFromArr(t *testing.T) {
 }
 
 func TestComputeRefractIOR(t *testing.T) {
-	a := geometry.NewSphere(
-		matrix.ScalingU(2),
-		material.Glass.Copy())
-	a.Mat.(*material.PhongMat).IOR = 1.5
-
-	b := geometry.NewSphere(
-		matrix.Translation(0, 0, -0.25),
-		material.Glass.Copy())
-	b.Mat.(*material.PhongMat).IOR = 2.0
-
-	c := geometry.NewSphere(
-		matrix.Translation(0, 0, 0.25),
-		material.Glass.Copy())
-	c.Mat.(*material.PhongMat).IOR = 2.5
+	a := &TestPrimitive{1.5}
+	b := &TestPrimitive{2.0}
+	c := &TestPrimitive{2.5}
 
 	r := NewRay(
 		tuple.NewPoint(0, 0, -4),
@@ -135,7 +143,7 @@ func TestComputeRefractIOR(t *testing.T) {
 		},
 	}
 	for _, tc := range testCases {
-		name := fmt.Sprintf("%v,%v,%v", tc.index, tc.wantN1, tc.wantN2)
+		name := fmt.Sprintf("%v, %v, %v", tc.index, tc.wantN1, tc.wantN2)
 		t.Run(name, func(t *testing.T) {
 			h := xs[tc.index].ToHit(r, xs)
 			assert.Equal(t, tc.wantN1, h.N1)
