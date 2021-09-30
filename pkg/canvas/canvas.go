@@ -5,6 +5,8 @@ import (
 	"image/png"
 	"os"
 
+	"github.com/Henelik/tricaster/pkg/util"
+
 	"github.com/Henelik/tricaster/pkg/color"
 )
 
@@ -54,9 +56,9 @@ func (c *Canvas) ToImage() *image.RGBA {
 	for x := 0; x < c.W; x++ {
 		for y := 0; y < c.H; y++ {
 			i = x + y*c.W
-			r = uint8(c.Pix[i].R * 255)
-			g = uint8(c.Pix[i].G * 255)
-			b = uint8(c.Pix[i].B * 255)
+			r = uint8(util.Clamp(c.Pix[i].R, 0, 1) * 255)
+			g = uint8(util.Clamp(c.Pix[i].G, 0, 1) * 255)
+			b = uint8(util.Clamp(c.Pix[i].B, 0, 1) * 255)
 			img.Pix[i*4] = r
 			img.Pix[i*4+1] = g
 			img.Pix[i*4+2] = b
