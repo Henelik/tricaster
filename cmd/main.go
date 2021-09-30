@@ -515,7 +515,7 @@ func refractionScene() {
 		},
 		Config: renderer.WorldConfig{
 			Shadows:   true,
-			MaxBounce: 3,
+			MaxBounce: 7,
 		},
 	}
 
