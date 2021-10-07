@@ -1,0 +1,56 @@
+---
+name: sphere_test
+world:
+  shadows: false
+  max_bounce: 1
+  light:
+    color:
+      r: 1
+      g: 1
+      b: 1
+    position:
+      x: 10
+      y: -5
+      z: 10
+camera:
+  height: 512
+  width: 512
+  aa_level: 4
+  num_workers: 8
+  subdivision_number: 4
+  fov: .5
+  transform:
+    from:
+      x: 0
+      y: 0
+      z: 0
+    to:
+      x: 0
+      y: 5
+      z: 0
+    up:
+      x: 0
+      y: 0
+      z: 1
+objects:
+  - type: sphere
+    material:
+      type: phong
+      ambient: 0.1
+      diffuse: 0.9
+      specular: 0.9
+      shininess: 200
+      ior: 1
+      color:
+        r: 1
+        g: 0
+        b: 0
+    transform:
+      position:
+        x: 0
+        y: 5
+        z: 0
+      scale:
+        x: 1
+        y: 1
+        z: 1

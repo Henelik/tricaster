@@ -14,52 +14,43 @@ import (
 var DefaultFOV = math.Pi / 2
 
 type Camera struct {
-	hSize      int
-	vSize      int
-	FOV        float64
+	config     *CameraConfig
 	m          *matrix.Matrix
 	im         *matrix.Matrix
 	halfWidth  float64
 	halfHeight float64
 	pixelSize  float64
-	AALevel    int
 }
 
 // NewCamera creates a new camera.
 // Set fov to 0 and transform to nil to use defaults.
-func NewCamera(hSize, vSize int, fov float64, transform *matrix.Matrix, aaLevel int) *Camera {
+func NewCamera(config *CameraConfig) *Camera {
 	c := &Camera{
-		hSize: hSize,
-		vSize: vSize,
+		config: config,
 	}
 
-	if fov == 0 {
-		c.FOV = DefaultFOV
-	} else {
-		c.FOV = fov
+	if config.FOV == 0 {
+		config.FOV = DefaultFOV
 	}
-	if transform == nil {
-		c.m = matrix.Identity
-	} else {
-		c.m = transform
-	}
+
+	c.m = config.Transform.ToMatrix()
 	c.im = c.m.Inverse()
 
-	switch aaLevel {
+	switch config.AALevel {
 	case 2:
-		c.AALevel = 2
+		config.AALevel = 2
 	case 4:
-		c.AALevel = 4
+		config.AALevel = 4
 	case 8:
-		c.AALevel = 8
+		config.AALevel = 8
 	case 16:
-		c.AALevel = 16
+		config.AALevel = 16
 	default:
-		c.AALevel = 1
+		config.AALevel = 1
 	}
 
-	halfView := math.Tan(c.FOV / 2)
-	aspect := float64(hSize) / float64(vSize)
+	halfView := math.Tan(config.FOV / 2)
+	aspect := float64(config.Height) / float64(config.Width)
 	if aspect >= 1 {
 		c.halfWidth = halfView
 		c.halfHeight = halfView / aspect
@@ -67,7 +58,7 @@ func NewCamera(hSize, vSize int, fov float64, transform *matrix.Matrix, aaLevel 
 		c.halfWidth = halfView * aspect
 		c.halfHeight = halfView
 	}
-	c.pixelSize = (c.halfWidth * 2) / float64(c.hSize)
+	c.pixelSize = (c.halfWidth * 2) / float64(config.Height)
 
 	return c
 }
@@ -111,20 +102,20 @@ func (c *Camera) RayForPixel(x, y int) *ray.Ray {
 }
 
 func (c *Camera) AARaysForPixel(x, y int) []*ray.Ray {
-	if c.AALevel == 0 {
+	if c.config.AALevel == 0 {
 		return []*ray.Ray{c.RayForPixel(x, y)}
 	}
-	rs := make([]*ray.Ray, 0, c.AALevel*c.AALevel)
+	rs := make([]*ray.Ray, 0, c.config.AALevel*c.config.AALevel)
 
 	// the offset from the edge of the canvas to the pixel's center
 	xOffset := (float64(x) + 0.5) * c.pixelSize
 	yOffset := (float64(y) + 0.5) * c.pixelSize
 	// the distance between sampled sub-pixel points on the canvas
-	aaOffset := c.pixelSize / float64(c.AALevel)
+	aaOffset := c.pixelSize / float64(c.config.AALevel)
 	origin := c.im.MultTuple(tuple.Origin)
 
-	for aax := 0; aax < c.AALevel; aax++ {
-		for aay := 0; aay < c.AALevel; aay++ {
+	for aax := 0; aax < c.config.AALevel; aax++ {
+		for aay := 0; aay < c.config.AALevel; aay++ {
 			// the untransformed coordinates of the pixel in world space.
 			// (remember that the camera looks toward -z, so +x is to the *right*.)
 			worldX := c.halfWidth - xOffset + float64(aax)*aaOffset
@@ -142,10 +133,11 @@ func (c *Camera) AARaysForPixel(x, y int) []*ray.Ray {
 	return rs
 }
 
+// Render is the original single-thread render function
 func (c *Camera) Render(w *World) *canvas.Canvas {
-	canv := canvas.NewCanvas(c.hSize, c.vSize)
-	for x := 0; x < c.hSize; x++ {
-		for y := 0; y < c.vSize; y++ {
+	canv := canvas.NewCanvas(c.config.Height, c.config.Width)
+	for x := 0; x < c.config.Height; x++ {
+		for y := 0; y < c.config.Width; y++ {
 			r := c.RayForPixel(x, y)
 			col := w.ColorAt(r, w.Config.MaxBounce)
 			canv.Set(x, y, col)
@@ -155,15 +147,15 @@ func (c *Camera) Render(w *World) *canvas.Canvas {
 }
 
 // GoRender divides the image into an n*n grid and renders each cell in a goroutine
-func (c *Camera) GoRender(w *World, gridNum int) *canvas.Canvas {
-	canv := canvas.NewCanvas(c.hSize, c.vSize)
+func (c *Camera) GoRender(w *World) *canvas.Canvas {
+	canv := canvas.NewCanvas(c.config.Height, c.config.Width)
 
 	// set up a wait group for the number of subdivisions
 	var wg sync.WaitGroup
-	wg.Add(gridNum * gridNum)
+	wg.Add(c.config.SubdivisionNumber * c.config.SubdivisionNumber)
 
-	subH := c.hSize / gridNum
-	subV := c.vSize / gridNum
+	subH := c.config.Height / c.config.SubdivisionNumber
+	subV := c.config.Width / c.config.SubdivisionNumber
 
 	worker := func(xs, ys int) {
 		defer wg.Done()
@@ -179,8 +171,8 @@ func (c *Camera) GoRender(w *World, gridNum int) *canvas.Canvas {
 		}
 	}
 
-	for sh := 0; sh < gridNum; sh++ {
-		for sv := 0; sv < gridNum; sv++ {
+	for sh := 0; sh < c.config.SubdivisionNumber; sh++ {
+		for sv := 0; sv < c.config.SubdivisionNumber; sv++ {
 			go worker(sh*subH, sv*subV)
 		}
 	}

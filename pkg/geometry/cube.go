@@ -5,9 +5,9 @@ import (
 
 	"github.com/Henelik/tricaster/pkg/color"
 	"github.com/Henelik/tricaster/pkg/light"
-	material2 "github.com/Henelik/tricaster/pkg/material"
+	"github.com/Henelik/tricaster/pkg/material"
 	"github.com/Henelik/tricaster/pkg/matrix"
-	ray2 "github.com/Henelik/tricaster/pkg/ray"
+	"github.com/Henelik/tricaster/pkg/ray"
 	"github.com/Henelik/tricaster/pkg/tuple"
 	"github.com/Henelik/tricaster/pkg/util"
 )
@@ -20,15 +20,15 @@ type Cube struct {
 	// the transposition of the inverse matrix
 	imt *matrix.Matrix
 	// the material
-	Mat material2.Material
+	Mat material.Material
 }
 
-func NewCube(m *matrix.Matrix, mat material2.Material) *Cube {
+func NewCube(m *matrix.Matrix, mat material.Material) *Cube {
 	c := &Cube{
 		matrix.Identity,
 		matrix.Identity,
 		matrix.Identity,
-		material2.DefaultPhong,
+		material.DefaultPhong,
 	}
 	if m != nil {
 		c.m = m
@@ -50,7 +50,7 @@ func (c *Cube) GetMatrix() *matrix.Matrix {
 	return c.m
 }
 
-func (c *Cube) Intersects(r *ray2.Ray) []ray2.Intersection {
+func (c *Cube) Intersects(r *ray.Ray) []ray.Intersection {
 	rt := r.Transform(c.im)
 	xtmin, xtmax := checkAxis(rt.Origin.X, rt.Direction.X)
 	ytmin, ytmax := checkAxis(rt.Origin.Y, rt.Direction.Y)
@@ -60,10 +60,10 @@ func (c *Cube) Intersects(r *ray2.Ray) []ray2.Intersection {
 	tmax := util.Min(util.Min(xtmax, ytmax), ztmax)
 
 	if tmin > tmax {
-		return []ray2.Intersection{}
+		return []ray.Intersection{}
 	}
 
-	return []ray2.Intersection{{tmin, c}, {tmax, c}}
+	return []ray.Intersection{{tmin, c}, {tmax, c}}
 }
 
 // checkAxis returns the min and max t-values where a ray intersects the cube on an axis
@@ -107,11 +107,11 @@ func (c *Cube) LocalNormalAt(pos *tuple.Tuple) *tuple.Tuple {
 	return tuple.NewVector(0, 0, pos.Z)
 }
 
-func (c *Cube) Shade(light *light.PointLight, h *ray2.Hit) *color.Color {
+func (c *Cube) Shade(light *light.PointLight, h *ray.Hit) *color.Color {
 	return c.Mat.Lighting(light, h)
 }
 
-func (c *Cube) GetMaterial() material2.Material {
+func (c *Cube) GetMaterial() material.Material {
 	return c.Mat
 }
 

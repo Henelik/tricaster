@@ -21,10 +21,12 @@ func NewCylinderRingPattern(m *matrix.Matrix, ps ...Pattern) *CylinderRingPatter
 		im:       matrix.Identity,
 		Patterns: ps,
 	}
+
 	if m != nil {
 		result.m = m
 		result.im = m.Inverse()
 	}
+
 	return result
 }
 

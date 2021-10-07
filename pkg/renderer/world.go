@@ -27,7 +27,7 @@ var DefaultWorld = &World{
 		tuple.NewPoint(-10, -10, 10),
 		color.White,
 	},
-	Config: WorldConfig{
+	Config: &WorldConfig{
 		Shadows:   false,
 		MaxBounce: 3,
 	},
@@ -36,7 +36,7 @@ var DefaultWorld = &World{
 type World struct {
 	Geometry []Primitive
 	Light    *light.PointLight
-	Config   WorldConfig
+	Config   *WorldConfig
 }
 
 // Intersect returns all the intersections where a ray encounters an object in the world, unsorted.
