@@ -33,7 +33,11 @@ func NewCamera(config *CameraConfig) *Camera {
 		config.FOV = DefaultFOV
 	}
 
-	c.m = config.Transform.ToMatrix()
+	if config.Transform == nil {
+		c.m = matrix.Identity
+	} else {
+		c.m = config.Transform.ToMatrix()
+	}
 	c.im = c.m.Inverse()
 
 	switch config.AALevel {

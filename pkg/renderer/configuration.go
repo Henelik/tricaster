@@ -57,7 +57,7 @@ type CameraConfig struct {
 	NumWorkers        int `yaml:"num_workers"`
 	SubdivisionNumber int `yaml:"subdivision_number"`
 	FOV               float64
-	Transform         ViewTransformConfig
+	Transform         *ViewTransformConfig
 }
 
 func (c *CameraConfig) ToCamera() *Camera {
