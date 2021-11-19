@@ -1,0 +1,136 @@
+---
+name: refraction_test
+world:
+  shadows: true
+  max_bounce: 7
+  light:
+    color: [1, 1, 1]
+    position: [0, -10, 10]
+camera:
+  height: 3840
+  width: 2160
+  aa_level: 4
+  num_workers: 8
+  subdivision_number: 4
+  fov: 0.448798950513 # pi/7
+  transform:
+    from: [-15, -10, 5]
+    to: [0, 0, 3]
+    up: [0, 0, 1]
+objects:
+  - type: cube # room
+    transform:
+      position: [0, 0, 20]
+      scale: [20, 20, 20]
+    material:
+      type: phong
+      ambient: 0.1
+      diffuse: 0.9
+      specular: 0
+      shininess: 0
+      ior: 1
+      color: [0.1, 0.1, 0.1]
+      pattern:
+        type: checker_3d
+        transform:
+          position: [2.5, 2.5, 2.5]
+          scale: [1, 1, 1]
+        sub_patterns:
+          - type: solid
+            color: [0.9, 0.9, 0.9]
+          - type: solid
+            color: [0.2, 0.2, 0.2]
+  - type: sphere # glass ball
+    transform:
+      position: [0, 0, 3]
+      scale: [2, 2, 2]
+    material:
+      type: phong
+      ambient: 0.1
+      diffuse: 0.9
+      specular: 0.8
+      shininess: 300
+      reflectivity: 0.9
+      transparency: 0.9
+      ior: 1.5
+      color: [0.1, 0.1, 0.1]
+  - type: sphere # air ball
+    transform:
+      position: [0, 0, 3]
+      scale: [1, 1, 1]
+    material:
+      type: phong
+      ambient: 0.1
+      diffuse: 0.9
+      specular: 0.8
+      shininess: 300
+      reflectivity: 0.9
+      transparency: 0.9
+      ior: 1
+      color: [0.1, 0.1, 0.1]
+  - type: sphere # green ball
+    transform:
+      position: [4, -5, 2]
+      scale: [2, 2, 2]
+    material:
+      type: phong
+      ambient: 0.1
+      diffuse: 0.9
+      specular: 0.0
+      shininess: 10
+      reflectivity: 0.05
+      ior: 1
+      color: [0.1, 1, 0.5]
+      pattern:
+        type: checker_3d
+        transform:
+          rotation: [0, -0.523598775598, -0.523598775598]
+          scale: [0.5, 0.5, 0.5]
+        sub_patterns:
+          - type: solid
+            color: [0.1, 1, 0.5]
+          - type: solid
+            color: [0.1, 0.5, 0.4]
+  - type: sphere # red ball
+    transform:
+      position: [7, -0.25, 1]
+      scale: [1, 1, 1]
+    material:
+      type: phong
+      ambient: 0.1
+      diffuse: 0.9
+      specular: 0.9
+      shininess: 200
+      reflectivity: 0.1
+      color: [1, 0.1, 0.1]
+  - type: sphere # blue ball
+    transform:
+      position: [4, 7, 1.25]
+      scale: [1.25, 1.25, 1.25]
+    material:
+      type: phong
+      ambient: 0.1
+      diffuse: 0.9
+      specular: 0.9
+      shininess: 200
+      reflectivity: 0.1
+      ior: 1
+      color: [0.2, 0.2, 1]
+      pattern:
+        type: stripe
+        transform:
+          position: [0, 0, 0.25]
+          rotation: [0, 1.57079632679, 0]
+          scale: [0.5, 0.5, 0.5]
+        sub_patterns:
+          - type: gradient
+            transform:
+              rotation: [0, 1.57079632679, 0]
+              scale: [3, 3, 3]
+            sub_patterns:
+              - type: solid
+                color: [0.9, 0.9, 0.9]
+              - type: solid
+                color: [0.2, 0.2, 1]
+          - type: solid
+            color: [0.2, 0.2, 0.4]
