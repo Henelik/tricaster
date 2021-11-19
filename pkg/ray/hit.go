@@ -15,10 +15,8 @@ type Intersection struct {
 	P Primitive
 }
 
-// TODO: replace T/P values with index of intersection
 type Hit struct {
-	T        float64
-	P        Primitive
+	Index    int
 	Pos      *tuple.Tuple
 	EyeV     *tuple.Tuple
 	NormalV  *tuple.Tuple
@@ -32,15 +30,14 @@ type Hit struct {
 	Inters   []Intersection
 }
 
-func (i *Intersection) ToHit(r *Ray, inters []Intersection) *Hit {
-	h := &Hit{}
-	h.T = i.T
-	h.P = i.P
+func NewHit(r *Ray, inters []Intersection, index int) *Hit {
+	h := &Hit{
+		Index: index,
+		Pos:   r.Position(inters[index].T),
+		EyeV:  r.Direction.Neg(),
+	}
 
-	h.Pos = r.Position(i.T)
-
-	h.EyeV = r.Direction.Neg()
-	h.NormalV = i.P.NormalAt(h.Pos)
+	h.NormalV = inters[index].P.NormalAt(h.Pos)
 	h.Inside = h.NormalV.DotProd(h.EyeV) < 0
 	if h.Inside {
 		h.NormalV = h.NormalV.Neg()
@@ -57,8 +54,19 @@ func (i *Intersection) ToHit(r *Ray, inters []Intersection) *Hit {
 	return h
 }
 
-// Hit returns the closest positive intersection
-func GetClosest(inters []Intersection) *Intersection {
+// GetClosestPositiveIndex returns the index of the closest positive intersection,
+// assuming they are sorted.
+// Returns 0 if none of the intersections are positive.
+func GetClosestPositiveIndex(inters []Intersection) int {
+	for i, inter := range inters {
+		if inter.T > 0 {
+			return i
+		}
+	}
+	return 0
+}
+
+func GetClosestPositive(inters []Intersection) *Intersection {
 	if len(inters) == 0 {
 		return NilIntersect
 	}

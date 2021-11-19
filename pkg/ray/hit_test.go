@@ -145,7 +145,7 @@ func TestComputeRefractIOR(t *testing.T) {
 	for _, tc := range testCases {
 		name := fmt.Sprintf("%v, %v, %v", tc.index, tc.wantN1, tc.wantN2)
 		t.Run(name, func(t *testing.T) {
-			h := xs[tc.index].ToHit(r, xs)
+			h := NewHit(r, xs, tc.index)
 			assert.Equal(t, tc.wantN1, h.N1)
 			assert.Equal(t, tc.wantN2, h.N2)
 		})

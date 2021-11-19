@@ -12,7 +12,7 @@ func ComputeIORs(h *Hit) {
 	containers := make([]IORHaver, 0, len(h.Inters))
 	var removed bool
 	for _, inter := range h.Inters {
-		if h.T == inter.T && h.P == inter.P {
+		if h.Inters[h.Index].T == inter.T && h.Inters[h.Index].P == inter.P {
 			if len(containers) == 0 {
 				h.N1 = 1
 			} else {
@@ -26,7 +26,7 @@ func ComputeIORs(h *Hit) {
 			containers = append(containers, inter.P.(IORHaver))
 		}
 
-		if h.T == inter.T && h.P == inter.P {
+		if h.Inters[h.Index].T == inter.T && h.Inters[h.Index].P == inter.P {
 			if len(containers) == 0 {
 				h.N2 = 1
 			} else {
