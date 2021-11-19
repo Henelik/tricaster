@@ -1,9 +1,8 @@
-package renderer
+package pattern
 
 import (
 	"github.com/Henelik/tricaster/pkg/color"
 	"github.com/Henelik/tricaster/pkg/matrix"
-	"github.com/Henelik/tricaster/pkg/pattern"
 	"github.com/Henelik/tricaster/pkg/tuple"
 	"github.com/Henelik/tricaster/pkg/util"
 )
@@ -11,10 +10,10 @@ import (
 type StripePattern struct {
 	m        *matrix.Matrix
 	im       *matrix.Matrix
-	Patterns []pattern.Pattern
+	Patterns []Pattern
 }
 
-func NewStripePattern(m *matrix.Matrix, ps ...pattern.Pattern) *StripePattern {
+func NewStripePattern(m *matrix.Matrix, ps ...Pattern) *StripePattern {
 	result := &StripePattern{
 		Patterns: ps,
 	}

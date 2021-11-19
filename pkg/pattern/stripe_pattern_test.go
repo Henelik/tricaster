@@ -1,17 +1,16 @@
-package renderer
+package pattern
 
 import (
 	"testing"
 
 	"github.com/Henelik/tricaster/pkg/color"
-	"github.com/Henelik/tricaster/pkg/pattern"
 	"github.com/Henelik/tricaster/pkg/tuple"
 
 	"github.com/stretchr/testify/assert"
 )
 
 func TestStripePattern_Process(t *testing.T) {
-	p := NewStripePattern(nil, pattern.NewSolidPattern(color.White), pattern.NewSolidPattern(color.Black))
+	p := NewStripePattern(nil, NewSolidPattern(color.White), NewSolidPattern(color.Black))
 	testCases := []struct {
 		name string
 		pos  *tuple.Tuple

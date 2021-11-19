@@ -263,6 +263,23 @@ func (p *PatternConfig) ToPattern() pattern.Pattern {
 			p.SubPatterns[0].ToPattern(),
 			p.SubPatterns[1].ToPattern())
 
+	case "stripe":
+		numSub := len(p.SubPatterns)
+
+		if numSub < 2 {
+			panic("not enough sub-patterns for stripe: " + strconv.Itoa(numSub))
+		}
+
+		subPatterns := make([]pattern.Pattern, 0, numSub)
+
+		for _, pConfig := range p.SubPatterns {
+			subPatterns = append(subPatterns, pConfig.ToPattern())
+		}
+
+		return pattern.NewStripePattern(
+			p.Transform.ToMatrix(),
+			subPatterns...)
+
 	default:
 		panic("unrecognized pattern type: " + p.Type)
 	}
