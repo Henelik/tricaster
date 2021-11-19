@@ -8,7 +8,7 @@ import (
 	"github.com/Henelik/tricaster/pkg/light"
 	"github.com/Henelik/tricaster/pkg/material"
 	"github.com/Henelik/tricaster/pkg/matrix"
-	ray2 "github.com/Henelik/tricaster/pkg/ray"
+	"github.com/Henelik/tricaster/pkg/ray"
 	"github.com/Henelik/tricaster/pkg/tuple"
 )
 
@@ -40,16 +40,16 @@ type World struct {
 }
 
 // Intersect returns all the intersections where a ray encounters an object in the world, unsorted.
-func (w *World) Intersect(r *ray2.Ray) []ray2.Intersection {
-	var inters []ray2.Intersection
+func (w *World) Intersect(r *ray.Ray) []ray.Intersection {
+	var inters []ray.Intersection
 	for _, p := range w.Geometry {
 		inters = append(inters, p.Intersects(r)...)
 	}
-	return ray2.SortI(inters)
+	return ray.SimpleSort(inters)
 }
 
 // Shade finds the color of an object at a hit point
-func (w *World) Shade(h *ray2.Hit, remainingBounce int) *color.Color {
+func (w *World) Shade(h *ray.Hit, remainingBounce int) *color.Color {
 	if w.Config.Shadows {
 		h.InShadow = w.IsShadowed(h.OverP)
 	}
@@ -74,17 +74,17 @@ func (w *World) Shade(h *ray2.Hit, remainingBounce int) *color.Color {
 }
 
 // ColorAt finds a ray's hit and then calls shade at that hit
-func (w *World) ColorAt(r *ray2.Ray, remainingBounce int) *color.Color {
+func (w *World) ColorAt(r *ray.Ray, remainingBounce int) *color.Color {
 	inters := w.Intersect(r)
-	i := ray2.GetClosest(inters)
-	if *i == *ray2.NilIntersect {
+	i := ray.GetClosest(inters)
+	if *i == *ray.NilIntersect {
 		return color.Black
 	}
 	return w.Shade(i.ToHit(r, inters), remainingBounce)
 }
 
 // ReflectedColor handles reflection ray culling and finds the next color on the light path
-func (w *World) ReflectedColor(h *ray2.Hit, remainingBounce int) *color.Color {
+func (w *World) ReflectedColor(h *ray.Hit, remainingBounce int) *color.Color {
 	if remainingBounce <= 0 {
 		return color.Black
 	}
@@ -92,13 +92,13 @@ func (w *World) ReflectedColor(h *ray2.Hit, remainingBounce int) *color.Color {
 		if m.Reflectivity == 0 {
 			return color.Black
 		}
-		return w.ColorAt(ray2.NewRay(h.OverP, h.ReflectV), remainingBounce).MultF(m.Reflectivity)
+		return w.ColorAt(ray.NewRay(h.OverP, h.ReflectV), remainingBounce).MultF(m.Reflectivity)
 	}
 	return color.Black
 }
 
 // RefractedColor handles refraction ray culling and finds the next color on the light path
-func (w *World) RefractedColor(h *ray2.Hit, remainingBounce int) *color.Color {
+func (w *World) RefractedColor(h *ray.Hit, remainingBounce int) *color.Color {
 	if remainingBounce <= 0 {
 		return color.Black
 	}
@@ -112,7 +112,7 @@ func (w *World) RefractedColor(h *ray2.Hit, remainingBounce int) *color.Color {
 		// find the new ray's direction
 		cosT := math.Sqrt(math.Abs(1.0 - sin2T))
 		dir := h.NormalV.Mult(nRatio*cosI - cosT).Sub(h.EyeV.Mult(nRatio))
-		return w.ColorAt(ray2.NewRay(h.UnderP, dir), remainingBounce).MultF(m.Transparency)
+		return w.ColorAt(ray.NewRay(h.UnderP, dir), remainingBounce).MultF(m.Transparency)
 	}
 	return color.Black
 }
@@ -122,13 +122,13 @@ func (w *World) IsShadowed(p *tuple.Tuple) bool {
 	distance := v.Mag()
 	direction := v.Norm()
 
-	r := ray2.NewRay(p, direction)
+	r := ray.NewRay(p, direction)
 
 	inters := w.Intersect(r)
 
-	h := ray2.GetClosest(inters)
+	h := ray.GetClosest(inters)
 
-	if *h != *ray2.NilIntersect && h.T < distance {
+	if *h != *ray.NilIntersect && h.T < distance {
 		return true
 	}
 	return false

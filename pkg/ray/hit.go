@@ -71,6 +71,28 @@ func GetClosest(inters []Intersection) *Intersection {
 	return &closest
 }
 
+func SimpleSort(inters []Intersection) []Intersection {
+	if len(inters) <= 1 {
+		return inters
+	}
+
+	var sum int
+
+	result := make([]Intersection, len(inters))
+
+	for _, inter := range inters {
+		sum = 0
+		for _, other := range inters {
+			if inter.T < other.T {
+				sum++
+			}
+		}
+		result[sum] = inter
+	}
+
+	return result
+}
+
 // SortI merge sorts a list of intersections in ascending order
 func SortI(inters []Intersection) []Intersection {
 	result := make([]Intersection, 0, len(inters))
