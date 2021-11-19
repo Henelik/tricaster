@@ -83,7 +83,7 @@ func SimpleSort(inters []Intersection) []Intersection {
 	for _, inter := range inters {
 		sum = 0
 		for _, other := range inters {
-			if inter.T < other.T {
+			if inter.T > other.T {
 				sum++
 			}
 		}
