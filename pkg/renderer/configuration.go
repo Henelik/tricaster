@@ -72,9 +72,9 @@ type ViewTransformConfig struct {
 
 func (v *ViewTransformConfig) ToMatrix() *matrix.Matrix {
 	return matrix.ViewTransform(
-		tuple.NewPoint(v.From.X, v.From.Y, v.From.Z),
-		tuple.NewPoint(v.To.X, v.To.Y, v.To.Z),
-		tuple.NewVector(v.Up.X, v.Up.Y, v.Up.Z),
+		tuple.NewPoint(v.From[0], v.From[1], v.From[2]),
+		tuple.NewPoint(v.To[0], v.To[1], v.To[2]),
+		tuple.NewVector(v.Up[0], v.Up[1], v.Up[2]),
 	)
 }
 
@@ -149,46 +149,34 @@ type TransformConfig struct {
 
 func (t *TransformConfig) ToMatrix() *matrix.Matrix {
 	return matrix.Compose(
-		matrix.Translation(t.Position.X, t.Position.Y, t.Position.Z),
-		matrix.RotationX(t.Rotation.X),
-		matrix.RotationY(t.Rotation.Y),
-		matrix.RotationZ(t.Rotation.Z),
-		matrix.Scaling(t.Scale.X, t.Scale.Y, t.Scale.Z),
+		matrix.Translation(t.Position[0], t.Position[1], t.Position[2]),
+		matrix.RotationX(t.Rotation[0]),
+		matrix.RotationY(t.Rotation[1]),
+		matrix.RotationZ(t.Rotation[2]),
+		matrix.Scaling(t.Scale[0], t.Scale[1], t.Scale[2]),
 	)
 }
 
 // tuples
 
-type PointConfig struct {
-	X float64
-	Y float64
-	Z float64
-}
+type PointConfig [3]float64
 
 func (p *PointConfig) ToPoint() *tuple.Tuple {
-	return tuple.NewPoint(p.X, p.Y, p.Z)
+	return tuple.NewPoint(p[0], p[1], p[2])
 }
 
-type VectorConfig struct {
-	X float64
-	Y float64
-	Z float64
-}
+type VectorConfig [3]float64
 
 func (v *VectorConfig) ToVector() *tuple.Tuple {
-	return tuple.NewVector(v.X, v.Y, v.Z)
+	return tuple.NewVector(v[0], v[1], v[2])
 }
 
 // color
 
-type ColorConfig struct {
-	R float64
-	G float64
-	B float64
-}
+type ColorConfig [3]float64
 
 func (config *ColorConfig) ToColor() *color.Color {
-	return color.NewColor(config.R, config.G, config.B)
+	return color.NewColor(config[0], config[1], config[2])
 }
 
 // pattern
@@ -196,7 +184,7 @@ func (config *ColorConfig) ToColor() *color.Color {
 type PatternConfig struct {
 	Type        string
 	Color       ColorConfig
-	Translation TransformConfig
+	Transform   TransformConfig
 	SubPatterns []PatternConfig `yaml:"sub_patterns"`
 }
 
@@ -213,7 +201,7 @@ func (p *PatternConfig) ToPattern() pattern.Pattern {
 		}
 
 		return pattern.NewCheckerPattern2D(
-			p.Translation.ToMatrix(),
+			p.Transform.ToMatrix(),
 			p.SubPatterns[0].ToPattern(),
 			p.SubPatterns[1].ToPattern())
 
@@ -225,7 +213,7 @@ func (p *PatternConfig) ToPattern() pattern.Pattern {
 		}
 
 		return pattern.NewCheckerPattern3D(
-			p.Translation.ToMatrix(),
+			p.Transform.ToMatrix(),
 			p.SubPatterns[0].ToPattern(),
 			p.SubPatterns[1].ToPattern())
 
@@ -243,7 +231,7 @@ func (p *PatternConfig) ToPattern() pattern.Pattern {
 		}
 
 		return pattern.NewCylinderRingPattern(
-			p.Translation.ToMatrix(),
+			p.Transform.ToMatrix(),
 			subPatterns...)
 
 	case "sphere_ring":
@@ -260,7 +248,7 @@ func (p *PatternConfig) ToPattern() pattern.Pattern {
 		}
 
 		return pattern.NewCylinderRingPattern(
-			p.Translation.ToMatrix(),
+			p.Transform.ToMatrix(),
 			subPatterns...)
 
 	case "gradient":
@@ -271,7 +259,7 @@ func (p *PatternConfig) ToPattern() pattern.Pattern {
 		}
 
 		return pattern.NewGradientPattern(
-			p.Translation.ToMatrix(),
+			p.Transform.ToMatrix(),
 			p.SubPatterns[0].ToPattern(),
 			p.SubPatterns[1].ToPattern())
 
