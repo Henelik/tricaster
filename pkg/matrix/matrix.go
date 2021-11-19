@@ -148,6 +148,10 @@ func (m *Matrix) IsInvertible() bool {
 
 func (m *Matrix) Inverse() *Matrix {
 	det := m.Determinant()
+	if det == 0 {
+		return nil
+	}
+
 	data := make([][]float64, m.Order)
 	for i := 0; i < m.Order; i++ {
 		data[i] = make([]float64, m.Order)

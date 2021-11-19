@@ -80,6 +80,9 @@ func TestColorAtHitBehind(t *testing.T) {
 			tuple.NewPoint(-10, -10, 10),
 			color.White,
 		},
+		Config: &WorldConfig{
+			Shadows: false,
+		},
 	}
 	r := ray2.NewRay(tuple.NewPoint(0.75, 0, 0), tuple.Left)
 	col := w.ColorAt(r, 0)
@@ -88,7 +91,7 @@ func TestColorAtHitBehind(t *testing.T) {
 
 func TestShadow(t *testing.T) {
 	w := *DefaultWorld
-	w.Config = WorldConfig{Shadows: true}
+	w.Config = &WorldConfig{Shadows: true}
 	testCases := []struct {
 		name string
 		p    *tuple.Tuple
