@@ -5,7 +5,7 @@ import (
 
 	"github.com/Henelik/tricaster/pkg/material"
 	"github.com/Henelik/tricaster/pkg/matrix"
-	ray2 "github.com/Henelik/tricaster/pkg/ray"
+	"github.com/Henelik/tricaster/pkg/ray"
 	"github.com/Henelik/tricaster/pkg/tuple"
 
 	"github.com/stretchr/testify/assert"
@@ -15,40 +15,40 @@ func TestPlane_Intersects(t *testing.T) {
 	p := NewPlane(matrix.Identity, material.DefaultPhong)
 	testCases := []struct {
 		name string
-		r    *ray2.Ray
-		want []ray2.Intersection
+		r    *ray.Ray
+		want []ray.Intersection
 	}{
 		{
 			name: "Intersect with a ray parallel to the plane",
-			r: ray2.NewRay(
+			r: ray.NewRay(
 				tuple.NewPoint(0, 0, 10),
 				tuple.Forward,
 			),
-			want: []ray2.Intersection{},
+			want: []ray.Intersection{},
 		},
 		{
 			name: "Intersect with a coplanar ray",
-			r: ray2.NewRay(
+			r: ray.NewRay(
 				tuple.NewPoint(0, 0, 0),
 				tuple.Forward,
 			),
-			want: []ray2.Intersection{},
+			want: []ray.Intersection{},
 		},
 		{
 			name: "A ray intersecting a plane from above",
-			r: ray2.NewRay(
+			r: ray.NewRay(
 				tuple.NewPoint(0, 0, 1),
 				tuple.Down,
 			),
-			want: []ray2.Intersection{{1, p}},
+			want: []ray.Intersection{{1, p}},
 		},
 		{
 			name: "A ray intersecting a plane from below",
-			r: ray2.NewRay(
+			r: ray.NewRay(
 				tuple.NewPoint(0, 0, -1),
 				tuple.Up,
 			),
-			want: []ray2.Intersection{{1, p}},
+			want: []ray.Intersection{{1, p}},
 		},
 	}
 	for _, tc := range testCases {

@@ -6,7 +6,7 @@ import (
 
 	"github.com/Henelik/tricaster/pkg/material"
 	"github.com/Henelik/tricaster/pkg/matrix"
-	ray2 "github.com/Henelik/tricaster/pkg/ray"
+	"github.com/Henelik/tricaster/pkg/ray"
 	"github.com/Henelik/tricaster/pkg/tuple"
 
 	"github.com/stretchr/testify/assert"
@@ -16,48 +16,48 @@ func TestSphere_Intersects(t *testing.T) {
 	s := NewSphere(matrix.Identity, material.DefaultPhong)
 	testCases := []struct {
 		name string
-		r    *ray2.Ray
-		want []ray2.Intersection
+		r    *ray.Ray
+		want []ray.Intersection
 	}{
 		{
 			name: "A ray intersects a sphere at two points",
-			r: ray2.NewRay(
+			r: ray.NewRay(
 				tuple.NewPoint(0, 0, -5),
 				tuple.Up,
 			),
-			want: []ray2.Intersection{{4, s}, {6, s}},
+			want: []ray.Intersection{{4, s}, {6, s}},
 		},
 		{
 			name: "A ray intersects a sphere at a tangent",
-			r: ray2.NewRay(
+			r: ray.NewRay(
 				tuple.NewPoint(0, 1, -5),
 				tuple.Up,
 			),
-			want: []ray2.Intersection{{5, s}, {5, s}},
+			want: []ray.Intersection{{5, s}, {5, s}},
 		},
 		{
 			name: "A ray misses a sphere",
-			r: ray2.NewRay(
+			r: ray.NewRay(
 				tuple.NewPoint(0, 2, -5),
 				tuple.Up,
 			),
-			want: []ray2.Intersection{},
+			want: []ray.Intersection{},
 		},
 		{
 			name: "A ray originates inside a sphere",
-			r: ray2.NewRay(
+			r: ray.NewRay(
 				tuple.Origin,
 				tuple.Up,
 			),
-			want: []ray2.Intersection{{-1, s}, {1, s}},
+			want: []ray.Intersection{{-1, s}, {1, s}},
 		},
 		{
 			name: "A sphere is behind a ray",
-			r: ray2.NewRay(
+			r: ray.NewRay(
 				tuple.NewPoint(0, 0, 5),
 				tuple.Up,
 			),
-			want: []ray2.Intersection{{-6, s}, {-4, s}},
+			want: []ray.Intersection{{-6, s}, {-4, s}},
 		},
 	}
 	for _, tc := range testCases {
@@ -69,14 +69,14 @@ func TestSphere_Intersects(t *testing.T) {
 }
 
 func TestSphere_IntersectsTransformed(t *testing.T) {
-	r := ray2.NewRay(
+	r := ray.NewRay(
 		tuple.NewPoint(0, 0, -5),
 		tuple.Up,
 	)
 
 	// Intersecting a scaled sphere with a ray
 	s := NewSphere(matrix.Scaling(2, 2, 2), material.DefaultPhong)
-	want := []ray2.Intersection{
+	want := []ray.Intersection{
 		{3, s},
 		{7, s},
 	}
@@ -85,7 +85,7 @@ func TestSphere_IntersectsTransformed(t *testing.T) {
 
 	// Intersecting a translated sphere with a ray
 	s2 := NewSphere(matrix.Translation(5, 0, 0), material.DefaultPhong)
-	want2 := []ray2.Intersection{}
+	want2 := []ray.Intersection{}
 
 	assert.Equal(t, want2, s2.Intersects(r))
 }
