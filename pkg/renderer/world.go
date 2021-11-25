@@ -41,7 +41,6 @@ type World struct {
 
 // Intersect returns all the intersections where a ray encounters an object in the world, sorted.
 func (w *World) Intersect(r *ray.Ray) []ray.Intersection {
-	// TODO: initialize inters to a decent length
 	var inters []ray.Intersection
 
 	for _, p := range w.Geometry {
@@ -105,18 +104,23 @@ func (w *World) RefractedColor(h *ray.Hit, remainingBounce int) *color.Color {
 	if remainingBounce <= 0 {
 		return color.Black
 	}
+
 	if m, ok := h.Inters[h.Index].P.(Primitive).GetMaterial().(*material.PhongMat); ok {
 		if m.Transparency == 0 {
 			return color.Black
 		}
+
 		nRatio := h.N1 / h.N2
 		cosI := h.EyeV.DotProd(h.NormalV)
 		sin2T := nRatio * nRatio * (1 - cosI*cosI)
+
 		// find the new ray's direction
 		cosT := math.Sqrt(math.Abs(1.0 - sin2T))
 		dir := h.NormalV.Mult(nRatio*cosI - cosT).Sub(h.EyeV.Mult(nRatio))
+
 		return w.ColorAt(ray.NewRay(h.UnderP, dir), remainingBounce).MultF(m.Transparency)
 	}
+
 	return color.Black
 }
 
