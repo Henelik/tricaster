@@ -150,6 +150,7 @@ func TestWorldRefractMax(t *testing.T) {
 		Color:        color.Red,
 		Pattern:      nil,
 	}
+
 	r := ray.NewRay(tuple.NewPoint(0, 0, -5), tuple.NewVector(0, 0, 1))
 	inters := []ray.Intersection{{4, s}, {6, s}}
 	h := ray.NewHit(r, inters, 0)
@@ -162,16 +163,17 @@ func TestWorldRefractTotalInternalReflection(t *testing.T) {
 	w := *DefaultWorld
 	s := w.Geometry[0].(*geometry.Sphere)
 	s.Mat = &material.PhongMat{
-		Ambient:      0.1,
-		Diffuse:      0.5,
+		Ambient:      0,
+		Diffuse:      0,
 		Specular:     0,
 		Shininess:    0,
 		Reflectivity: 0,
 		Transparency: 1,
 		IOR:          1.5,
-		Color:        color.Red,
+		Color:        color.White,
 		Pattern:      nil,
 	}
+
 	r := ray.NewRay(tuple.NewPoint(0, 0, math.Sqrt2/2), tuple.NewVector(0, 1, 0))
 	inters := []ray.Intersection{{-math.Sqrt2 / 2, s}, {math.Sqrt2 / 2, s}}
 	h := ray.NewHit(r, inters, 1)
@@ -182,6 +184,7 @@ func TestWorldRefractTotalInternalReflection(t *testing.T) {
 // The refracted color with a refracted ray
 func TestWorldRefractRefract(t *testing.T) {
 	w := *DefaultWorld
+
 	a := w.Geometry[0].(*geometry.Sphere)
 	a.Mat = &material.PhongMat{
 		Ambient:      1,
@@ -193,6 +196,7 @@ func TestWorldRefractRefract(t *testing.T) {
 		IOR:          1,
 		Pattern:      NewTestPattern(nil),
 	}
+
 	b := w.Geometry[1].(*geometry.Sphere)
 	b.Mat = &material.PhongMat{
 		Ambient:      0,
