@@ -29,14 +29,17 @@ func NewSphere(m *matrix.Matrix, mat material.Material) *Sphere {
 		matrix.Identity,
 		material.DefaultPhong,
 	}
+
 	if m != nil {
 		s.m = m
 		s.im = m.Inverse()
 		s.imt = s.im.Transpose()
 	}
+
 	if mat != nil {
 		s.Mat = mat
 	}
+
 	return s
 }
 
@@ -52,21 +55,24 @@ func (s *Sphere) GetMatrix() *matrix.Matrix {
 func (s *Sphere) Intersects(r *ray.Ray) []ray.Intersection {
 	rt := r.Transform(s.im)
 	sphereToRay := rt.Origin.Sub(tuple.Origin)
-	a := rt.Direction.DotProd(rt.Direction)
+	a2 := 2 * rt.Direction.DotProd(rt.Direction)
 	b := -2 * rt.Direction.DotProd(sphereToRay)
-	discriminant := b*b - 4*a*(sphereToRay.DotProd(sphereToRay)-1)
+
+	discriminant := b*b - 2*a2*(sphereToRay.DotProd(sphereToRay)-1)
 	if discriminant < 0 {
 		return []ray.Intersection{}
 	}
+
 	return []ray.Intersection{
-		{(b - math.Sqrt(discriminant)) / (2 * a), s},
-		{(b + math.Sqrt(discriminant)) / (2 * a), s},
+		{(b - math.Sqrt(discriminant)) / a2, s},
+		{(b + math.Sqrt(discriminant)) / a2, s},
 	}
 }
 
 func (s *Sphere) NormalAt(pos *tuple.Tuple) *tuple.Tuple {
 	worldNormal := s.imt.MultTuple(s.im.MultTuple(pos).Sub(tuple.Origin))
 	worldNormal.W = 0
+
 	return worldNormal.Norm()
 }
 
