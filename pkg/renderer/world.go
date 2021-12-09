@@ -41,7 +41,7 @@ type World struct {
 
 // Intersect returns all the intersections where a ray encounters an object in the world, sorted.
 func (w *World) Intersect(r *ray.Ray) []ray.Intersection {
-	var inters []ray.Intersection
+	var inters = make([]ray.Intersection, 0, len(w.Geometry)*2)
 
 	for _, p := range w.Geometry {
 		inters = append(inters, p.Intersects(r)...)
