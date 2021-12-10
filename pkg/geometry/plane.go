@@ -32,9 +32,7 @@ func NewPlane(m *matrix.Matrix, mat material.Material) *Plane {
 	}
 
 	if m != nil {
-		p.m = m
-		p.im = m.Inverse()
-		p.n = p.im.MultTuple(tuple.Up)
+		p.SetMatrix(m)
 	}
 
 	if mat != nil {
@@ -47,6 +45,7 @@ func NewPlane(m *matrix.Matrix, mat material.Material) *Plane {
 func (p *Plane) SetMatrix(m *matrix.Matrix) {
 	p.m = m
 	p.im = m.Inverse()
+	p.n = p.im.MultTuple(tuple.Up)
 }
 
 func (p *Plane) GetMatrix() *matrix.Matrix {
