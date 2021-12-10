@@ -5,6 +5,8 @@
 
 A multi-threaded raytracer written in Go.
 
+<img src="/renders/refraction_test.png" alt="reflections" width="1024"/>
+
 ## Features
 
 * Uses backward raytracing
