@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"time"
 
 	"github.com/Henelik/tricaster/pkg/renderer"
 	"gopkg.in/yaml.v3"
@@ -19,6 +20,8 @@ func init() {
 }
 
 func main() {
+	start := time.Now()
+
 	flag.Parse()
 
 	file, err := ioutil.ReadFile(filename)
@@ -33,9 +36,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%+v\n", config)
-
 	scene := renderer.NewScene(config)
 
+	fmt.Printf("rendering scene %s\n", filename)
+
 	scene.Render()
+
+	fmt.Printf("render took %s\n", time.Since(start))
 }
