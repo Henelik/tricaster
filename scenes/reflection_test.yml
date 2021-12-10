@@ -1,5 +1,6 @@
 ---
-name: refraction_test
+name: reflection_test
+
 world:
   shadows: true
   max_bounce: 7
@@ -43,7 +44,7 @@ objects:
           - type: solid
             color: [0.2, 0.2, 0.2]
 
-  - type: sphere # glass ball
+  - type: sphere # mirror ball
     transform:
       position: [0, 0, 3]
       scale: [2, 2, 2]
@@ -54,28 +55,12 @@ objects:
       specular: 0.8
       shininess: 300
       reflectivity: 0.9
-      transparency: 0.9
-      ior: 1.5
-      color: [0.1, 0.1, 0.1]
-
-  - type: sphere # air ball
-    transform:
-      position: [0, 0, 3]
-      scale: [1, 1, 1]
-    material:
-      type: phong
-      ambient: 0.1
-      diffuse: 0.9
-      specular: 0.8
-      shininess: 300
-      reflectivity: 0.9
-      transparency: 0.9
       ior: 1
-      color: [0.1, 0.1, 0.1]
+      color: [0.7, 0.7, 0.7]
 
   - type: sphere # green ball
     transform:
-      position: [4, -5, 2]
+      position: [-10, -10, 2]
       scale: [2, 2, 2]
     material:
       type: phong
@@ -99,7 +84,7 @@ objects:
 
   - type: sphere # red ball
     transform:
-      position: [7, -0.25, 1]
+      position: [7, -7, 1]
       scale: [1, 1, 1]
     material:
       type: phong
@@ -109,9 +94,10 @@ objects:
       shininess: 200
       reflectivity: 0.1
       color: [1, 0.1, 0.1]
+
   - type: sphere # blue ball
     transform:
-      position: [4, 7, 1.25]
+      position: [-4, 3, 1.25]
       scale: [1.25, 1.25, 1.25]
     material:
       type: phong

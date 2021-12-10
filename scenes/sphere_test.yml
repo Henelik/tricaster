@@ -6,6 +6,7 @@ world:
   light:
     color: [1, 1, 1]
     position: [10, -5, 10]
+
 camera:
   height: 512
   width: 512
@@ -17,6 +18,7 @@ camera:
     from: [0, 0, 0]
     to: [0, 5, 0]
     up: [0, 0, 1]
+
 objects:
   - type: sphere
     material:
