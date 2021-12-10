@@ -30,14 +30,17 @@ func NewPlane(m *matrix.Matrix, mat material.Material) *Plane {
 		n:   tuple.Up,
 		Mat: material.DefaultPhong,
 	}
+
 	if m != nil {
 		p.m = m
 		p.im = m.Inverse()
 		p.n = p.im.MultTuple(tuple.Up)
 	}
+
 	if mat != nil {
 		p.Mat = mat
 	}
+
 	return p
 }
 
@@ -52,10 +55,13 @@ func (p *Plane) GetMatrix() *matrix.Matrix {
 
 func (p *Plane) Intersects(r *ray.Ray) []ray.Intersection {
 	rt := r.Transform(p.im)
+
 	if math.Abs(rt.Direction.Z) < util.Epsilon {
 		return []ray.Intersection{}
 	}
+
 	t := -rt.Origin.Z / rt.Direction.Z
+
 	return []ray.Intersection{{t, p}}
 }
 
