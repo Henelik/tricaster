@@ -148,6 +148,10 @@ type TransformConfig struct {
 }
 
 func (t *TransformConfig) ToMatrix() *matrix.Matrix {
+	if t.Position == [3]float64{0, 0, 0} && t.Rotation == [3]float64{0, 0, 0} && t.Scale == [3]float64{0, 0, 0} {
+		panic("can't convert empty matrix")
+	}
+
 	return matrix.Compose(
 		matrix.Translation(t.Position[0], t.Position[1], t.Position[2]),
 		matrix.RotationX(t.Rotation[0]),
