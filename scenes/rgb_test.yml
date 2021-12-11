@@ -1,0 +1,120 @@
+---
+name: rgb_test
+world:
+  shadows: true
+  max_bounce: 0
+  light:
+    color: [1, 1, 1]
+    position: [0, -10, 10]
+
+camera:
+  height: 3840
+  width: 2160
+  aa_level: 4
+  num_workers: 8
+  subdivision_number: 4
+  fov: 0.785398163397 # pi/4
+  transform:
+    from: [-15, -10, 5]
+    to: [3, 3, 2]
+    up: [0, 0, 1]
+
+objects:
+  - type: plane
+    material:
+      type: phong
+      ambient: 0.1
+      diffuse: 0.9
+      specular: 0.9
+      shininess: 200
+      ior: 1
+      pattern:
+        type: checker_2d
+        transform:
+          scale: [20, 20, 20]
+        sub_patterns:
+          - type: stripe
+            transform:
+              rotation: [0, 0, 0.785398163397]
+              scale: [1, 1, 1]
+            sub_patterns:
+              - type: solid
+                color: [.9, .9, .9]
+              - type: solid
+                color: [.75, .75, .75]
+          - type: stripe
+            transform:
+              rotation: [0, 0, -0.785398163397]
+              scale: [1, 1, 1]
+            sub_patterns:
+              - type: solid
+                color: [.2, .2, .2]
+              - type: solid
+                color: [.3, .3, .3]
+    transform:
+      scale: [1, 1, 1]
+
+  - type: sphere # red ball
+    material:
+      type: phong
+      ambient: 0.1
+      diffuse: 0.9
+      specular: 0.9
+      shininess: 200
+      ior: 1
+      color: [1, .1, .1]
+    transform:
+      position: [2, -2, 1]
+      scale: [1, 1, 1]
+
+  - type: sphere # green ball
+    material:
+      type: phong
+      ambient: 0.1
+      diffuse: 0.9
+      specular: 0.0
+      shininess: 10
+      ior: 1
+      pattern:
+        type: checker_3d
+        transform:
+          rotation: [0, -0.523598775598, -0.523598775598]
+          scale: [.5, .5, .5]
+        sub_patterns:
+          - type: solid
+            color: [.1, 1, .5]
+          - type: solid
+            color: [.1, .5, .4]
+    transform:
+      position: [ 5, 5, 2 ]
+      scale: [ 2, 2, 2 ]
+
+  - type: sphere # blue ball
+    material:
+      type: phong
+      ambient: 0.1
+      diffuse: 0.9
+      specular: 0.9
+      shininess: 200
+      ior: 1
+      pattern:
+        type: stripe
+        transform:
+          position: [0, 0, .25]
+          rotation: [0, 1.57079632679, 0]
+          scale: [ .5, .5, .5 ]
+        sub_patterns:
+          - type: gradient
+            transform:
+              rotation: [0, 1.57079632679, 0]
+              scale: [3, 3, 3]
+            sub_patterns:
+              - type: solid
+                color: [.9, .9, .9]
+              - type: solid
+                color: [.2, .2, 1]
+          - type: solid
+            color: [.2, .2, .4]
+    transform:
+      position: [ -4, 3, 1.25 ]
+      scale: [ 1.25, 1.25, 1.25 ]

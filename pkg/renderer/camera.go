@@ -23,7 +23,6 @@ type Camera struct {
 }
 
 // NewCamera creates a new camera.
-// Set fov to 0 and transform to nil to use defaults.
 func NewCamera(config *CameraConfig) *Camera {
 	c := &Camera{
 		config: config,
