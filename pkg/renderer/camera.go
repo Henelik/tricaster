@@ -110,11 +110,13 @@ func (c *Camera) AARaysForPixel(x, y int) []*ray.Ray {
 	if c.config.AALevel == 0 {
 		return []*ray.Ray{c.RayForPixel(x, y)}
 	}
+
 	rs := make([]*ray.Ray, 0, c.config.AALevel*c.config.AALevel)
 
 	// the offset from the edge of the canvas to the pixel's center
 	xOffset := (float64(x) + 0.5) * c.pixelSize
 	yOffset := (float64(y) + 0.5) * c.pixelSize
+
 	// the distance between sampled sub-pixel points on the canvas
 	aaOffset := c.pixelSize / float64(c.config.AALevel)
 	origin := c.im.MultTuple(tuple.Origin)
@@ -148,6 +150,7 @@ func (c *Camera) Render(w *World) *canvas.Canvas {
 			canv.Set(x, y, col)
 		}
 	}
+
 	return canv
 }
 
@@ -183,5 +186,6 @@ func (c *Camera) GoRender(w *World) *canvas.Canvas {
 	}
 
 	wg.Wait()
+
 	return canv
 }

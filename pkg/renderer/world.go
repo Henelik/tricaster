@@ -82,7 +82,12 @@ func (w *World) ColorAt(r *ray.Ray, remainingBounce int) *color.Color {
 		return color.Black
 	}
 
-	return w.Shade(ray.NewHit(r, inters, ray.GetClosestPositiveIndex(inters)), remainingBounce)
+	closest := ray.GetClosestPositiveIndex(inters)
+	if closest != -1 {
+		return w.Shade(ray.NewHit(r, inters, closest), remainingBounce)
+	}
+
+	return color.Black
 }
 
 // ReflectedColor handles reflection ray culling and finds the next color on the light path

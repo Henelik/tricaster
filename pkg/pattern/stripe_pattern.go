@@ -17,11 +17,13 @@ func NewStripePattern(m *matrix.Matrix, ps ...Pattern) *StripePattern {
 	result := &StripePattern{
 		Patterns: ps,
 	}
+
 	if m != nil {
 		result.SetMatrix(m)
 	} else {
 		result.SetMatrix(matrix.Identity)
 	}
+
 	return result
 }
 
@@ -36,5 +38,6 @@ func (p *StripePattern) GetMatrix() *matrix.Matrix {
 
 func (p *StripePattern) Process(pos *tuple.Tuple) *color.Color {
 	tpos := p.im.MultTuple(pos)
+
 	return p.Patterns[util.AbsInt(int(tpos.X)%len(p.Patterns))].Process(pos)
 }

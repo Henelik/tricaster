@@ -149,7 +149,7 @@ func (m *Matrix) IsInvertible() bool {
 func (m *Matrix) Inverse() *Matrix {
 	det := m.Determinant()
 	if det == 0 {
-		return nil
+		panic("can't inverse matrix")
 	}
 
 	data := make([][]float64, m.Order)

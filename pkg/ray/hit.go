@@ -63,7 +63,7 @@ func GetClosestPositiveIndex(inters []Intersection) int {
 			return i
 		}
 	}
-	return 0
+	return -1
 }
 
 func GetClosestPositive(inters []Intersection) *Intersection {
