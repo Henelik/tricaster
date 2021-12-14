@@ -8,9 +8,9 @@ world:
     position: [0, -10, 10]
 
 camera:
-  height: 3840
-  width: 2160
-  aa_level: 4
+  height: 1920
+  width: 1080
+  aa_level: 2
   num_workers: 8
   subdivision_number: 4
   fov: 0.448798950513 # pi/7
@@ -50,11 +50,11 @@ objects:
     material:
       type: phong
       ambient: 0.1
-      diffuse: 0.9
+      diffuse: 0.1
       specular: 0.8
       shininess: 300
-      reflectivity: 0.9
-      transparency: 0.9
+      reflectivity: 0.8
+      transparency: 0.8
       ior: 1.5
       color: [0.1, 0.1, 0.1]
 

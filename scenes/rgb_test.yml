@@ -8,9 +8,9 @@ world:
     position: [0, -10, 10]
 
 camera:
-  height: 3840
-  width: 2160
-  aa_level: 4
+  height: 1920
+  width: 1080
+  aa_level: 2
   num_workers: 8
   subdivision_number: 4
   fov: 0.785398163397 # pi/4
