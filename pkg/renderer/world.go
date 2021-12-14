@@ -34,9 +34,10 @@ var DefaultWorld = &World{
 }
 
 type World struct {
-	Geometry []Primitive
-	Light    *light.PointLight
-	Config   *WorldConfig
+	Geometry   []Primitive
+	Light      *light.PointLight
+	Config     *WorldConfig
+	Background *color.Color
 }
 
 // Intersect returns all the intersections where a ray encounters an object in the world, sorted.
@@ -59,6 +60,7 @@ func (w *World) Shade(h *ray.Hit, remainingBounce int) *color.Color {
 	primitive := h.Inters[h.Index].P.(Primitive)
 
 	surface := primitive.Shade(w.Light, h)
+
 	reflected := w.ReflectedColor(h, remainingBounce-1)
 	refracted := w.RefractedColor(h, remainingBounce-1)
 
@@ -95,12 +97,15 @@ func (w *World) ReflectedColor(h *ray.Hit, remainingBounce int) *color.Color {
 	if remainingBounce <= 0 {
 		return color.Black
 	}
+
 	if m, ok := h.Inters[h.Index].P.(Primitive).GetMaterial().(*material.PhongMat); ok {
 		if m.Reflectivity == 0 {
 			return color.Black
 		}
+
 		return w.ColorAt(ray.NewRay(h.OverP, h.ReflectV), remainingBounce).MultF(m.Reflectivity)
 	}
+
 	return color.Black
 }
 

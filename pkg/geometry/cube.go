@@ -30,20 +30,22 @@ func NewCube(m *matrix.Matrix, mat material.Material) *Cube {
 		matrix.Identity,
 		material.DefaultPhong,
 	}
+
 	if m != nil {
-		c.m = m
-		c.im = m.Inverse()
-		c.imt = c.im.Transpose()
+		c.SetMatrix(m)
 	}
+
 	if mat != nil {
 		c.Mat = mat
 	}
+
 	return c
 }
 
 func (c *Cube) SetMatrix(m *matrix.Matrix) {
 	c.m = m
 	c.im = m.Inverse()
+	c.imt = c.im.Transpose()
 }
 
 func (c *Cube) GetMatrix() *matrix.Matrix {
@@ -92,6 +94,7 @@ func checkAxis(origin, dir float64) (float64, float64) {
 func (c *Cube) NormalAt(pos *tuple.Tuple) *tuple.Tuple {
 	n := c.imt.MultTuple(c.LocalNormalAt(c.im.MultTuple(pos)))
 	n.W = 0
+
 	return n.Norm()
 }
 

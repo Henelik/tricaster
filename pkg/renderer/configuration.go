@@ -84,6 +84,9 @@ type ObjectConfig struct {
 	Type      string
 	Material  MaterialConfig
 	Transform TransformConfig
+	Minimum   float64
+	Maximum   float64
+	Capped    bool
 }
 
 func (o *ObjectConfig) ToPrimitive() Primitive {
@@ -94,6 +97,8 @@ func (o *ObjectConfig) ToPrimitive() Primitive {
 		return geometry.NewCube(o.Transform.ToMatrix(), o.Material.ToMaterial())
 	case "plane":
 		return geometry.NewPlane(o.Transform.ToMatrix(), o.Material.ToMaterial())
+	case "cylinder":
+		return geometry.NewCylinder(o.Minimum, o.Maximum, o.Capped, o.Transform.ToMatrix(), o.Material.ToMaterial())
 	default:
 		panic("unknown object type: " + o.Type)
 	}
