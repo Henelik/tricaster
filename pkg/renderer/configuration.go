@@ -99,6 +99,8 @@ func (o *ObjectConfig) ToPrimitive() Primitive {
 		return geometry.NewPlane(o.Transform.ToMatrix(), o.Material.ToMaterial())
 	case "cylinder":
 		return geometry.NewCylinder(o.Minimum, o.Maximum, o.Capped, o.Transform.ToMatrix(), o.Material.ToMaterial())
+	case "cone":
+		return geometry.NewCone(o.Minimum, o.Maximum, o.Capped, o.Transform.ToMatrix(), o.Material.ToMaterial())
 	default:
 		panic("unknown object type: " + o.Type)
 	}

@@ -11,7 +11,7 @@ import (
 )
 
 func TestCone_Intersects_Hit(t *testing.T) {
-	cyl := NewCone(-10, 10, false, nil, nil)
+	cyl := NewCone(-100, 100, false, nil, nil)
 
 	testCases := []struct {
 		origin    *tuple.Tuple
@@ -28,14 +28,14 @@ func TestCone_Intersects_Hit(t *testing.T) {
 		{
 			origin:    tuple.NewPoint(0, -5, 0),
 			direction: tuple.NewVector(1, 1, 1),
-			t0:        8.66025,
-			t1:        8.66025,
+			t0:        8.660254037844386,
+			t1:        8.660254037844386,
 		},
 		{
 			origin:    tuple.NewPoint(1, -5, 1),
-			direction: tuple.NewVector(-0.5, -1, 1),
-			t0:        4.55006,
-			t1:        49.44994,
+			direction: tuple.NewVector(-0.5, 1, -1),
+			t0:        4.550055679356351,
+			t1:        49.44994432064363,
 		},
 	}
 
@@ -67,11 +67,11 @@ func TestCone_NormalAt(t *testing.T) {
 		},
 		{
 			point: tuple.NewPoint(1, 1, 1),
-			want:  tuple.NewVector(1, 1, -math.Sqrt(2)),
+			want:  tuple.NewVector(1, 1, -math.Sqrt(2)).Norm(),
 		},
 		{
 			point: tuple.NewPoint(-1, 0, -1),
-			want:  tuple.NewVector(-1, 0, 1),
+			want:  tuple.NewVector(-1, 0, 1).Norm(),
 		},
 	}
 
@@ -85,7 +85,7 @@ func TestCone_NormalAt(t *testing.T) {
 }
 
 func TestCone_Intersects_Caps(t *testing.T) {
-	cyl := NewCone(-0.5, 0.5, false, nil, nil)
+	cyl := NewCone(-0.5, 0.5, true, nil, nil)
 
 	testCases := []struct {
 		origin    *tuple.Tuple
@@ -99,7 +99,7 @@ func TestCone_Intersects_Caps(t *testing.T) {
 		},
 		{
 			origin:    tuple.NewPoint(0, -0.25, 0),
-			direction: tuple.NewVector(0, 1, 1),
+			direction: tuple.NewVector(0, 1, 1).Norm(),
 			count:     2,
 		},
 		{

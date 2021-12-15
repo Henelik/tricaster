@@ -65,11 +65,11 @@ func (cone *Cone) Intersects(r *ray.Ray) []ray.Intersection {
 	inters = append(inters, cone.intersectCaps(rt)...)
 
 	a := rt.Direction.X*rt.Direction.X + rt.Direction.Y*rt.Direction.Y - rt.Direction.Z*rt.Direction.Z
-	if a < util.Epsilon {
+	if math.Abs(a) < util.Epsilon {
 		return inters
 	}
 
-	b := 2*rt.Origin.X*rt.Direction.X + 2*rt.Origin.Y*rt.Direction.Y
+	b := 2*rt.Origin.X*rt.Direction.X + 2*rt.Origin.Y*rt.Direction.Y - 2*rt.Origin.Z*rt.Direction.Z
 	c := rt.Origin.X*rt.Origin.X + rt.Origin.Y*rt.Origin.Y - rt.Origin.Z*rt.Origin.Z
 
 	if a == 0 {
@@ -138,7 +138,12 @@ func checkConeCap(r *ray.Ray, t float64) bool {
 }
 
 func (cone *Cone) NormalAt(pos *tuple.Tuple) *tuple.Tuple {
-	n := cone.imt.MultTuple(cone.LocalNormalAt(cone.im.MultTuple(pos)))
+	localPos := cone.im.MultTuple(pos)
+	if pos.X == 0.0 && pos.Y == 0.0 && pos.Z == 0.0 {
+		return tuple.NewVector(0, 0, 0)
+	}
+
+	n := cone.imt.MultTuple(cone.LocalNormalAt(localPos))
 	n.W = 0
 
 	return n.Norm()
