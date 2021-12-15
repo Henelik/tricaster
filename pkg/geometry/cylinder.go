@@ -99,6 +99,7 @@ func (cyl *Cylinder) Intersects(r *ray.Ray) []ray.Intersection {
 	return inters
 }
 
+// TODO: move if closed statement to caller
 // intersectCaps checks for intersections at the caps of the cylinder
 func (cyl *Cylinder) intersectCaps(r *ray.Ray) []ray.Intersection {
 	inters := make([]ray.Intersection, 0, 2)
@@ -108,20 +109,20 @@ func (cyl *Cylinder) intersectCaps(r *ray.Ray) []ray.Intersection {
 	}
 
 	t := (cyl.min - r.Origin.Z) / r.Direction.Z
-	if checkCap(r, t) {
+	if checkCylinderCap(r, t) {
 		inters = append(inters, ray.Intersection{t, cyl})
 	}
 
 	t = (cyl.max - r.Origin.Z) / r.Direction.Z
-	if checkCap(r, t) {
+	if checkCylinderCap(r, t) {
 		inters = append(inters, ray.Intersection{t, cyl})
 	}
 
 	return inters
 }
 
-// checkCap checks for an intersection within the radius of the cylinder
-func checkCap(r *ray.Ray, t float64) bool {
+// checkCylinderCap checks for an intersection within the radius of the cylinder
+func checkCylinderCap(r *ray.Ray, t float64) bool {
 	x := r.Origin.X + t*r.Direction.X
 	y := r.Origin.Y + t*r.Direction.Y
 
