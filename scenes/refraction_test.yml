@@ -35,7 +35,7 @@ objects:
       pattern:
         type: checker_3d
         transform:
-          position: [2.5, 2.5, 2.5]
+          position: [2, 2, 2]
           scale: [1, 1, 1]
         sub_patterns:
           - type: solid
