@@ -6,7 +6,7 @@ import (
 
 	"github.com/Henelik/tricaster/pkg/canvas"
 	"github.com/Henelik/tricaster/pkg/color"
-	geometry2 "github.com/Henelik/tricaster/pkg/geometry"
+	"github.com/Henelik/tricaster/pkg/geometry"
 	"github.com/Henelik/tricaster/pkg/light"
 	"github.com/Henelik/tricaster/pkg/material"
 	"github.com/Henelik/tricaster/pkg/matrix"
@@ -80,11 +80,11 @@ func BenchmarkRender(b *testing.B) {
 	var canv *canvas.Canvas
 	floorMat := material.DefaultPhong.CopyWithColor(color.NewColor(1, 0.9, 0.9))
 	floorMat.Specular = 0
-	floor := geometry2.NewPlane(
+	floor := geometry.NewPlane(
 		matrix.Identity,
 		floorMat)
 
-	middle := geometry2.NewSphere(
+	middle := geometry.NewSphere(
 		matrix.Translation(5, 5, 2).Mult(matrix.Scaling(2, 2, 2)),
 		&material.PhongMat{
 			Ambient:   0.1,
@@ -94,7 +94,7 @@ func BenchmarkRender(b *testing.B) {
 			Color:     color.NewColor(0.1, 1, 0.5),
 		})
 
-	left := geometry2.NewSphere(
+	left := geometry.NewSphere(
 		matrix.Translation(2, -2, 1),
 		&material.PhongMat{
 			Ambient:   0.1,
@@ -104,7 +104,7 @@ func BenchmarkRender(b *testing.B) {
 			Color:     color.NewColor(1, 0.1, 0.1),
 		})
 
-	right := geometry2.NewSphere(
+	right := geometry.NewSphere(
 		matrix.Translation(-4, 3, 1.25).Mult(matrix.ScalingU(1.25)),
 		&material.PhongMat{
 			Ambient:   0.1,
