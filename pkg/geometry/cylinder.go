@@ -89,11 +89,11 @@ func (cyl *Cylinder) Intersects(r *ray.Ray) []ray.Intersection {
 	y1 := rt.Origin.Z + t1*rt.Direction.Z
 
 	if cyl.min < y0 && y0 < cyl.max {
-		inters = append(inters, ray.Intersection{t0, cyl})
+		inters = append(inters, ray.Intersection{T: t0, P: cyl})
 	}
 
 	if cyl.min < y1 && y1 < cyl.max {
-		inters = append(inters, ray.Intersection{t1, cyl})
+		inters = append(inters, ray.Intersection{T: t1, P: cyl})
 	}
 
 	return inters
@@ -110,12 +110,12 @@ func (cyl *Cylinder) intersectCaps(r *ray.Ray) []ray.Intersection {
 
 	t := (cyl.min - r.Origin.Z) / r.Direction.Z
 	if checkCylinderCap(r, t) {
-		inters = append(inters, ray.Intersection{t, cyl})
+		inters = append(inters, ray.Intersection{T: t, P: cyl})
 	}
 
 	t = (cyl.max - r.Origin.Z) / r.Direction.Z
 	if checkCylinderCap(r, t) {
-		inters = append(inters, ray.Intersection{t, cyl})
+		inters = append(inters, ray.Intersection{T: t, P: cyl})
 	}
 
 	return inters

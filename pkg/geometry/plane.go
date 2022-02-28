@@ -61,7 +61,7 @@ func (p *Plane) Intersects(r *ray.Ray) []ray.Intersection {
 
 	t := -rt.Origin.Z / rt.Direction.Z
 
-	return []ray.Intersection{{t, p}}
+	return []ray.Intersection{{T: t, P: p}}
 }
 
 func (p *Plane) NormalAt(pos *tuple.Tuple) *tuple.Tuple {

@@ -64,8 +64,8 @@ func (s *Sphere) Intersects(r *ray.Ray) []ray.Intersection {
 	}
 
 	return []ray.Intersection{
-		{(b - math.Sqrt(discriminant)) / a2, s},
-		{(b + math.Sqrt(discriminant)) / a2, s},
+		{T: (b - math.Sqrt(discriminant)) / a2, P: s},
+		{T: (b + math.Sqrt(discriminant)) / a2, P: s},
 	}
 }
 

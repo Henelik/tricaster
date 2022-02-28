@@ -65,30 +65,30 @@ func (c *Cube) Intersects(r *ray.Ray) []ray.Intersection {
 		return []ray.Intersection{}
 	}
 
-	return []ray.Intersection{{tmin, c}, {tmax, c}}
+	return []ray.Intersection{{T: tmin, P: c}, {T: tmax, P: c}}
 }
 
 // checkAxis returns the min and max t-values where a ray intersects the cube on an axis
 func checkAxis(origin, dir float64) (float64, float64) {
-	var tmin, tmax float64
+	var tMin, tMax float64
 
-	tmin_numerator := (-1 - origin)
-	tmax_numerator := (1 - origin)
+	tMinNumerator := (-1 - origin)
+	tMaxNumerator := (1 - origin)
 
 	if math.Abs(dir) >= util.Epsilon {
-		tmin = tmin_numerator / dir
-		tmax = tmax_numerator / dir
+		tMin = tMinNumerator / dir
+		tMax = tMaxNumerator / dir
 	} else {
-		tmin = tmin_numerator * math.Inf(1)
-		tmax = tmax_numerator * math.Inf(1)
+		tMin = tMinNumerator * math.Inf(1)
+		tMax = tMaxNumerator * math.Inf(1)
 	}
 
 	// ensure the correct order of returns
-	if tmin > tmax {
-		return tmax, tmin
+	if tMin > tMax {
+		return tMax, tMin
 	}
 
-	return tmin, tmax
+	return tMin, tMax
 }
 
 func (c *Cube) NormalAt(pos *tuple.Tuple) *tuple.Tuple {

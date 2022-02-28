@@ -1,0 +1,13 @@
+# Options for analysis running.
+run:
+  timeout: 5m
+  tests: false
+linters:
+  disable-all: true
+  enable:
+    - gofumpt
+    - revive
+    - govet
+    - gocyclo
+    - ineffassign
+    - misspell

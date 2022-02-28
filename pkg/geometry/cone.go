@@ -77,7 +77,7 @@ func (cone *Cone) Intersects(r *ray.Ray) []ray.Intersection {
 			return inters
 		}
 
-		return append(inters, ray.Intersection{-c / 2 * b, cone})
+		return append(inters, ray.Intersection{T: -c / 2 * b, P: cone})
 	}
 
 	discriminant := b*b - 4*a*c
@@ -97,11 +97,11 @@ func (cone *Cone) Intersects(r *ray.Ray) []ray.Intersection {
 	y1 := rt.Origin.Z + t1*rt.Direction.Z
 
 	if cone.min < y0 && y0 < cone.max {
-		inters = append(inters, ray.Intersection{t0, cone})
+		inters = append(inters, ray.Intersection{T: t0, P: cone})
 	}
 
 	if cone.min < y1 && y1 < cone.max {
-		inters = append(inters, ray.Intersection{t1, cone})
+		inters = append(inters, ray.Intersection{T: t1, P: cone})
 	}
 
 	return inters
@@ -118,12 +118,12 @@ func (cone *Cone) intersectCaps(r *ray.Ray) []ray.Intersection {
 
 	t := (cone.min - r.Origin.Z) / r.Direction.Z
 	if checkConeCap(r, t) {
-		inters = append(inters, ray.Intersection{t, cone})
+		inters = append(inters, ray.Intersection{T: t, P: cone})
 	}
 
 	t = (cone.max - r.Origin.Z) / r.Direction.Z
 	if checkConeCap(r, t) {
-		inters = append(inters, ray.Intersection{t, cone})
+		inters = append(inters, ray.Intersection{T: t, P: cone})
 	}
 
 	return inters
