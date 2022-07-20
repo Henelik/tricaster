@@ -17,9 +17,9 @@ type Sphere struct {
 	// the inverse transformation matrix
 	im *matrix.Matrix
 	// the transposition of the inverse matrix
-	imt *matrix.Matrix
-	// the material
-	Mat material.Material
+	imt    *matrix.Matrix
+	Mat    material.Material
+	parent GroupInterface
 }
 
 func NewSphere(m *matrix.Matrix, mat material.Material) *Sphere {
@@ -28,6 +28,7 @@ func NewSphere(m *matrix.Matrix, mat material.Material) *Sphere {
 		matrix.Identity,
 		matrix.Identity,
 		material.DefaultPhong,
+		nil,
 	}
 
 	if m != nil {
@@ -74,6 +75,18 @@ func (s *Sphere) NormalAt(pos *tuple.Tuple) *tuple.Tuple {
 	worldNormal.W = 0
 
 	return worldNormal.Norm()
+}
+
+func (s *Sphere) SetParent(group GroupInterface) {
+	s.parent = group
+}
+
+func (s *Sphere) WorldToObject(p *tuple.Tuple) *tuple.Tuple {
+	if s.parent != nil {
+		return s.im.MultTuple(s.parent.WorldToGroup(p))
+	}
+
+	return s.im.MultTuple(p)
 }
 
 func (s *Sphere) Shade(light *light.PointLight, h *ray.Hit) *color.Color {

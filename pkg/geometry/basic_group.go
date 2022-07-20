@@ -1,4 +1,4 @@
-package group
+package geometry
 
 import (
 	"github.com/Henelik/tricaster/pkg/matrix"
@@ -7,7 +7,7 @@ import (
 )
 
 type BasicGroup struct {
-	Parent                 GroupInterface
+	parent                 GroupInterface
 	Children               []Intersecter
 	matrix                 *matrix.Matrix
 	inverseMatrix          *matrix.Matrix
@@ -16,13 +16,14 @@ type BasicGroup struct {
 
 func NewBasicGroup(m *matrix.Matrix, parent GroupInterface, children ...Intersecter) *BasicGroup {
 	group := &BasicGroup{
-		Parent:   parent,
+		parent:   parent,
 		Children: children,
-		matrix:   matrix.Identity,
 	}
 
 	if m != nil {
-		group.matrix = m
+		group.SetMatrix(m)
+	} else {
+		group.SetMatrix(matrix.Identity)
 	}
 
 	return group
@@ -34,17 +35,27 @@ func (group *BasicGroup) SetMatrix(m *matrix.Matrix) {
 	group.inverseTransposeMatrix = group.inverseMatrix.Transpose()
 }
 
+func (group *BasicGroup) AddChild(child Intersecter) {
+	group.Children = append(group.Children, child)
+
+	child.SetParent(group)
+}
+
+func (group *BasicGroup) SetParent(parent GroupInterface) {
+	group.parent = parent
+}
+
 func (group *BasicGroup) WorldToGroup(p *tuple.Tuple) *tuple.Tuple {
-	if group.Parent != nil {
-		return group.inverseMatrix.MultTuple(group.Parent.WorldToGroup(p))
+	if group.parent != nil {
+		return group.inverseMatrix.MultTuple(group.parent.WorldToGroup(p))
 	}
 
 	return group.inverseMatrix.MultTuple(p)
 }
 
 func (group *BasicGroup) GroupToWorld(p *tuple.Tuple) *tuple.Tuple {
-	if group.Parent != nil {
-		return group.inverseTransposeMatrix.MultTuple(group.Parent.WorldToGroup(p))
+	if group.parent != nil {
+		return group.inverseTransposeMatrix.MultTuple(group.parent.WorldToGroup(p))
 	}
 
 	return group.inverseTransposeMatrix.MultTuple(p)

@@ -1,11 +1,10 @@
-package group
+package geometry
 
 import (
+	"math"
 	"testing"
 
 	"github.com/Henelik/tricaster/pkg/matrix"
-
-	"github.com/Henelik/tricaster/pkg/geometry"
 
 	"github.com/stretchr/testify/assert"
 
@@ -14,9 +13,9 @@ import (
 )
 
 func TestBasicGroup_Intersects(t *testing.T) {
-	s1 := geometry.NewSphere(nil, nil)
-	s2 := geometry.NewSphere(matrix.Translation(0, 0, -3), nil)
-	s3 := geometry.NewSphere(matrix.Translation(5, 0, 0), nil)
+	s1 := NewSphere(nil, nil)
+	s2 := NewSphere(matrix.Translation(0, 0, -3), nil)
+	s3 := NewSphere(matrix.Translation(5, 0, 0), nil)
 
 	testCases := []struct {
 		name  string
@@ -68,4 +67,21 @@ func TestBasicGroup_Intersects(t *testing.T) {
 			assert.Equal(t, tc.want, got)
 		})
 	}
+}
+
+func TestBasicGroup_WorldToGroup(t *testing.T) {
+	t.Run("Converting a point from world space to object space", func(t *testing.T) {
+		g1 := NewBasicGroup(matrix.RotationZ(-math.Pi/2), nil)
+		g2 := NewBasicGroup(matrix.ScalingU(2), nil)
+
+		g1.AddChild(g2)
+
+		s := NewSphere(matrix.Translation(5, 0, 0), nil)
+
+		g2.AddChild(s)
+
+		p := s.WorldToObject(tuple.NewPoint(-2, -10, 0))
+
+		assert.True(t, p.Equal(tuple.NewPoint(0, -1, 0)))
+	})
 }

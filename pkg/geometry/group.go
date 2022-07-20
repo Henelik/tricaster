@@ -1,4 +1,4 @@
-package group
+package geometry
 
 import (
 	"github.com/Henelik/tricaster/pkg/ray"
@@ -7,6 +7,7 @@ import (
 
 type Intersecter interface {
 	Intersects(r *ray.Ray) []ray.Intersection
+	SetParent(group GroupInterface)
 }
 
 type GroupInterface interface {
